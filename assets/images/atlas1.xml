@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TextureAtlas imagePath="atlas.png">
+	<!-- Created with Adobe Flash Professional version 13.0.1.808 -->
+	<!-- http://www.adobe.com/products/flash.html -->
+	<SubTexture name="achievement_button" x="1179" y="1796" width="118" height="134" pivotX="0" pivotY="0"/>
+	<SubTexture name="back_world_2_a0000" x="2" y="2" width="284" height="900" pivotX="0" pivotY="0"/>
+	<SubTexture name="back_world_2_a0001" x="289" y="2" width="284" height="900"/>
+	<SubTexture name="back_world_2_a0002" x="576" y="2" width="284" height="900"/>
+	<SubTexture name="back_world_2_a0003" x="863" y="2" width="284" height="900"/>
+	<SubTexture name="back_world_2_b0000" x="1150" y="606" width="284" height="457" pivotX="0" pivotY="-201.25"/>
+	<SubTexture name="back_world_2_b0001" x="1437" y="606" width="284" height="457"/>
+	<SubTexture name="back_world_2_b0002" x="1724" y="606" width="284" height="457"/>
+	<SubTexture name="back_world_2_b0003" x="2" y="905" width="284" height="457"/>
+	<SubTexture name="car_info_back" x="1564" y="1183" width="284" height="208" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_buy_button" x="1721" y="1603" width="284" height="78" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_0" x="2" y="1695" width="178" height="107" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_1" x="1689" y="1684" width="180" height="107" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_10" x="1501" y="1792" width="180" height="98" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_11" x="1684" y="1794" width="180" height="97" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_12" x="489" y="1675" width="200" height="109" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_13" x="692" y="1676" width="180" height="116" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_2" x="1501" y="1684" width="185" height="105" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_3" x="875" y="1764" width="180" height="104" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_4" x="1863" y="1066" width="180" height="110" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_5" x="1135" y="1684" width="180" height="109" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_6" x="306" y="1675" width="180" height="123" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_7" x="1318" y="1684" width="180" height="108" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_8" x="489" y="1787" width="180" height="99" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_car_9" x="672" y="1795" width="180" height="95" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_line" x="731" y="1951" width="250" height="15" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_line_active" x="807" y="1032" width="250" height="15" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_info_select_button" x="219" y="1493" width="284" height="78" pivotX="0" pivotY="0"/>
+	<SubTexture name="car_select_button_back" x="723" y="1385" width="189" height="159" pivotX="0" pivotY="0"/>
+	<SubTexture name="counter_1" x="855" y="1871" width="162" height="77" pivotX="0" pivotY="0"/>
+	<SubTexture name="counter_2" x="123" y="1832" width="177" height="77" pivotX="0" pivotY="0"/>
+	<SubTexture name="counter_3" x="875" y="1684" width="257" height="77" pivotX="0" pivotY="0"/>
+	<SubTexture name="crate_0" x="219" y="1365" width="50" height="50" pivotX="0" pivotY="0"/>
+	<SubTexture name="crate_1" x="610" y="1082" width="75" height="75" pivotX="0" pivotY="0"/>
+	<SubTexture name="crate_2" x="578" y="1893" width="150" height="75" pivotX="0" pivotY="0"/>
+	<SubTexture name="crate_3" x="1748" y="289" width="100" height="50" pivotX="0" pivotY="0"/>
+	<SubTexture name="crate_4" x="425" y="1889" width="150" height="75" pivotX="0" pivotY="0"/>
+	<SubTexture name="crate_5" x="506" y="1284" width="100" height="50" pivotX="0" pivotY="0"/>
+	<SubTexture name="facebook_button" x="2" y="1805" width="118" height="134" pivotX="0" pivotY="0"/>
+	<SubTexture name="help_back" x="1150" y="364" width="726" height="239" pivotX="0" pivotY="0"/>
+	<SubTexture name="help_icon_0_0" x="1364" y="1394" width="214" height="206" pivotX="0" pivotY="0"/>
+	<SubTexture name="help_icon_0_1" x="1581" y="1394" width="214" height="206" pivotX="0" pivotY="0"/>
+	<SubTexture name="help_icon_0_2" x="1798" y="1394" width="214" height="206" pivotX="0" pivotY="0"/>
+	<SubTexture name="help_icon_0_3" x="1147" y="1384" width="214" height="206" pivotX="0" pivotY="0"/>
+	<SubTexture name="help_icon_0_4" x="506" y="1385" width="214" height="206" pivotX="0" pivotY="0"/>
+	<SubTexture name="help_icon_1_0" x="930" y="1384" width="214" height="206" pivotX="0" pivotY="0"/>
+	<SubTexture name="help_icon_1_1" x="289" y="1284" width="214" height="206" pivotX="0" pivotY="0"/>
+	<SubTexture name="help_icon_2_0" x="2" y="1365" width="214" height="206" pivotX="0" pivotY="0"/>
+	<SubTexture name="home_button" x="304" y="1801" width="118" height="134" pivotX="0" pivotY="0"/>
+	<SubTexture name="large_star_0" x="723" y="1547" width="143" height="41" pivotX="0" pivotY="0"/>
+	<SubTexture name="large_star_1" x="1773" y="1940" width="146" height="47" pivotX="0" pivotY="0"/>
+	<SubTexture name="large_star_2" x="1172" y="1933" width="146" height="47" pivotX="0" pivotY="0"/>
+	<SubTexture name="large_star_3" x="1020" y="1933" width="149" height="47" pivotX="0" pivotY="0"/>
+	<SubTexture name="small_star_normal" x="35" y="2000" width="24" height="22" pivotX="0" pivotY="0"/>
+	<SubTexture name="small_star_reached" x="5" y="2000" width="24" height="22" pivotX="0" pivotY="0"/>
+	<SubTexture name="level_button_base" x="1879" y="289" width="154" height="138" pivotX="0" pivotY="0"/>
+	<SubTexture name="level_button_locked" x="1879" y="430" width="154" height="138" pivotX="0" pivotY="0"/>
+	<SubTexture name="level_button_perfect" x="993" y="905" width="154" height="124" pivotX="0" pivotY="0"/>
+	<SubTexture name="level_button_star" x="2011" y="571" width="29" height="27" pivotX="0" pivotY="0"/>
+	<SubTexture name="level_pack_0" x="289" y="1082" width="318" height="199" pivotX="0" pivotY="0"/>
+	<SubTexture name="level_pack_1" x="610" y="1183" width="317" height="199" pivotX="0" pivotY="0"/>
+	<SubTexture name="level_pack_1_locked" x="689" y="905" width="301" height="118" pivotX="0" pivotY="0"/>
+	<SubTexture name="level_pack_2" x="930" y="1183" width="314" height="198" pivotX="0" pivotY="0"/>
+	<SubTexture name="level_pack_2_locked" x="2" y="1574" width="301" height="118" pivotX="0" pivotY="0"/>
+	<SubTexture name="level_pack_coming_soon" x="1247" y="1183" width="314" height="198" pivotX="0" pivotY="0"/>
+	<SubTexture name="loading_logo" x="723" y="1593" width="361" height="80" pivotX="0" pivotY="0"/>
+	<SubTexture name="logo" x="289" y="905" width="397" height="174" pivotX="0" pivotY="0"/>
+	<SubTexture name="new_icon" x="1851" y="289" width="20" height="41" pivotX="0" pivotY="0"/>
+	<SubTexture name="options_button" x="183" y="1695" width="118" height="134" pivotX="0" pivotY="0"/>
+	<SubTexture name="pager_page" x="1879" y="571" width="20" height="20" pivotX="0" pivotY="0"/>
+	<SubTexture name="pager_selected" x="1851" y="333" width="20" height="20" pivotX="0" pivotY="0"/>
+	<SubTexture name="panel_background" x="1150" y="2" width="595" height="359" pivotX="0" pivotY="0"/>
+	<SubTexture name="play_game_button" x="1851" y="1183" width="181" height="195" pivotX="0" pivotY="0"/>
+	<SubTexture name="remove_ad_button" x="1872" y="1684" width="126" height="126" pivotX="0" pivotY="0"/>
+	<SubTexture name="reward_back" x="1748" y="2" width="295" height="284" pivotX="0" pivotY="0"/>
+	<SubTexture name="star_counter_back" x="123" y="1912" width="152" height="64" pivotX="0" pivotY="0"/>
+	<SubTexture name="task_background" x="689" y="1066" width="584" height="114" pivotX="0" pivotY="0"/>
+	<SubTexture name="task_background_completed" x="1276" y="1066" width="584" height="114" pivotX="0" pivotY="0"/>
+	<SubTexture name="task_button" x="1867" y="1813" width="124" height="124" pivotX="0" pivotY="0"/>
+	<SubTexture name="toplist_button" x="1058" y="1796" width="118" height="134" pivotX="0" pivotY="0"/>
+	<SubTexture name="github_button" x="1318" y="1795" width="118" height="134" pivotX="0" pivotY="0"/>
+	<SubTexture name="coin_icon" x="140" y="1585" width="34" height="34" pivotX="0" pivotY="0"/>
+	<SubTexture name="time_icon" x="185" y="1585" width="34" height="33" pivotX="0" pivotY="0"/>
+</TextureAtlas>

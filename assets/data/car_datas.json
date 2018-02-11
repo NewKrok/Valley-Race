@@ -1,0 +1,17 @@
+{
+	"carDatas":[
+		{
+			"name": "Flamy",
+			"id": 0,
+			"graphicId": 0,
+			"starRequired": 0,
+			"speed": 15,
+			"rotation": 2500,
+			"elasticity": 0.7,
+			"firstWheelXOffset": 36,
+			"firstWheelYOffset": 25,
+			"backWheelXOffset": -12,
+			"backWheelYOffset": 25
+		}
+	]
+}
