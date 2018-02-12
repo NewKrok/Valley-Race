@@ -4,12 +4,11 @@ import flixel.FlxG;
 import hpp.flixel.system.HPPFlxMain;
 import hpp.util.DeviceData;
 import hpp.util.JsFullScreenUtil;
-import js.Browser;
+import openfl.display.Sprite;
 import valleyrace.AppConfig;
 import valleyrace.assets.Fonts;
 import valleyrace.state.MenuState;
 import valleyrace.util.SavedDataUtil;
-import openfl.display.Sprite;
 
 class Main extends Sprite
 {
@@ -21,8 +20,6 @@ class Main extends Sprite
 		var settingsInfo:SettingsInfo = SavedDataUtil.getSettingsInfo();
 
 		AppConfig.IS_ALPHA_ANIMATION_ENABLED = settingsInfo.enableAlphaAnimation;
-		AppConfig.SHOW_3_STAR_REPLAY = settingsInfo.show3StarsReplay;
-		AppConfig.SHOW_PLAYER_REPLAY = settingsInfo.showPlayersReplay;
 		AppConfig.IS_MOBILE_DEVICE = DeviceData.isMobile();
 
 		JsFullScreenUtil.init("openfl-content");

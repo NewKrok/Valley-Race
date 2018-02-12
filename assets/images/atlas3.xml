@@ -15,6 +15,9 @@
 	<SubTexture name="bridge" x="345" y="70" width="71" height="23"/>
 	<SubTexture name="gui_coin_back" x="710" y="5" width="137" height="50"/>
 	<SubTexture name="gui_time_back" x="860" y="5" width="137" height="50"/>
+	<SubTexture name="gui_frontflip_back" x="540" y="150" width="107" height="50"/>
+	<SubTexture name="gui_backflip_back" x="660" y="150" width="107" height="50"/>
+	<SubTexture name="gui_wheelie_back" x="780" y="150" width="107" height="50"/>
 	<SubTexture name="pause_button" x="710" y="60" width="75" height="75"/>
 	<SubTexture name="pause_button_over" x="790" y="60" width="75" height="75"/>
 	<SubTexture name="large_resume_button" x="1005" y="5" width="100" height="100"/>
@@ -24,6 +27,9 @@
 	<SubTexture name="large_exit_button" x="1225" y="5" width="100" height="100"/>
 	<SubTexture name="large_exit_button_over" x="1225" y="110" width="100" height="100"/>
 	<SubTexture name="base_button" x="345" y="105" width="190" height="55"/>
+	<SubTexture name="notification_front_flip" x="5" y="140" width="175" height="37"/>
+	<SubTexture name="notification_back_flip" x="5" y="190" width="161" height="36"/>
+	<SubTexture name="notification_nice_wheelie" x="5" y="240" width="155" height="33"/>
 
 
 
@@ -49,10 +55,6 @@
 	<SubTexture name="effect_time_out" x="1578" y="1850" width="200" height="51"/>
 	<SubTexture name="large_sound_off_button" x="908" y="1574" width="118" height="132"/>
 	<SubTexture name="large_sound_on_button" x="1274" y="1582" width="118" height="132"/>
-	<SubTexture name="notification_back_flip" x="1217" y="1859" width="181" height="50"/>
-	<SubTexture name="notification_front_flip" x="643" y="1840" width="205" height="51"/>
-	<SubTexture name="notification_nice_airtime" x="414" y="1736" width="255" height="50"/>
-	<SubTexture name="notification_nice_wheelie" x="798" y="1718" width="261" height="50"/>
 	<SubTexture name="small_rock_1_1" x="2036" y="17" width="8" height="8"/>
 	<SubTexture name="small_rock_1_2" x="2020" y="4" width="12" height="13"/>
 	<SubTexture name="small_rock_1_3" x="2020" y="21" width="12" height="10"/>
@@ -62,8 +64,6 @@
 	<SubTexture name="small_rock_3_1" x="2020" y="76" width="9" height="9"/>
 	<SubTexture name="small_rock_3_2" x="2034" y="35" width="10" height="11"/>
 	<SubTexture name="small_rock_3_3" x="2034" y="50" width="10" height="9"/>
-	<SubTexture name="snowflake" x="1396" y="1487" width="44" height="44"/>
-	<SubTexture name="title_text_back" x="292" y="1391" width="1136" height="92"/>
 	<SubTexture name="wheel_1" x="113" y="1876" width="49" height="49"/>
 	<SubTexture name="wheel_10" x="798" y="1652" width="52" height="52"/>
 	<SubTexture name="wheel_11" x="1935" y="1850" width="52" height="52"/>

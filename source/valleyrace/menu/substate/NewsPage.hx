@@ -53,7 +53,7 @@ class NewsPage extends FlxSubState
 		scrollContainerConfig.direction = HPPScrollDirection.VERTICAL;
 		var scrollContainer:HPPTouchScrollContainer = new HPPTouchScrollContainer(1136, 410, scrollContainerConfig);
 
-		container.add(createEntry("???"));
+		container.add(createEntry("???", "???"));
 
 		scrollContainer.add(container);
 		scrollContainer.x = 25;

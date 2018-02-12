@@ -19,7 +19,7 @@ class SmallButton extends HPPButton
 		label.font = Fonts.HOLLYWOOD;
 		labelSize = 30;
 		up_style = new ButtonLabelStyle(null, null, 0xFF3E3700);
-		over_style = new ButtonLabelStyle(null, null, 0xFFFFFFFF);
+		over_style = new ButtonLabelStyle(null, null, 0xFFFFE302);
 		labelOffsets = [new FlxPoint(0, 7), new FlxPoint(0, 7), new FlxPoint(0, 7)];
 		loadGraphic(HPPAssetManager.getGraphic("base_button"));
 		overScale = .95;

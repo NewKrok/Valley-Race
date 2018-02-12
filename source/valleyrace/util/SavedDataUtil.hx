@@ -27,9 +27,7 @@ class SavedDataUtil
 		{
 			gameSave.data.settings = {
 				showFPS: false,
-				enableAlphaAnimation: false,
-				show3StarsReplay: true,
-				showPlayersReplay: true
+				enableAlphaAnimation: false
 			};
 		}
 
@@ -71,29 +69,6 @@ class SavedDataUtil
 				}
 			];
 		}
-		// Recalculate level stars if the player changed from v1.2.1 or lower to v1.3.0 or higher
-		else if (AppVersionUtil.isLowerThan(gameSave.data.baseInfo.version, "1.3.0"))
-		{
-			for (i in 0...gameSave.data.levelInfos.length)
-			{
-				var levelInfo:LevelInfo = gameSave.data.levelInfos[i];
-				if (levelInfo.levelId > 23) break;
-
-				var levelData:LevelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level/world_" + levelInfo.worldId + "/level_" + levelInfo.worldId + "_" + levelInfo.levelId + ".json" ) );
-				levelInfo.starCount = 0;
-				for( i in 0...levelData.starValues.length)
-				{
-					if(levelInfo.score >= levelData.starValues[i])
-						levelInfo.starCount = i + 1;
-					else
-						break;
-				}
-			}
-			save();
-		}
-
-		// Hotfix for version 1.2.0
-		getLevelInfo(1, 0).isEnabled = true;
 	}
 
 	public static function save():Void
@@ -191,8 +166,6 @@ typedef BaseAppInfo = {
 
 typedef SettingsInfo = {
 	var enableAlphaAnimation:Bool;
-	var show3StarsReplay:Bool;
-	var showPlayersReplay:Bool;
 }
 
 typedef LevelInfo = {

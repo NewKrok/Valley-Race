@@ -22,7 +22,6 @@ class NotificationHandler extends FlxSpriteGroup
 		{
 			case Notification.FRONT_FLIP: addFrontFlipNotification();
 			case Notification.BACK_FLIP: addBackFlipNotification();
-			case Notification.NICE_AIR: addNiceAirTimeNotification();
 			case Notification.NICE_WHEELIE: addNiceWheelieTimeNotification();
 		}
 	}
@@ -35,11 +34,6 @@ class NotificationHandler extends FlxSpriteGroup
 	public function addBackFlipNotification():Void
 	{
 		addNotification("notification_back_flip");
-	}
-
-	public function addNiceAirTimeNotification():Void
-	{
-		addNotification("notification_nice_airtime");
 	}
 
 	public function addNiceWheelieTimeNotification():Void
@@ -99,6 +93,5 @@ enum Notification
 {
 	FRONT_FLIP;
 	BACK_FLIP;
-	NICE_AIR;
 	NICE_WHEELIE;
 }

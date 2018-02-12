@@ -130,7 +130,6 @@ class GameState extends FlxState
 	var countOfFrontFlip:UInt = 0;
 	var countOfBackFlip:UInt = 0;
 	var countOfNiceWheelie:UInt = 0;
-	var countOfNiceAirTime:UInt = 0;
 
 	var isLost:Bool;
 	var isWon:Bool;
@@ -313,7 +312,6 @@ class GameState extends FlxState
 		collectedExtraCoins = 0;
 		countOfFrontFlip = 0;
 		countOfBackFlip = 0;
-		countOfNiceAirTime = 0;
 		countOfNiceWheelie = 0;
 		gameTime = 0;
 		totalPausedTime = 0;
@@ -439,8 +437,8 @@ class GameState extends FlxState
 
 		totalPausedTime += now - pauseStartTime;
 
-		baseGhostCar.visible = AppConfig.SHOW_3_STAR_REPLAY;
-		playerGhostCar.visible = AppConfig.SHOW_PLAYER_REPLAY;
+		baseGhostCar.visible = true;
+		playerGhostCar.visible = true;
 
 		if (recorder != null)
 		{
@@ -801,7 +799,7 @@ class GameState extends FlxState
 		{
 			checkCoinPickUp();
 			checkWheelieState();
-			checkFlipAndNiceAirTimeState();
+			checkFlipState();
 			checkLoose();
 			checkWin();
 
@@ -809,10 +807,10 @@ class GameState extends FlxState
 				pauseRequest(null);
 		}
 
-		if (AppConfig.SHOW_3_STAR_REPLAY && basePlayback != null)
+		if (basePlayback != null)
 			basePlayback.showSnapshot(recorder.getElapsedTime());
 
-		if (AppConfig.SHOW_PLAYER_REPLAY && playerPlayback != null)
+		if (playerPlayback != null)
 			playerPlayback.showSnapshot(recorder.getElapsedTime());
 	}
 
@@ -925,7 +923,7 @@ class GameState extends FlxState
 		car.isOnWheelie = isWheelieInProgress;
 	}
 
-	function checkFlipAndNiceAirTimeState():Void
+	function checkFlipState():Void
 	{
 		var newIsOnAirValue:Bool = car.leftWheelOnAir && car.rightWheelOnAir;
 
@@ -978,11 +976,6 @@ class GameState extends FlxState
 			else if(angleInDeg < -200)
 			{
 				startBackFlipRutin();
-			}
-
-			if(gameTime - car.onAirStartGameTime > CGameTimeValue.MINIMUM_TIME_TO_NICE_AIR_IN_MS)
-			{
-				startNiceAirTimeRutin();
 			}
 		}
 	}
@@ -1121,18 +1114,6 @@ class GameState extends FlxState
 
 		gameGui.addNotification(Notification.BACK_FLIP);
 	}
-
-	function startNiceAirTimeRutin():Void
-	{
-		countOfNiceAirTime++;
-
-		collectedExtraCoins += CScore.SCORE_NICE_AIR_TIME;
-
-		//checkNiceAirTimeTasks();
-
-		gameGui.addNotification(Notification.NICE_AIR);
-	}
-
 
 	function startNiceWheelieTimeRutin():Void
 	{
