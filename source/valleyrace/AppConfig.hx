@@ -7,7 +7,7 @@ package valleyrace;
 class AppConfig
 {
 	public static inline var GAME_NAME:String = "ValleyRace";
-	public static inline var GAME_VERSION:String = "0.0.1";
+	public static inline var GAME_VERSION:String = "0.0.2";
 
 	public static inline var MAXIMUM_GAME_TIME_BONUS:Int = 10000;
 	public static inline var COIN_SCORE_MULTIPLIER:Int = 25;

@@ -4,13 +4,16 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.util.HPPAssetManager;
+import openfl.events.TouchEvent;
 import valleyrace.AppConfig;
+import valleyrace.game.BonusCounter;
 import valleyrace.game.NotificationHandler.Notification;
 import valleyrace.game.TimeCounter;
-import openfl.events.TouchEvent;
 
 /**
  * ...
@@ -30,6 +33,7 @@ class GameGui extends FlxSpriteGroup
 	var coinCounter:CoinCounter;
 	var timeCounter:TimeCounter;
 	var startCounter:StartCounter;
+	var topContainer:HPPHUIBox;
 
 	var controlLeft:FlxSprite;
 	var controlRight:FlxSprite;
@@ -37,6 +41,9 @@ class GameGui extends FlxSpriteGroup
 	var controlDown:FlxSprite;
 
 	var pauseButton:HPPButton;
+	var frontFlipCounter:BonusCounter;
+	var backFlipCounter:BonusCounter;
+	var wheelieCounter:BonusCounter;
 
 	public function new(resumeGameCallBack:Void->Void, pauseGameCallBack:HPPButton->Void, maxCoinCount:UInt)
 	{
@@ -44,12 +51,15 @@ class GameGui extends FlxSpriteGroup
 
 		touches = new Map<Int, FlxSprite>();
 
-		var topContainer:HPPHUIBox = new HPPHUIBox(10);
+		topContainer = new HPPHUIBox(10);
 		topContainer.x = 15;
 		topContainer.y = 15;
 
 		topContainer.add(timeCounter = new TimeCounter());
 		topContainer.add(coinCounter = new CoinCounter(0, maxCoinCount));
+		topContainer.add(frontFlipCounter = new BonusCounter("gui_frontflip_back"));
+		topContainer.add(backFlipCounter = new BonusCounter("gui_backflip_back"));
+		topContainer.add(wheelieCounter = new BonusCounter("gui_wheelie_back"));
 
 		add(topContainer);
 		add(startCounter = new StartCounter(resumeGameCallBack));
@@ -77,6 +87,9 @@ class GameGui extends FlxSpriteGroup
 	public function resumeGameRequest():Void
 	{
 		startCounter.start();
+
+		topContainer.y = -topContainer.height;
+		FlxTween.tween(topContainer, { y: 15 }, .5, { ease: FlxEase.backOut });
 	}
 
 	function createControlButtons()
@@ -189,6 +202,21 @@ class GameGui extends FlxSpriteGroup
 	public function updateCoinCount(value:UInt):Void
 	{
 		coinCounter.updateValue(value);
+	}
+
+	public function updateFrontFlipCount(value:UInt):Void
+	{
+		frontFlipCounter.updateValue(value);
+	}
+
+	public function updateBackFlipCount(value:UInt):Void
+	{
+		backFlipCounter.updateValue(value);
+	}
+
+	public function updateWheelieCount(value:UInt):Void
+	{
+		wheelieCounter.updateValue(value);
 	}
 
 	public function updateRemainingTime(value:Float):Void

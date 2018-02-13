@@ -1,6 +1,7 @@
 package valleyrace.util;
 
 import flixel.util.FlxSave;
+import hpp.util.DeviceData;
 import valleyrace.datatype.LevelData;
 import openfl.Assets;
 import valleyrace.AppConfig;
@@ -27,7 +28,7 @@ class SavedDataUtil
 		{
 			gameSave.data.settings = {
 				showFPS: false,
-				enableAlphaAnimation: false
+				enableAlphaAnimation: DeviceData.isMobile() ? false : true
 			};
 		}
 

@@ -11,24 +11,20 @@ import valleyrace.assets.Fonts;
  * ...
  * @author Krisztian Somoracz
  */
-class CoinCounter extends FlxSpriteGroup
+class BonusCounter extends FlxSpriteGroup
 {
 	var background:FlxSprite;
 	var text:FlxText;
 	var count:UInt;
-	var maxValue:UInt;
 
-	public function new(defaultValue:UInt = 0, maxValue:UInt = 0)
+	public function new(backgroundUrl:String)
 	{
 		super();
+		add(background = HPPAssetManager.getSprite(backgroundUrl));
 
-		this.maxValue = maxValue;
-
-		add(background = HPPAssetManager.getSprite("gui_coin_back"));
-
-		text = new FlxText(45, 0, cast width - 40, Std.string(defaultValue) + " / " + maxValue, 30);
+		text = new FlxText(45, 0, cast width - 40, Std.string(0), 30);
 		text.autoSize = false;
-		text.color = FlxColor.YELLOW;
+		text.color = FlxColor.WHITE;
 		text.alignment = "center";
 		text.font = Fonts.HOLLYWOOD;
 		text.borderStyle = FlxTextBorderStyle.SHADOW;
@@ -41,11 +37,11 @@ class CoinCounter extends FlxSpriteGroup
 
 	public function updateValue(value:UInt):Void
 	{
-		if(value != count)
+		if (value != count)
 		{
 			count = value;
 
-			text.text = Std.string(value) + " / " + maxValue;
+			text.text = Std.string(value);
 		}
 	}
 }

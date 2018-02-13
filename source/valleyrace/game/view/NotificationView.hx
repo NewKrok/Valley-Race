@@ -1,6 +1,7 @@
 package valleyrace.game.view;
 
 import flixel.FlxSprite;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.tweens.misc.VarTween;
 import hpp.flixel.util.HPPAssetManager;
@@ -26,6 +27,14 @@ class NotificationView extends FlxSprite
 
 	public function show():Void
 	{
+		x = -width;
+		FlxTween.tween(
+			this,
+			{ x: 20 },
+			.5,
+			{ ease: FlxEase.backOut }
+		);
+
 		if (AppConfig.IS_ALPHA_ANIMATION_ENABLED)
 		{
 			alpha = 0;
@@ -41,7 +50,7 @@ class NotificationView extends FlxSprite
 			this,
 			{ x: -width + 10, alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? 0 : 1 },
 			.5,
-			{ startDelay: 2, onComplete: function(_) { remove(this); } }
+			{ ease: FlxEase.backIn, startDelay: 2, onComplete: function(_) { remove(this); } }
 		);
 	}
 

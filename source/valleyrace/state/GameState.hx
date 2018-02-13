@@ -1,7 +1,4 @@
 package valleyrace.state;
-import valleyrace.game.CarFog;
-import valleyrace.game.NotificationHandler;
-
 import apostx.replaykit.Playback;
 import apostx.replaykit.Recorder;
 import flixel.FlxCamera;
@@ -12,21 +9,33 @@ import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import haxe.Timer;
 import hpp.flixel.HPPCamera;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
+import nape.constraint.PivotJoint;
+import nape.dynamics.InteractionFilter;
+import nape.geom.Vec2;
+import nape.phys.Body;
+import nape.phys.BodyType;
+import nape.shape.Polygon;
+import nape.space.Space;
+import openfl.Assets;
+import openfl.geom.Rectangle;
+import valleyrace.AppConfig;
 import valleyrace.assets.CarDatas;
 import valleyrace.common.PlayerInfo;
 import valleyrace.datatype.LevelData;
 import valleyrace.game.Background;
 import valleyrace.game.Car;
+import valleyrace.game.CarFog;
 import valleyrace.game.Coin;
 import valleyrace.game.GameGui;
-import valleyrace.game.GameGui;
 import valleyrace.game.GhostCar;
+import valleyrace.game.NotificationHandler.Notification;
 import valleyrace.game.SmallRock;
 import valleyrace.game.constant.CGameTimeValue;
 import valleyrace.game.constant.CLibraryElement;
@@ -44,20 +53,10 @@ import valleyrace.game.substate.EndLevelPanel;
 import valleyrace.game.substate.PausePanel;
 import valleyrace.game.substate.StartLevelPanel;
 import valleyrace.game.terrain.BrushTerrain;
-import valleyrace.game.NotificationHandler.Notification;
 import valleyrace.state.MenuState.MenuSubStateType;
 import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil;
-import nape.constraint.PivotJoint;
-import nape.dynamics.InteractionFilter;
-import nape.geom.Vec2;
-import nape.phys.Body;
-import nape.phys.BodyType;
-import nape.shape.Polygon;
-import nape.space.Space;
-import openfl.Assets;
-import openfl.geom.Rectangle;
-import valleyrace.AppConfig;
+
 
 class GameState extends FlxState
 {
@@ -102,10 +101,6 @@ class GameState extends FlxState
 	var baseGhostCar:GhostCar;
 	var playerGhostCar:GhostCar;
 	var snow:Snow;
-
-	/*
-		var achievementManager:AchievementManager;
-	*/
 
 	var effects:Array<FlxSprite> = [];
 	var crates:Array<AbstractCrate> = [];
@@ -416,9 +411,14 @@ class GameState extends FlxState
 
 		closeSubState();
 
-		if (!isGamePaused) pause();
-
-		gameGui.resumeGameRequest();
+		if (!isGamePaused)
+		{
+			pause();
+		}
+		else
+		{
+			gameGui.resumeGameRequest();
+		}
 	}
 
 	function pauseRequest(target:HPPButton = null):Void
@@ -1099,8 +1099,7 @@ class GameState extends FlxState
 
 		collectedExtraCoins += CScore.SCORE_FRONT_FLIP;
 
-		//checkFrontFlipTasks();
-
+		gameGui.updateFrontFlipCount(countOfFrontFlip);
 		gameGui.addNotification(Notification.FRONT_FLIP);
 	}
 
@@ -1110,8 +1109,7 @@ class GameState extends FlxState
 
 		collectedExtraCoins += CScore.SCORE_BACK_FLIP;
 
-		//checkBackFlipTasks();
-
+		gameGui.updateBackFlipCount(countOfBackFlip);
 		gameGui.addNotification(Notification.BACK_FLIP);
 	}
 
@@ -1121,8 +1119,7 @@ class GameState extends FlxState
 
 		collectedExtraCoins += CScore.SCORE_NICE_WHEELIE_TIME;
 
-		//checkNiceWheelieTimeTasks();
-
+		gameGui.updateWheelieCount(countOfNiceWheelie);
 		gameGui.addNotification(Notification.NICE_WHEELIE);
 	}
 
@@ -1157,17 +1154,18 @@ class GameState extends FlxState
 				x: 1,
 				y: 1,
 			},
-			.3
+			.3,
+			{ ease: FlxEase.backOut }
 		);
 
 		FlxTween.tween(
 			effect.scale,
 			{
-				x: 0,
-				y: 0,
+				x: .3,
+				y: .3,
 			},
 			.2,
-			{ startDelay: 1, onComplete: function(_) { disposeEffect(effect); } }
+			{ ease: FlxEase.backIn, startDelay: 1, onComplete: function(_) { disposeEffect(effect); } }
 		);
 
 		container.add(effect);

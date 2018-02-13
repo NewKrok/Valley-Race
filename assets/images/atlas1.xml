@@ -31,9 +31,6 @@
 	<SubTexture name="car_info_line_active" x="807" y="1032" width="250" height="15" pivotX="0" pivotY="0"/>
 	<SubTexture name="car_info_select_button" x="219" y="1493" width="284" height="78" pivotX="0" pivotY="0"/>
 	<SubTexture name="car_select_button_back" x="723" y="1385" width="189" height="159" pivotX="0" pivotY="0"/>
-	<SubTexture name="counter_1" x="855" y="1871" width="162" height="77" pivotX="0" pivotY="0"/>
-	<SubTexture name="counter_2" x="123" y="1832" width="177" height="77" pivotX="0" pivotY="0"/>
-	<SubTexture name="counter_3" x="875" y="1684" width="257" height="77" pivotX="0" pivotY="0"/>
 	<SubTexture name="crate_0" x="219" y="1365" width="50" height="50" pivotX="0" pivotY="0"/>
 	<SubTexture name="crate_1" x="610" y="1082" width="75" height="75" pivotX="0" pivotY="0"/>
 	<SubTexture name="crate_2" x="578" y="1893" width="150" height="75" pivotX="0" pivotY="0"/>

@@ -6,8 +6,8 @@ package valleyrace.game.constant;
  */
 class CScore
 {
-	public static inline var SCORE_FRONT_FLIP:UInt = 200;
-	public static inline var SCORE_BACK_FLIP:UInt = 200;
-	public static inline var SCORE_NICE_AIR_TIME:UInt = 200;
-	public static inline var SCORE_NICE_WHEELIE_TIME:UInt = 200;
+	public static inline var SCORE_FRONT_FLIP:UInt = 125;
+	public static inline var SCORE_BACK_FLIP:UInt = 125;
+	public static inline var SCORE_NICE_AIR_TIME:UInt = 125;
+	public static inline var SCORE_NICE_WHEELIE_TIME:UInt = 125;
 }

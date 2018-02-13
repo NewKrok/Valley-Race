@@ -5,6 +5,8 @@ import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
@@ -25,7 +27,8 @@ import valleyrace.util.SavedDataUtil.LevelInfo;
  */
 class StartLevelPanel extends FlxSubState
 {
-	var content:HPPVUIBox;
+	var header:FlxSpriteGroup;
+	var footer:FlxSpriteGroup;
 
 	var startButton:HPPButton;
 	var exitButton:HPPButton;
@@ -77,12 +80,13 @@ class StartLevelPanel extends FlxSubState
 
 	function buildHeader():Void
 	{
-		var container:FlxSpriteGroup = new FlxSpriteGroup();
-		container.scrollFactor.set();
+		header = new FlxSpriteGroup();
+		header.scrollFactor.set();
 
-		var background:FlxSprite = new FlxSprite().makeGraphic(1136, 100, FlxColor.BLACK);
+		var background:FlxSprite = new FlxSprite().makeGraphic(1136, 150, FlxColor.BLACK);
+		background.y = -50;
 		background.alpha = .8;
-		container.add(background);
+		header.add(background);
 
 		var scoreContainer = new HPPHUIBox(15);
 		var bestScoreLabelText:FlxText = new FlxText(0, 0, 0, "Best score ", 25);
@@ -99,7 +103,7 @@ class StartLevelPanel extends FlxSubState
 		scoreContainer.add(bestScoreText);
 		scoreContainer.x = 30;
 		scoreContainer.y = 17;
-		container.add(scoreContainer);
+		header.add(scoreContainer);
 
 		var titleContainer:HPPVUIBox = new HPPVUIBox(-20, HAlign.RIGHT);
 		var levelText:FlxText = new FlxText(0, 0, 0, "RACE " + (levelInfo.levelId + 1), 45);
@@ -114,19 +118,19 @@ class StartLevelPanel extends FlxSubState
 		titleContainer.add(worldText);
 		titleContainer.x = FlxG.stage.stageWidth - titleContainer.width - 30;
 		titleContainer.y = 17;
-		container.add(titleContainer);
+		header.add(titleContainer);
 
-		add(container);
+		add(header);
 	}
 
 	function buildFooter():Void
 	{
-		var container:FlxSpriteGroup = new FlxSpriteGroup();
-		container.scrollFactor.set();
+		footer = new FlxSpriteGroup();
+		footer.scrollFactor.set();
 
-		var background:FlxSprite = new FlxSprite().makeGraphic(1136, 100, FlxColor.BLACK);
+		var background:FlxSprite = new FlxSprite().makeGraphic(1136, 150, FlxColor.BLACK);
 		background.alpha = .8;
-		container.add(background);
+		footer.add(background);
 
 		var buttonContainer:HPPHUIBox = new HPPHUIBox(30);
 
@@ -135,16 +139,33 @@ class StartLevelPanel extends FlxSubState
 		if (canStartNextLevel()) buttonContainer.add(nextButton = new SmallButton(AppConfig.IS_DESKTOP_DEVICE ? "NEXT LEVEL" : "NEXT LEVEL", nextLevelRequest));
 
 		buttonContainer.x = 30;
-		buttonContainer.y = background.height / 2 - buttonContainer.height / 2;
-		container.add(buttonContainer);
-		container.add(startButton = new SmallButton(AppConfig.IS_DESKTOP_DEVICE ? "START GAME" : "START GAME", startRequest));
+		buttonContainer.y = (background.height - 50) / 2 - buttonContainer.height / 2;
+		footer.add(buttonContainer);
+		footer.add(startButton = new SmallButton(AppConfig.IS_DESKTOP_DEVICE ? "START GAME" : "START GAME", startPreRequest));
 		startButton.x = FlxG.stage.stageWidth - startButton.width - 30;
 		startButton.y = buttonContainer.y;
 
-		container.add(buttonContainer);
+		footer.add(buttonContainer);
 
-		container.y = FlxG.stage.stageHeight - container.height;
-		add(container);
+		footer.y = FlxG.stage.stageHeight - footer.height + 50;
+		add(footer);
+	}
+
+	function startPreRequest(e)
+	{
+		FlxTween.tween(
+			header,
+			{ y: -header.height - 10, alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? 0 : 1 },
+			.5,
+			{ ease: FlxEase.backIn }
+		);
+
+		FlxTween.tween(
+			footer,
+			{ y: FlxG.stage.stageHeight + 10, alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? 0 : 1 },
+			.5,
+			{ ease: FlxEase.backIn, onComplete: function(_) { startRequest(e); } }
+		);
 	}
 
 	override public function update(elapsed:Float):Void
