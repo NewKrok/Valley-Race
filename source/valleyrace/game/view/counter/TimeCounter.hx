@@ -1,4 +1,4 @@
-package valleyrace.game;
+package valleyrace.game.view.counter;
 
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -6,12 +6,13 @@ import flixel.text.FlxText;
 import hpp.flixel.util.HPPAssetManager;
 import hpp.util.TimeUtil;
 import valleyrace.assets.Fonts;
+import valleyrace.game.view.endlevelpanel.IValueContainer;
 
 /**
  * ...
  * @author Krisztian Somoracz
  */
-class TimeCounter extends FlxSpriteGroup
+class TimeCounter extends FlxSpriteGroup implements IValueContainer
 {
 	var background:FlxSprite;
 	var text:FlxText;
@@ -34,10 +35,10 @@ class TimeCounter extends FlxSpriteGroup
 
 		add(text);
 
-		updateValue(defaultValue);
+		setValue(defaultValue);
 	}
 
-	public function updateValue(value:Float):Void
+	public function setValue(value:Float):Void
 	{
 		if(value <= 1000 * 10)
 		{

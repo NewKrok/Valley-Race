@@ -14,6 +14,7 @@
 	<SubTexture name="table_world_0_b" x="620" y="5" width="75" height="117"/>
 	<SubTexture name="bridge" x="345" y="70" width="71" height="23"/>
 	<SubTexture name="gui_coin_back" x="710" y="5" width="137" height="50"/>
+	<SubTexture name="gui_coin_back_max" x="345" y="165" width="161" height="74"/>
 	<SubTexture name="gui_time_back" x="860" y="5" width="137" height="50"/>
 	<SubTexture name="gui_frontflip_back" x="540" y="145" width="107" height="50"/>
 	<SubTexture name="gui_backflip_back" x="660" y="145" width="107" height="50"/>
@@ -40,4 +41,6 @@
 	<SubTexture name="counter_0" x="5" y="290" width="165" height="174"/>
 	<SubTexture name="counter_1" x="175" y="290" width="128" height="174"/>
 	<SubTexture name="counter_2" x="310" y="290" width="109" height="174"/>
+	<SubTexture name="level_star" x="580" y="205" width="35" height="35"/>
+	<SubTexture name="level_star_reached" x="540" y="205" width="35" height="35"/>
 </TextureAtlas>

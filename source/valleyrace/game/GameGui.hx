@@ -11,9 +11,10 @@ import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.util.HPPAssetManager;
 import openfl.events.TouchEvent;
 import valleyrace.AppConfig;
-import valleyrace.game.BonusCounter;
+import valleyrace.game.view.counter.BonusCounter;
 import valleyrace.game.NotificationHandler.Notification;
-import valleyrace.game.TimeCounter;
+import valleyrace.game.view.counter.CoinCounter;
+import valleyrace.game.view.counter.TimeCounter;
 
 /**
  * ...
@@ -201,27 +202,27 @@ class GameGui extends FlxSpriteGroup
 
 	public function updateCoinCount(value:UInt):Void
 	{
-		coinCounter.updateValue(value);
+		coinCounter.setValue(value);
 	}
 
 	public function updateFrontFlipCount(value:UInt):Void
 	{
-		frontFlipCounter.updateValue(value);
+		frontFlipCounter.setValue(value);
 	}
 
 	public function updateBackFlipCount(value:UInt):Void
 	{
-		backFlipCounter.updateValue(value);
+		backFlipCounter.setValue(value);
 	}
 
 	public function updateWheelieCount(value:UInt):Void
 	{
-		wheelieCounter.updateValue(value);
+		wheelieCounter.setValue(value);
 	}
 
 	public function updateRemainingTime(value:Float):Void
 	{
-		timeCounter.updateValue(value);
+		timeCounter.setValue(value);
 	}
 
 	override public function destroy():Void

@@ -1,6 +1,4 @@
 package valleyrace.game.substate;
-import valleyrace.util.SavedDataUtil;
-
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -10,19 +8,17 @@ import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
-import hpp.flixel.ui.PlaceHolder;
-import hpp.flixel.util.HPPAssetManager;
+import hpp.ui.HAlign;
 import hpp.util.NumberUtil;
-import hpp.util.TimeUtil;
+import valleyrace.AppConfig;
 import valleyrace.assets.Fonts;
-import valleyrace.common.view.LongButton;
+import valleyrace.common.view.SmallButton;
 import valleyrace.datatype.LevelData;
-import valleyrace.game.view.CollectedCoinsInfoBlock;
-import valleyrace.game.view.LevelResultBlock;
-import valleyrace.game.view.LevelStatisticBlock;
+import valleyrace.game.view.ReachedStarView;
+import valleyrace.game.view.endlevelpanel.EndLevelSummary;
 import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil.LevelInfo;
-import valleyrace.AppConfig;
+
 
 /**
  * ...
@@ -30,11 +26,10 @@ import valleyrace.AppConfig;
  */
 class EndLevelPanel extends FlxSubState
 {
-	var content:HPPVUIBox;
-	var panelBack:FlxSprite;
-	var levelStatisticBlock:LevelStatisticBlock;
-	var collectedCoinsInfoBlock:CollectedCoinsInfoBlock;
-	var levelResultBlock:LevelResultBlock;
+	var header:FlxSpriteGroup;
+	var footer:FlxSpriteGroup;
+	var endLevelSummary:EndLevelSummary;
+	var reachedStarView:ReachedStarView;
 
 	var startButton:HPPButton;
 	var exitButton:HPPButton;
@@ -46,11 +41,9 @@ class EndLevelPanel extends FlxSubState
 	var nextLevelRequest:HPPButton->Void;
 	var prevLevelRequest:HPPButton->Void;
 
+	var bestScoreText:FlxText;
 	var highscoreText:FlxText;
-	var newHighScoreText:FlxText;
 
-	var baseBack:FlxSprite;
-	var container:FlxSpriteGroup;
 	var levelInfo:LevelInfo;
 	var levelData:LevelData;
 
@@ -59,6 +52,9 @@ class EndLevelPanel extends FlxSubState
 	var currentTime:Float;
 	var currentCollectedCoins:UInt;
 	var currentEarnedStarCounts:UInt;
+	var countOfFrontFlip:UInt;
+	var countOfBackFlip:UInt;
+	var countOfNiceWheelie:UInt;
 
 	function new(levelInfo:LevelInfo, levelData:LevelData, restartRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
 	{
@@ -78,107 +74,111 @@ class EndLevelPanel extends FlxSubState
 
 		build();
 		isBuilt = true;
+
+		updateView(
+			currentScore,
+			currentTime,
+			currentCollectedCoins,
+			currentEarnedStarCounts,
+			countOfFrontFlip,
+			countOfBackFlip,
+			countOfNiceWheelie
+		);
 	}
 
 	function build()
 	{
-		add(container = new FlxSpriteGroup());
-		container.scrollFactor.set();
-
-		container.add(baseBack = new FlxSprite());
-		baseBack.makeGraphic(FlxG.stage.stageWidth, FlxG.stage.stageHeight, FlxColor.BLACK);
-		baseBack.alpha = .5;
-
-		panelBack = HPPAssetManager.getSprite("panel_background");
-		container.add(panelBack);
-		panelBack.x = container.width / 2 - panelBack.width / 2;
-		panelBack.y = container.height / 2 - panelBack.height / 2 - 40 - ( canStartPrevLevel() || canStartNextLevel() ? 50 : 0 );
-
-		content = new HPPVUIBox();
-		container.add(content);
-		content.add(new PlaceHolder(0, 36));
-		createTitle();
-		content.add(new PlaceHolder(0, 5));
-		content.add(levelStatisticBlock = new LevelStatisticBlock(currentCollectedCoins, levelData.starPoints.length, currentTime));
-		content.add(new PlaceHolder(0, 5));
-		content.add(collectedCoinsInfoBlock = new CollectedCoinsInfoBlock(currentCollectedCoins, levelData.starPoints.length));
-		content.add(new PlaceHolder(0, 5));
-		content.add(levelResultBlock = new LevelResultBlock(currentScore, currentEarnedStarCounts));
-		content.add(new PlaceHolder(0, 5));
-		createButtons();
-
-		content.x = container.width / 2 - content.width / 2;
-		content.y = container.height / 2 - content.height / 2 - 5;
-
-		highscoreText.visible = currentScore >= levelInfo.score;
+		buildHeader();
+		buildFooter();
+		add(endLevelSummary = new EndLevelSummary(levelInfo, levelData));
+		endLevelSummary.y = 100;
 	}
 
-	function createTitle()
+	function buildHeader():Void
 	{
-		var subContainer:FlxSpriteGroup = new FlxSpriteGroup();
-		subContainer.add(new PlaceHolder(1,1));
+		header = new FlxSpriteGroup();
+		header.scrollFactor.set();
 
-		var levelText:FlxText = new FlxText(0, 0, 0, "LEVEL " + (levelInfo.levelId + 1), 35);
-		levelText.autoSize = true;
-		levelText.color = FlxColor.WHITE;
-		levelText.alignment = "left";
-		levelText.font = Fonts.HOLLYWOOD;
-		subContainer.add(levelText);
+		var background:FlxSprite = new FlxSprite().makeGraphic(1136, 150, FlxColor.BLACK);
+		background.y = -50;
+		background.alpha = .8;
+		header.add(background);
 
-		var worldText:FlxText = new FlxText(0, 0, 0, LevelUtil.getWorldNameByWorldId(levelInfo.worldId).toUpperCase(), 20);
-		worldText.autoSize = true;
-		worldText.color = 0xFFCCCCCC;
-		worldText.alignment = "left";
-		worldText.font = Fonts.HOLLYWOOD;
-		worldText.x = panelBack.width - worldText.fieldWidth - 60;
-		subContainer.add(worldText);
+		var scoreWrapper = new HPPVUIBox(0, HAlign.LEFT);
+		var scoreContainer = new HPPHUIBox(15);
 
-		var completedText:FlxText = new FlxText(0, 0, 0, "COMPLETED", 28);
-		completedText.autoSize = true;
-		completedText.color = FlxColor.YELLOW;
-		completedText.alignment = "left";
-		completedText.font = Fonts.HOLLYWOOD;
-		completedText.y = 30;
-		subContainer.add(completedText);
+		var bestScoreLabelText:FlxText = new FlxText(0, 0, 0, "Best score ", 25);
+		bestScoreLabelText.autoSize = true;
+		bestScoreLabelText.color = FlxColor.WHITE;
+		bestScoreLabelText.alignment = "left";
+		bestScoreLabelText.font = Fonts.HOLLYWOOD;
+		scoreContainer.add(bestScoreLabelText);
+		bestScoreText = new FlxText(0, 0, 0, levelInfo.isCompleted ? NumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
+		bestScoreText.autoSize = true;
+		bestScoreText.color = FlxColor.YELLOW;
+		bestScoreText.alignment = "left";
+		bestScoreText.font = Fonts.HOLLYWOOD;
+		scoreContainer.add(bestScoreText);
+		scoreWrapper.add(scoreContainer);
 
-		highscoreText = new FlxText(0, 0, 0, "NEW HIGHSCORE!", 28);
+		highscoreText = new FlxText(0, 0, 0, "NEW HIGHSCORE! ", 25);
 		highscoreText.autoSize = true;
-		highscoreText.color = FlxColor.YELLOW;
+		highscoreText.color = FlxColor.WHITE;
 		highscoreText.alignment = "left";
 		highscoreText.font = Fonts.HOLLYWOOD;
-		highscoreText.x = panelBack.width - highscoreText.fieldWidth - 60;
-		highscoreText.y = completedText.y;
-		subContainer.add(highscoreText);
+		highscoreText.visible = currentScore >= levelInfo.score;
+		scoreContainer.add(highscoreText);
 
-		content.add(subContainer);
+		reachedStarView = new ReachedStarView();
+		scoreWrapper.add(reachedStarView);
+
+		scoreWrapper.x = 30;
+		scoreWrapper.y = 17;
+		header.add(scoreWrapper);
+
+		var titleContainer:HPPVUIBox = new HPPVUIBox(-20, HAlign.RIGHT);
+		var levelText:FlxText = new FlxText(0, 0, 0, "RACE " + (levelInfo.levelId + 1), 45);
+		levelText.autoSize = true;
+		levelText.color = 0xFFC9B501;
+		levelText.font = Fonts.HOLLYWOOD;
+		titleContainer.add(levelText);
+		var worldText:FlxText = new FlxText(0, 0, 0, LevelUtil.getWorldNameByWorldId(levelInfo.worldId).toUpperCase(), 35);
+		worldText.autoSize = true;
+		worldText.color = 0xFFFFFF00;
+		worldText.font = Fonts.HOLLYWOOD;
+		titleContainer.add(worldText);
+		titleContainer.x = FlxG.stage.stageWidth - titleContainer.width - 30;
+		titleContainer.y = 17;
+		header.add(titleContainer);
+
+		add(header);
 	}
 
-	function createButtons()
+	function buildFooter():Void
 	{
+		footer = new FlxSpriteGroup();
+		footer.scrollFactor.set();
+
+		var background:FlxSprite = new FlxSprite().makeGraphic(1136, 150, FlxColor.BLACK);
+		background.alpha = .8;
+		footer.add(background);
+
 		var buttonContainer:HPPHUIBox = new HPPHUIBox(30);
+		buttonContainer.add(exitButton = new SmallButton("EXIT", exitRequest));
+		buttonContainer.add(exitButton = new SmallButton("RESTART", restartRequest));
+		footer.add(buttonContainer);
+		buttonContainer.x = 30;
+		buttonContainer.y = (background.height - 50) / 2 - buttonContainer.height / 2;
 
-		buttonContainer.add(exitButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "E(X)IT" : "EXIT", exitRequest));
-		buttonContainer.add(startButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(R)ESTART GAME" : "RESTART GAME", restartRequest));
+		var buttonContainerRight:HPPHUIBox = new HPPHUIBox(30);
+		if (canStartPrevLevel()) buttonContainerRight.add(prevButton = new SmallButton("PREV RACE", prevLevelRequest));
+		if (canStartNextLevel()) buttonContainerRight.add(nextButton = new SmallButton("NEXT RACE", nextLevelRequest));
+		buttonContainerRight.x = FlxG.stage.stageWidth - buttonContainerRight.width - 30;
+		buttonContainerRight.y = (background.height - 50) / 2 - buttonContainer.height / 2;
+		footer.add(buttonContainerRight);
 
-		content.add(buttonContainer);
-
-		var subButtonContainer:HPPHUIBox = new HPPHUIBox(30);
-		var _canStartPrevLevel:Bool = canStartPrevLevel();
-		var _canStartNextLevel:Bool = canStartNextLevel();
-
-		if (_canStartPrevLevel || _canStartNextLevel)
-		{
-			content.add(new PlaceHolder(0, 20));
-		}
-		if (_canStartPrevLevel)
-		{
-			subButtonContainer.add(prevButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(P)REVIOUS LEVEL" : "PREVIOUS LEVEL", prevLevelRequest));
-		}
-		if (_canStartNextLevel)
-		{
-			subButtonContainer.add(nextButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(N)EXT LEVEL" : "NEXT LEVEL", nextLevelRequest));
-		}
-		content.add(subButtonContainer);
+		footer.y = FlxG.stage.stageHeight - footer.height + 50;
+		add(footer);
 	}
 
 	function canStartPrevLevel():Bool
@@ -191,20 +191,31 @@ class EndLevelPanel extends FlxSubState
 		return levelInfo.isCompleted && levelInfo.levelId != 23;
 	}
 
-	public function updateView(currentScore:UInt, currentTime:Float, currentCollectedCoins:UInt, currentEarnedStarCounts:UInt):Void
+	public function updateView(
+		currentScore:UInt,
+		currentTime:Float,
+		currentCollectedCoins:UInt,
+		currentEarnedStarCounts:UInt,
+		countOfFrontFlip:UInt,
+		countOfBackFlip:UInt,
+		countOfNiceWheelie:UInt
+	):Void
 	{
 		this.currentTime = currentTime;
 		this.currentScore = currentScore;
 		this.currentCollectedCoins = currentCollectedCoins;
 		this.currentEarnedStarCounts = currentEarnedStarCounts;
+		this.countOfFrontFlip = countOfFrontFlip;
+		this.countOfBackFlip = countOfBackFlip;
+		this.countOfNiceWheelie = countOfNiceWheelie;
 
 		if (!isBuilt) return;
 
+		reachedStarView.setStarCount(levelInfo.starCount);
+		bestScoreText.text = NumberUtil.formatNumber(levelInfo.score);
 		highscoreText.visible = currentScore >= levelInfo.score;
 
-		levelStatisticBlock.updateData(currentCollectedCoins, levelData.starPoints.length, currentTime);
-		collectedCoinsInfoBlock.updateData(currentCollectedCoins, levelData.starPoints.length);
-		levelResultBlock.updateData(currentScore, currentEarnedStarCounts);
+		endLevelSummary.updateView(currentScore, currentTime, currentCollectedCoins, countOfFrontFlip, countOfBackFlip, countOfNiceWheelie);
 	}
 
 	override public function update(elapsed:Float):Void

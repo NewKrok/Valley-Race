@@ -521,7 +521,7 @@ class GameState extends FlxState
 			var body:Body = new Body(BodyType.STATIC);
 
 			body.shapes.add(new Polygon(Polygon.box(distance, 1)));
-			body.setShapeMaterials(worldId == 1 ? CPhysicsValue.MATERIAL_SNOWY_GROUND : CPhysicsValue.MATERIAL_NORMAL_GROUND);
+			body.setShapeMaterials(CPhysicsValue.MATERIAL_NORMAL_GROUND);
 			body.setShapeFilters(filter);
 			body.position.x = levelData.groundPoints[ i ].x + (levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x) / 2;
 			body.position.y = levelData.groundPoints[ i ].y + (levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y) / 2;
@@ -1015,7 +1015,7 @@ class GameState extends FlxState
 
 			addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_LEVEL_COMPLETED);
 
-			Timer.delay(winRutin, 500);
+			Timer.delay(winRutin, 250);
 		}
 	}
 
@@ -1059,13 +1059,21 @@ class GameState extends FlxState
 
 		persistentUpdate = false;
 		openSubState(endLevelPanel);
-		endLevelPanel.updateView(score, gameTime, collectedCoin, starCount);
+		endLevelPanel.updateView(
+			score,
+			gameTime,
+			collectedCoin,
+			starCount,
+			countOfFrontFlip,
+			countOfBackFlip,
+			countOfNiceWheelie
+		);
+		gameGui.visible = false;
 	}
 
 	function calculateScore():UInt
 	{
 		var result = 0;
-
 		result = Math.floor(AppConfig.MAXIMUM_GAME_TIME_BONUS - gameTime / 10);
 		result += collectedCoin * AppConfig.COIN_SCORE_MULTIPLIER;
 		result += collectedExtraCoins;

@@ -9,9 +9,9 @@ class AppConfig
 	public static inline var GAME_NAME:String = "ValleyRace";
 	public static inline var GAME_VERSION:String = "0.0.2";
 
-	public static inline var MAXIMUM_GAME_TIME_BONUS:Int = 10000;
-	public static inline var COIN_SCORE_MULTIPLIER:Int = 25;
-	public static inline var ALL_COINS_COLLECTED_BONUS:Int = 250;
+	public static inline var MAXIMUM_GAME_TIME_BONUS:Int = 20000;
+	public static inline var COIN_SCORE_MULTIPLIER:Int = 250;
+	public static inline var ALL_COINS_COLLECTED_BONUS:Int = 1000;
 
 	public static var IS_ALPHA_ANIMATION_ENABLED:Bool = false;
 
