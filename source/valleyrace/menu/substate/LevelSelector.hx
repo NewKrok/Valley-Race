@@ -26,6 +26,8 @@ class LevelSelector extends FlxSubState
 {
 	public var worldId:UInt;
 
+	var carPreviews:Array<CarPreview>;
+
 	var header:FlxSpriteGroup;
 	var footer:FlxSpriteGroup;
 	var playersCoin:PlayersCoin;
@@ -36,6 +38,7 @@ class LevelSelector extends FlxSubState
 	function new(onBackRequest:HPPButton->Void):Void
 	{
 		this.onBackRequest = onBackRequest;
+		carPreviews = [];
 
 		super();
 	}
@@ -87,11 +90,27 @@ class LevelSelector extends FlxSubState
 
 		for (i in 0...3)
 		{
-			var preview = new CarPreview(i, PlayerInfo.selectedCarId == i);
+			var preview = new CarPreview(onCarSelect, onCarUpgrade, i, PlayerInfo.selectedCarId == i);
 			carSelectorContainer.add(preview);
+			carPreviews.push(preview);
 		}
 
 		contentHolder.add(carSelectorContainer);
+	}
+
+	function onCarSelect(p:CarPreview)
+	{
+		for (preview in carPreviews)
+			preview.isSelected = p == preview;
+
+		PlayerInfo.selectedCarId = p.id;
+	}
+
+	function onCarUpgrade()
+	{
+		playersCoin.updateValue(SavedDataUtil.getPlayerInfo().coin);
+
+		for (preview in carPreviews) preview.updateView();
 	}
 
 	function buildInfo()

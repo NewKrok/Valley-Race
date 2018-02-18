@@ -3,7 +3,11 @@
 	<SubTexture name="wheel_holder" x="260" y="90" width="56" height="9"/>
 	<SubTexture name="spring" x="260" y="105" width="59" height="17"/>
 	<SubTexture name="car_body_0" x="5" y="5" width="250" height="123"/>
+	<SubTexture name="car_body_1" x="280" y="485" width="250" height="126"/>
+	<SubTexture name="car_body_2" x="5" y="485" width="250" height="123"/>
 	<SubTexture name="wheel_0" x="260" y="5" width="80" height="80"/>
+	<SubTexture name="wheel_1" x="540" y="465" width="80" height="80"/>
+	<SubTexture name="wheel_2" x="630" y="465" width="80" height="80"/>
 	<SubTexture name="car_fog" x="345" y="5" width="31" height="25"/>
 	<SubTexture name="small_rock_0_1" x="345" y="35" width="12" height="9"/>
 	<SubTexture name="small_rock_0_2" x="345" y="50" width="12" height="14"/>
@@ -51,5 +55,7 @@
 	<SubTexture name="car_preview_back_selected" x="830" y="220" width="333" height="128"/>
 	<SubTexture name="car_preview_0" x="1170" y="260" width="140" height="88"/>
 	<SubTexture name="car_preview_1" x="1170" y="362" width="141" height="90"/>
-	<SubTexture name="car_preview_2" x="1340" y="165" width="141" height="92"/>
+	<SubTexture name="car_preview_2" x="1340" y="165" width="141" height="86"/>
+	<SubTexture name="upgrade_button" x="1170" y="225" width="136" height="28"/>
+	<SubTexture name="coin_small" x="925" y="65" width="20" height="20"/>
 </TextureAtlas>

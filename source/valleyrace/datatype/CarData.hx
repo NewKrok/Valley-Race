@@ -11,6 +11,7 @@ typedef CarData =
 	var id(default, default):UInt;
 	var graphicId(default, default):UInt;
 
+	var price(default, default):Array<UInt>;
 	var speed(default, default):Array<Float>;
 	var rotation(default, default):Array<Float>;
 	var elasticity(default, default):Array<Float>;

@@ -34,6 +34,11 @@ class PlayersCoin extends FlxSpriteGroup
 		add(levelText);
 	}
 
+	public function updateValue(v:UInt):Void
+	{
+		levelText.text = NumberUtil.formatNumber(v);
+	}
+
 	override function get_width():Float
 	{
 		return levelText != null ? levelText.x + levelText.width : 0;

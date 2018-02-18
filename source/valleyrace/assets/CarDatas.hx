@@ -12,12 +12,12 @@ import valleyrace.datatype.CarData;
  */
 class CarDatas
 {
-	public static inline var MAX_SPEED:Float = 25;
-	public static inline var MIN_SPEED:Float = 15;
-	public static inline var MAX_ROTATION:Float = 3750;
-	public static inline var MIN_ROTATION:Float = 2500;
-	public static inline var MAX_ELASTICITY:Float = .2;
-	public static inline var MIN_ELASTICITY:Float = .7;
+	public static var MAX_SPEED(default, null):Float = 0;
+	public static var MIN_SPEED(default, null):Float = 0;
+	public static var MAX_ROTATION(default, null):Float = 0;
+	public static var MIN_ROTATION(default, null):Float = 0;
+	public static var MAX_ELASTICITY(default, null):Float = 0;
+	public static var MIN_ELASTICITY(default, null):Float = 0;
 
 	static var carDatas:Array<CarData>;
 
@@ -26,6 +26,25 @@ class CarDatas
 		try
 		{
 			carDatas = Json.parse(jsonData).carDatas;
+
+			for (data in carDatas)
+			{
+				for (prop in data.speed)
+				{
+					if (MAX_SPEED == 0 || prop > MAX_SPEED) MAX_SPEED = prop;
+					if (MIN_SPEED == 0 || prop < MIN_SPEED) MIN_SPEED = prop;
+				}
+				for (prop in data.rotation)
+				{
+					if (MAX_ROTATION == 0 || prop > MAX_ROTATION) MAX_ROTATION = prop;
+					if (MIN_ROTATION == 0 || prop < MIN_ROTATION) MIN_ROTATION = prop;
+				}
+				for (prop in data.elasticity)
+				{
+					if (MIN_ELASTICITY == 0 || prop > MIN_ELASTICITY) MIN_ELASTICITY = prop;
+					if (MAX_ELASTICITY == 0 || prop < MAX_ELASTICITY) MAX_ELASTICITY = prop;
+				}
+			}
 		}
 		catch(e:String)
 		{

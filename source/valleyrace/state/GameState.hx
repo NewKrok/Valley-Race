@@ -142,9 +142,6 @@ class GameState extends FlxState
 		this.worldId = worldId;
 		this.levelId = levelId;
 
-		// TODO remove this hack after car selector added
-		PlayerInfo.selectedCarId = worldId == 0 ? 0 : 1;
-
 		levelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 		SavedDataUtil.resetLastPlayedInfo();
 		levelInfo.isLastPlayed = true;
