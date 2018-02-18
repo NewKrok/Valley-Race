@@ -1,14 +1,21 @@
 package valleyrace.menu.substate;
 
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxText;
+import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
-import hpp.flixel.ui.HPPPager;
-import hpp.flixel.ui.HPPTouchScrollContainer;
-import valleyrace.common.view.LongButton;
+import hpp.flixel.ui.HPPVUIBox;
+import valleyrace.assets.Fonts;
+import valleyrace.common.PlayerInfo;
+import valleyrace.common.view.SmallButton;
+import valleyrace.menu.view.CarPreview;
 import valleyrace.menu.view.LevelSelectorPage;
+import valleyrace.menu.view.PlayersCoin;
+import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil;
 
 /**
@@ -19,15 +26,14 @@ class LevelSelector extends FlxSubState
 {
 	public var worldId:UInt;
 
-	var levelButtonsContainer:HPPTouchScrollContainer;
-	var controlButtonContainer:FlxSpriteGroup;
-
-	var backButton:HPPButton;
+	var header:FlxSpriteGroup;
+	var footer:FlxSpriteGroup;
+	var playersCoin:PlayersCoin;
+	var contentHolder:HPPVUIBox;
 
 	var onBackRequest:HPPButton->Void;
-	var pager:HPPPager;
 
-	function new( onBackRequest:HPPButton->Void ):Void
+	function new(onBackRequest:HPPButton->Void):Void
 	{
 		this.onBackRequest = onBackRequest;
 
@@ -38,46 +44,81 @@ class LevelSelector extends FlxSubState
 	{
 		super.create();
 
-		createLevelButtons();
-		createControlButtons();
-		createPager();
+		add(contentHolder = new HPPVUIBox(50));
+		contentHolder.scrollFactor.set();
+
+		buildHeader();
+		contentHolder.add(new LevelSelectorPage(worldId, 0, 5));
+		buildCarSelector();
+		buildInfo();
+		buildFooter();
+
+		contentHolder.x = FlxG.stage.stageWidth / 2 - contentHolder.width / 2;
+		contentHolder.y = FlxG.stage.stageHeight / 2 - contentHolder.height / 2;
 	}
 
-	function createLevelButtons()
+	function buildHeader():Void
 	{
-		add(levelButtonsContainer = new HPPTouchScrollContainer(FlxG.width, FlxG.height, new HPPTouchScrollContainerConfig({ snapToPages: true })));
-		levelButtonsContainer.scrollFactor.set();
+		header = new FlxSpriteGroup();
+		header.scrollFactor.set();
 
-		var container:HPPHUIBox = new HPPHUIBox();
-		container.add(new LevelSelectorPage(worldId, 0, 12));
-		container.add(new LevelSelectorPage(worldId, 12, 24));
+		var background:FlxSprite = new FlxSprite().makeGraphic(1136, 66, FlxColor.BLACK);
+		background.alpha = .5;
+		header.add(background);
 
-		levelButtonsContainer.add(container);
+		header.add(playersCoin = new PlayersCoin(SavedDataUtil.getPlayerInfo().coin));
+		playersCoin.x = 20;
+		playersCoin.y = 8;
 
-		var lastPlayedLevel:UInt = SavedDataUtil.getLastPlayedLevel(worldId);
-		var isNextLevelEnabled:Bool = lastPlayedLevel == 23 ? false : SavedDataUtil.getLevelInfo(worldId, lastPlayedLevel + 1).isEnabled;
-		if (lastPlayedLevel + (isNextLevelEnabled ? 1 : 0) > 11)
+		var worldText:FlxText = new FlxText(0, 0, 0, LevelUtil.getWorldNameByWorldId(worldId).toUpperCase(), 35);
+		worldText.autoSize = true;
+		worldText.color = 0xFFFFFF00;
+		worldText.font = Fonts.HOLLYWOOD;
+		worldText.x = FlxG.stage.stageWidth - worldText.width - 30;
+		worldText.y = 20;
+		header.add(worldText);
+
+		add(header);
+	}
+
+	function buildCarSelector()
+	{
+		var carSelectorContainer:HPPHUIBox = new HPPHUIBox(30);
+
+		for (i in 0...3)
 		{
-			levelButtonsContainer.currentPage = 2;
+			var preview = new CarPreview(i, PlayerInfo.selectedCarId == i);
+			carSelectorContainer.add(preview);
 		}
 
-		openCallback = levelButtonsContainer.makeActive;
+		contentHolder.add(carSelectorContainer);
 	}
 
-	function createControlButtons()
+	function buildInfo()
 	{
-		add( controlButtonContainer = new FlxSpriteGroup() );
-		controlButtonContainer.scrollFactor.set();
+		var infoText = new FlxText(0, 0, 0, "Be the 1st to unlock the next level!", 30);
+		infoText.color = FlxColor.WHITE;
+		infoText.alignment = "center";
+		infoText.font = Fonts.HOLLYWOOD;
 
-		controlButtonContainer.add( backButton = new LongButton( "BACK", onBackRequest ) );
-		backButton.x = FlxG.width / 2 - backButton.width / 2;
-		backButton.y = FlxG.height - 40 - backButton.height;
+		contentHolder.add(infoText);
 	}
 
-	function createPager():Void
+	function buildFooter():Void
 	{
-		add( pager = new HPPPager( levelButtonsContainer, "pager_page", "pager_selected", 10 ) );
-		pager.x = FlxG.width / 2 - pager.width / 2;
-		pager.y = backButton.y - 40;
+		footer = new FlxSpriteGroup();
+		footer.scrollFactor.set();
+
+		var background:FlxSprite = new FlxSprite().makeGraphic(1136, 80, FlxColor.BLACK);
+		background.alpha = .5;
+		footer.add(background);
+
+		var backButton = new SmallButton("BACK", onBackRequest);
+		backButton.x = background.width / 2 - backButton.width / 2;
+		backButton.y = background.height - backButton.height - 12;
+		footer.add(backButton);
+
+		footer.y = FlxG.stage.stageHeight - footer.height;
+		add(footer);
 	}
 }

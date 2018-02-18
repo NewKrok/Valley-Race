@@ -43,4 +43,13 @@
 	<SubTexture name="counter_2" x="310" y="290" width="109" height="174"/>
 	<SubTexture name="level_star" x="580" y="205" width="35" height="35"/>
 	<SubTexture name="level_star_reached" x="540" y="205" width="35" height="35"/>
+	<SubTexture name="level_star_reached" x="540" y="205" width="35" height="35"/>
+	<SubTexture name="level_button_base" x="440" y="265" width="180" height="179"/>
+	<SubTexture name="level_button_locked" x="640" y="265" width="180" height="179"/>
+	<SubTexture name="level_button_star_back" x="640" y="205" width="157" height="46"/>
+	<SubTexture name="car_preview_back" x="830" y="355" width="333" height="128"/>
+	<SubTexture name="car_preview_back_selected" x="830" y="220" width="333" height="128"/>
+	<SubTexture name="car_preview_0" x="1170" y="260" width="140" height="88"/>
+	<SubTexture name="car_preview_1" x="1170" y="362" width="141" height="90"/>
+	<SubTexture name="car_preview_2" x="1340" y="165" width="141" height="92"/>
 </TextureAtlas>

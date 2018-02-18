@@ -14,10 +14,10 @@ import valleyrace.AppConfig;
 import valleyrace.assets.Fonts;
 import valleyrace.common.view.SmallButton;
 import valleyrace.datatype.LevelData;
-import valleyrace.game.view.ReachedStarView;
+import valleyrace.common.view.ReachedStarView;
 import valleyrace.game.view.endlevelpanel.EndLevelSummary;
 import valleyrace.util.LevelUtil;
-import valleyrace.util.SavedDataUtil.LevelInfo;
+import valleyrace.util.SavedDataUtil.LevelSavedData;
 
 
 /**
@@ -44,7 +44,7 @@ class EndLevelPanel extends FlxSubState
 	var bestScoreText:FlxText;
 	var highscoreText:FlxText;
 
-	var levelInfo:LevelInfo;
+	var levelInfo:LevelSavedData;
 	var levelData:LevelData;
 
 	var isBuilt:Bool = false;
@@ -56,7 +56,7 @@ class EndLevelPanel extends FlxSubState
 	var countOfBackFlip:UInt;
 	var countOfNiceWheelie:UInt;
 
-	function new(levelInfo:LevelInfo, levelData:LevelData, restartRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
+	function new(levelInfo:LevelSavedData, levelData:LevelData, restartRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
 	{
 		super();
 

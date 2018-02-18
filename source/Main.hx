@@ -4,9 +4,12 @@ import flixel.FlxG;
 import hpp.flixel.system.HPPFlxMain;
 import hpp.util.DeviceData;
 import hpp.util.JsFullScreenUtil;
+import openfl.Assets;
 import openfl.display.Sprite;
 import valleyrace.AppConfig;
+import valleyrace.assets.CarDatas;
 import valleyrace.assets.Fonts;
+import valleyrace.common.PlayerInfo;
 import valleyrace.state.MenuState;
 import valleyrace.util.SavedDataUtil;
 
@@ -21,6 +24,10 @@ class Main extends Sprite
 
 		AppConfig.IS_ALPHA_ANIMATION_ENABLED = settingsInfo.enableAlphaAnimation;
 		AppConfig.IS_MOBILE_DEVICE = DeviceData.isMobile();
+
+		CarDatas.loadData(Assets.getText("assets/data/car_datas.json"));
+
+		PlayerInfo.selectedCarId = SavedDataUtil.getPlayerInfo().selectedCar;
 
 		JsFullScreenUtil.init("openfl-content");
 		Fonts.init();

@@ -18,9 +18,9 @@ import valleyrace.AppConfig;
 import valleyrace.assets.Fonts;
 import valleyrace.common.view.LongButton;
 import valleyrace.common.view.SmallButton;
-import valleyrace.game.view.ReachedStarView;
+import valleyrace.common.view.ReachedStarView;
 import valleyrace.util.LevelUtil;
-import valleyrace.util.SavedDataUtil.LevelInfo;
+import valleyrace.util.SavedDataUtil.LevelSavedData;
 
 /**
  * ...
@@ -44,9 +44,9 @@ class StartLevelPanel extends FlxSubState
 
 	var baseBack:FlxSprite;
 	var container:FlxSpriteGroup;
-	var levelInfo:LevelInfo;
+	var levelInfo:LevelSavedData;
 
-	function new(levelInfo:LevelInfo, startRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
+	function new(levelInfo:LevelSavedData, startRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
 	{
 		super();
 

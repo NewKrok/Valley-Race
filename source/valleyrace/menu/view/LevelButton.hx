@@ -1,32 +1,32 @@
 package valleyrace.menu.view;
-import valleyrace.util.SavedDataUtil;
 
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
-import hpp.flixel.ui.HPPExtendableButton;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.util.HPPAssetManager;
 import hpp.util.NumberUtil;
 import valleyrace.assets.Fonts;
+import valleyrace.common.view.ExtendedButtonWithTween;
+import valleyrace.common.view.ReachedStarView;
 import valleyrace.state.GameState;
-import valleyrace.util.SavedDataUtil.LevelInfo;
+import valleyrace.util.SavedDataUtil.LevelSavedData;
 
 /**
  * ...
  * @author Krisztian Somoracz
  */
-class LevelButton extends HPPExtendableButton
+class LevelButton extends ExtendedButtonWithTween
 {
 	var title:FlxText;
 	var score:FlxText;
-	var levelStarView:LevelStarView;
+	var reachedStarView:ReachedStarView;
 
 	var worldId:UInt;
 	var levelId:UInt;
 
-	public function new(worldId:UInt, levelId:UInt, levelInfo:LevelInfo)
+	public function new(worldId:UInt, levelId:UInt, levelInfo:LevelSavedData)
 	{
 		super(levelInfo.isEnabled ? loadLevel : null, "level_button_base");
 
@@ -37,26 +37,25 @@ class LevelButton extends HPPExtendableButton
 		{
 			overScale = .95;
 
-			var container:HPPVUIBox = new HPPVUIBox(6);
+			var container:HPPVUIBox = new HPPVUIBox(3);
 
-			title = new FlxText(0, 0, cast width, "Level " + (levelId + 1), 25);
+			title = new FlxText(0, 0, cast width, "RACE " + (levelId + 1), 35);
 			title.font = Fonts.HOLLYWOOD;
-			title.color = FlxColor.WHITE;
+			title.color = 0xFF3E3700;
 			title.alignment = "center";
 			container.add(title);
 
-			container.add(levelStarView = new LevelStarView());
-			levelStarView.setStarCount(levelInfo.starCount);
-
-			score = new FlxText(0, 0, title.width, NumberUtil.formatNumber(levelInfo.score), 25);
+			score = new FlxText(0, 0, title.width, levelInfo.score == 0 ? "PLAY" : NumberUtil.formatNumber(levelInfo.score), 35);
 			score.font = Fonts.HOLLYWOOD;
-			score.color = FlxColor.YELLOW;
+			score.color = FlxColor.WHITE;
 			score.alignment = "center";
 			container.add(score);
 
-			add(container);
+			container.add(reachedStarView = new ReachedStarView(true));
+			reachedStarView.setStarCount(levelInfo.starCount);
 
-			container.y = 9;
+			add(container);
+			container.y = height / 2 - container.height / 2;
 		}
 		else add(HPPAssetManager.getSprite("level_button_locked"));
 	}

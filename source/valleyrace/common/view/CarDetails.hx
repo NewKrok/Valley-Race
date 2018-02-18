@@ -3,7 +3,7 @@ package valleyrace.common.view;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.ui.HAlign;
 import valleyrace.assets.CarDatas;
-import valleyrace.datatype.CarData;
+import valleyrace.datatype.CarData.CarLeveledData;
 
 /**
  * ...
@@ -11,7 +11,7 @@ import valleyrace.datatype.CarData;
  */
 class CarDetails extends HPPVUIBox
 {
-	public function new(carData:CarData)
+	public function new(carData:CarLeveledData)
 	{
 		super(5, HAlign.RIGHT);
 

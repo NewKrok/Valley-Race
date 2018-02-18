@@ -14,7 +14,7 @@ import valleyrace.game.constant.CScore;
 import valleyrace.game.view.counter.BonusCounter;
 import valleyrace.game.view.counter.CoinCounter;
 import valleyrace.game.view.counter.TimeCounter;
-import valleyrace.util.SavedDataUtil.LevelInfo;
+import valleyrace.util.SavedDataUtil.LevelSavedData;
 
 /**
  * ...
@@ -22,7 +22,7 @@ import valleyrace.util.SavedDataUtil.LevelInfo;
  */
 class EndLevelSummary extends FlxSpriteGroup
 {
-	var levelInfo:LevelInfo;
+	var levelInfo:LevelSavedData;
 	var levelData:LevelData;
 	var totalScore:FlxText;
 
@@ -34,7 +34,7 @@ class EndLevelSummary extends FlxSpriteGroup
 
 	var coinCounter:CoinCounter;
 
-	public function new(levelInfo:LevelInfo, levelData:LevelData)
+	public function new(levelInfo:LevelSavedData, levelData:LevelData)
 	{
 		super();
 		scrollFactor.set();

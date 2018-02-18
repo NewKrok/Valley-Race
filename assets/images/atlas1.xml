@@ -25,10 +25,6 @@
 	<SubTexture name="crate_5" x="506" y="1284" width="100" height="50" pivotX="0" pivotY="0"/>
 	<SubTexture name="facebook_button" x="2" y="1805" width="118" height="134" pivotX="0" pivotY="0"/>
 	<SubTexture name="home_button" x="304" y="1801" width="118" height="134" pivotX="0" pivotY="0"/>
-	<SubTexture name="level_button_base" x="1879" y="289" width="154" height="138" pivotX="0" pivotY="0"/>
-	<SubTexture name="level_button_locked" x="1879" y="430" width="154" height="138" pivotX="0" pivotY="0"/>
-	<SubTexture name="level_button_perfect" x="993" y="905" width="154" height="124" pivotX="0" pivotY="0"/>
-	<SubTexture name="level_button_star" x="2011" y="571" width="29" height="27" pivotX="0" pivotY="0"/>
 	<SubTexture name="level_pack_0" x="289" y="1082" width="318" height="199" pivotX="0" pivotY="0"/>
 	<SubTexture name="level_pack_1" x="610" y="1183" width="317" height="199" pivotX="0" pivotY="0"/>
 	<SubTexture name="level_pack_1_locked" x="689" y="905" width="301" height="118" pivotX="0" pivotY="0"/>

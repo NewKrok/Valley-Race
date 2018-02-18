@@ -135,7 +135,7 @@ class GameState extends FlxState
 
 	var now:Float;
 
-	var levelInfo:LevelInfo;
+	var levelInfo:LevelSavedData;
 
 	public function new(worldId:UInt, levelId:UInt):Void
 	{
@@ -173,8 +173,6 @@ class GameState extends FlxState
 
 	function loadAssets():Void
 	{
-		CarDatas.loadData(Assets.getText("assets/data/car_datas.json"));
-
 		HPPAssetManager.loadXMLAtlas("assets/images/atlas1.png", "assets/images/atlas1.xml");
 		HPPAssetManager.loadXMLAtlas("assets/images/atlas2.png", "assets/images/atlas2.xml");
 		HPPAssetManager.loadXMLAtlas("assets/images/atlas3.png", "assets/images/atlas3.xml");
@@ -1043,7 +1041,7 @@ class GameState extends FlxState
 		levelInfo.starCount = levelInfo.starCount < starCount ? starCount : levelInfo.starCount;
 		levelInfo.collectedCoins = levelInfo.collectedCoins < collectedCoin ? collectedCoin : levelInfo.collectedCoins;
 
-		var nextLevelInfo:LevelInfo;
+		var nextLevelInfo:LevelSavedData;
 		if (levelId < 23)
 		{
 			nextLevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);

@@ -10,7 +10,7 @@ import valleyrace.assets.Fonts;
  * ...
  * @author Krisztian Somoracz
  */
-class SmallButton extends HPPButton
+class SmallButton extends ButtonWithTween
 {
 	public function new(title:String = "", callBack:HPPButton->Void = null)
 	{
@@ -22,6 +22,6 @@ class SmallButton extends HPPButton
 		over_style = new ButtonLabelStyle(null, null, 0xFFFFE302);
 		labelOffsets = [new FlxPoint(0, 7), new FlxPoint(0, 7), new FlxPoint(0, 7)];
 		loadGraphic(HPPAssetManager.getGraphic("base_button"));
-		overScale = .95;
+		tweenOverScale = .95;
 	}
 }

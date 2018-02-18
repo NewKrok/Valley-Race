@@ -11,7 +11,7 @@ import valleyrace.datatype.LevelData;
 class LevelUtil
 {
 	private static var worldNames:Array<String> = [
-		"Sharp Mountain",
+		"Pine Mountain",
 		"Ice World",
 		"Desert Valley",
 		"Candy Land"

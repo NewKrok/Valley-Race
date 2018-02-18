@@ -16,6 +16,7 @@ import nape.shape.Circle;
 import nape.shape.Polygon;
 import nape.space.Space;
 import openfl.geom.Point;
+import valleyrace.assets.CarDatas;
 import valleyrace.datatype.CarData;
 
 /**
@@ -24,6 +25,8 @@ import valleyrace.datatype.CarData;
  */
 class Car extends AbstractCar implements IRecorderPerformer
 {
+	var carLeveledData:CarLeveledData;
+
 	var wheelJoinDamping:Float = .3;
 	var wheelJoinHertz:Float = 3;
 
@@ -60,6 +63,7 @@ class Car extends AbstractCar implements IRecorderPerformer
 	public function new(space:Space, x:Float, y:Float, carData:CarData, scale:Float = 1, filterCategory:UInt = 0, filterMask:UInt = 0)
 	{
 		super(carData, scale);
+		carLeveledData = CarDatas.getLeveledData(carData.id);
 
 		this.space = space;
 
@@ -247,26 +251,26 @@ class Car extends AbstractCar implements IRecorderPerformer
 	{
 		direction = -1;
 
-		wheelLeftPhysics.angularVel = -carData.speed / 2;
-		wheelRightPhysics.angularVel = -carData.speed / 2;
+		wheelLeftPhysics.angularVel = -carLeveledData.speed / 2;
+		wheelRightPhysics.angularVel = -carLeveledData.speed / 2;
 	}
 
 	public function accelerateToRight():Void
 	{
 		direction = 1;
 
-		wheelLeftPhysics.angularVel = carData.speed;
-		wheelRightPhysics.angularVel = carData.speed;
+		wheelLeftPhysics.angularVel = carLeveledData.speed;
+		wheelRightPhysics.angularVel = carLeveledData.speed;
 	}
 
 	public function rotateLeft():Void
 	{
-		carBodyPhysics.applyAngularImpulse(-carData.rotation);
+		carBodyPhysics.applyAngularImpulse(-carLeveledData.rotation);
 	}
 
 	public function rotateRight():Void
 	{
-		carBodyPhysics.applyAngularImpulse(carData.rotation);
+		carBodyPhysics.applyAngularImpulse(carLeveledData.rotation);
 	}
 
 	public function teleportTo(x:Float, y:Float):Void

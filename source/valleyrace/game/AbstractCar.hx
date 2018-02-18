@@ -3,9 +3,7 @@ package valleyrace.game;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
-import flixel.util.FlxColor;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.util.GeomUtil.SimplePoint;
 import valleyrace.datatype.CarData;
 
 class AbstractCar extends FlxSpriteGroup

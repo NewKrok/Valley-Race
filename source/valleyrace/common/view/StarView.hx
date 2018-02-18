@@ -1,4 +1,4 @@
-package valleyrace.game.view;
+package valleyrace.common.view;
 
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;

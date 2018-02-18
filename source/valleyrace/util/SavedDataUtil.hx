@@ -24,6 +24,19 @@ class SavedDataUtil
 			gameSave.data.baseInfo = {gameName: AppConfig.GAME_NAME, version: AppConfig.GAME_VERSION};
 		}
 
+		if (gameSave.data.playerInfo == null)
+		{
+			gameSave.data.playerInfo = {
+				coin: 0,
+				selectedCar: 0,
+				carDatas: [
+					{ id: 0, isUnlocked: true, level: 0 },
+					{ id: 1, isUnlocked: false, level: 0 },
+					{ id: 1, isUnlocked: false, level: 0 }
+				]
+			};
+		}
+
 		if (gameSave.data.settings == null)
 		{
 			gameSave.data.settings = {
@@ -53,20 +66,6 @@ class SavedDataUtil
 					replay:null,
 					replayCarId:0,
 					isFullReplay: false
-				},
-				{
-					worldId:1,
-					levelId:0,
-					score:0,
-					starCount:0,
-					collectedCoins:0,
-					time:0,
-					isEnabled:true,
-					isCompleted:false,
-					isLastPlayed:true,
-					replay:null,
-					replayCarId:0,
-					isFullReplay: false
 				}
 			];
 		}
@@ -78,21 +77,26 @@ class SavedDataUtil
 		gameSave.flush();
 	}
 
-	public static function getBaseAppInfo():BaseAppInfo
+	public static function getBaseAppInfo():AppSavedData
 	{
 		return gameSave.data.baseInfo;
 	}
 
-	public static function getAllLevelInfo():Array<LevelInfo>
+	public static function getPlayerInfo():PlayerSavedData
+	{
+		return gameSave.data.playerInfo;
+	}
+
+	public static function getAllLevelInfo():Array<LevelSavedData>
 	{
 		return gameSave.data.levelInfos;
 	}
 
-	public static function getLevelInfo(worldId:UInt, levelId:UInt):LevelInfo
+	public static function getLevelInfo(worldId:UInt, levelId:UInt):LevelSavedData
 	{
 		for ( i in 0...gameSave.data.levelInfos.length )
 		{
-			var levelInfo:LevelInfo = gameSave.data.levelInfos[i];
+			var levelInfo:LevelSavedData = gameSave.data.levelInfos[i];
 
 			if (levelInfo.worldId == worldId && levelInfo.levelId == levelId)
 			{
@@ -103,7 +107,7 @@ class SavedDataUtil
 			}
 		}
 
-		var newEntry:LevelInfo = {
+		var newEntry:LevelSavedData = {
 			worldId:worldId,
 			levelId:levelId,
 			score:0,
@@ -126,7 +130,7 @@ class SavedDataUtil
 	{
 		for ( i in 0...gameSave.data.levelInfos.length )
 		{
-			var levelInfo:LevelInfo = gameSave.data.levelInfos[i];
+			var levelInfo:LevelSavedData = gameSave.data.levelInfos[i];
 			levelInfo.isLastPlayed = false;
 		}
 	}
@@ -160,16 +164,29 @@ class SavedDataUtil
 	}
 }
 
-typedef BaseAppInfo = {
+typedef AppSavedData = {
 	var gameName:String;
 	var version:String;
+}
+
+typedef PlayerSavedData = {
+	var coin:UInt;
+	var selectedCar:UInt;
+	var carDatas:Array<CarSavedData>;
+}
+
+
+typedef CarSavedData = {
+	var id:UInt;
+	var isUnlocked:Bool;
+	var level:UInt;
 }
 
 typedef SettingsInfo = {
 	var enableAlphaAnimation:Bool;
 }
 
-typedef LevelInfo = {
+typedef LevelSavedData = {
 	var worldId:UInt;
 	var levelId:UInt;
 	var score:UInt;
