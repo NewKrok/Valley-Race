@@ -25,7 +25,7 @@ class BrushTerrain extends FlxSpriteGroup
 	var segLength:Float = 0;
 	var groundBaseXOffset:Float;
 
-	public function new (levelSize:Rectangle, groundPoints:Array<FlxPoint>, brushTexture:FlxGraphic, terrainContentTexture:FlxGraphic, textureMaxWidth:Float, textureHeight:Float, groundBaseHeight:Float = 700)
+	public function new (levelSize:Rectangle, groundPoints:Array<FlxPoint>, brushTexture:FlxGraphic, terrainContentTexture:FlxGraphic, textureMaxWidth:Float, textureHeight:Float)
 	{
 		super();
 
@@ -46,8 +46,6 @@ class BrushTerrain extends FlxSpriteGroup
 
 		for (i in 0...cast groundPoints.length)
 		{
-			graphicContainer.graphics.lineTo(groundPoints[index].x, groundPoints[index].y + groundBaseHeight);
-
 			if (i == 0)
 			{
 				brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y);

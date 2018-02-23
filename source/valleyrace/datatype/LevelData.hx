@@ -12,16 +12,26 @@ typedef LevelData =
 	var worldId( default, default ):UInt;
 	var levelId( default, default ):UInt;
 	var cameraBounds( default, default ):Rectangle;
-	var starValues( default, default ):Array<UInt>;
+	@:optional var starValues( default, default ):Array<UInt>;
 	var startPoint( default, default ):FlxPoint;
 	var finishPoint( default, default ):FlxPoint;
-	var groundPoints( default, default ):Array<FlxPoint>;
+	var polygonBackgroundData( default, default ):Array<LevelPolygonBackgroundData>;
 	var starPoints( default, default ):Array<FlxPoint>;
 
+	//@:optional var libraryElements( default, default ):String;
+	//@:optional var staticElementData( default, default ):String;
+	//@:optional var staticElementData( default, default ):String;
+	//@:optional var rectangleBackgroundData( default, default ):String;
 	@:optional var replay( default, default ):String;
 	@:optional var bridgePoints( default, default ):Array<BridgeData>;
 	@:optional var gameObjects( default, default ):Array<GameObject>;
 	@:optional var libraryElements( default, default ):Array<LibraryElement>;
+}
+
+typedef LevelPolygonBackgroundData =
+{
+	var polygon:Array<FlxPoint>;
+	var terrainTextureId:String;
 }
 
 typedef BridgeData =

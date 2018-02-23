@@ -60,7 +60,7 @@ import valleyrace.util.SavedDataUtil;
 
 class GameState extends FlxState
 {
-	inline static var LEVEL_DATA_SCALE:Float = 2;
+	inline static var LEVEL_DATA_SCALE:Float = 1;
 
 	var space:Space;
 
@@ -179,15 +179,14 @@ class GameState extends FlxState
 
 	function setLevelDataScale():Void
 	{
-		for (i in 0...levelData.groundPoints.length)
-		{
-			levelData.groundPoints[i] = new FlxPoint(levelData.groundPoints[i].x * LEVEL_DATA_SCALE, levelData.groundPoints[i].y * LEVEL_DATA_SCALE);
-		}
+		for (background in levelData.polygonBackgroundData)
+			for (i in 0...background.polygon.length)
+				background.polygon[i] = new FlxPoint(background.polygon[i].x * LEVEL_DATA_SCALE, background.polygon[i].y * LEVEL_DATA_SCALE);
+
 
 		for (i in 0...levelData.starPoints.length)
-		{
 			levelData.starPoints[i] = new FlxPoint(levelData.starPoints[i].x * LEVEL_DATA_SCALE, levelData.starPoints[i].y * LEVEL_DATA_SCALE);
-		}
+
 
 		if (levelData.bridgePoints != null)
 		{
@@ -199,7 +198,7 @@ class GameState extends FlxState
 				levelData.bridgePoints[i].bridgeBY *= LEVEL_DATA_SCALE;
 			}
 		}
-
+/*
 		if (levelData.gameObjects != null)
 		{
 			for (i in 0...levelData.gameObjects.length)
@@ -228,7 +227,7 @@ class GameState extends FlxState
 			levelData.cameraBounds.y * LEVEL_DATA_SCALE,
 			levelData.cameraBounds.width * LEVEL_DATA_SCALE,
 			levelData.cameraBounds.height * LEVEL_DATA_SCALE
-		);
+		);*/
 	}
 
 	function build():Void
@@ -246,13 +245,17 @@ class GameState extends FlxState
 		createCarFogs();
 		createCamera();
 		createPhysicsWorld();
-		createGroundPhysics();
+
+		for (backgroundData in levelData.polygonBackgroundData) createGroundPhysics(backgroundData.polygon);
+
 		createGhostCar();
 		createCar();
 		createGameObjects();
 		createBridges();
 		createSmallRocks();
-		createGroundGraphics();
+
+		for (ground in levelData.polygonBackgroundData) createGroundGraphics(ground);
+
 		createCoins();
 		createLibraryElements();
 
@@ -481,13 +484,14 @@ class GameState extends FlxState
 		walls.space = space;
 	}
 
-	function createGroundGraphics():Void
+	function createGroundGraphics(backgroundData:LevelPolygonBackgroundData):Void
 	{
 		container.add(terrainContainer = new FlxSpriteGroup());
 
 		var generatedTerrain:BrushTerrain = new BrushTerrain(
 			levelData.cameraBounds,
-			levelData.groundPoints,
+			backgroundData.polygon,
+			//backgroundData.polygon
 			HPPAssetManager.getGraphic("terrain_ground_texture_" + worldId + "0000"),
 			HPPAssetManager.getGraphic("terrain_fill_texture_" + worldId + "0000"),
 			64,
@@ -497,7 +501,7 @@ class GameState extends FlxState
 		terrainContainer.add(generatedTerrain);
 	}
 
-	function createGroundPhysics():Void
+	function createGroundPhysics(ground:Array<FlxPoint>):Void
 	{
 		groundBodies = [];
 
@@ -505,12 +509,12 @@ class GameState extends FlxState
 		filter.collisionGroup = CPhysicsValue.GROUND_FILTER_CATEGORY;
 		filter.collisionMask = CPhysicsValue.GROUND_FILTER_MASK;
 
-		for (i in 0...levelData.groundPoints.length - 1)
+		for (i in 0...ground.length - 1)
 		{
-			var angle:Float = Math.atan2(levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y, levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x);
+			var angle:Float = Math.atan2(ground[ i + 1 ].y - ground[ i ].y, ground[ i + 1 ].x - ground[ i ].x);
 			var distance:Float = Math.sqrt(
-				Math.pow(Math.abs(levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x), 2) +
-				Math.pow(Math.abs(levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y), 2)
+				Math.pow(Math.abs(ground[ i + 1 ].x - ground[ i ].x), 2) +
+				Math.pow(Math.abs(ground[ i + 1 ].y - ground[ i ].y), 2)
 			);
 
 			var body:Body = new Body(BodyType.STATIC);
@@ -518,8 +522,8 @@ class GameState extends FlxState
 			body.shapes.add(new Polygon(Polygon.box(distance, 1)));
 			body.setShapeMaterials(CPhysicsValue.MATERIAL_NORMAL_GROUND);
 			body.setShapeFilters(filter);
-			body.position.x = levelData.groundPoints[ i ].x + (levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x) / 2;
-			body.position.y = levelData.groundPoints[ i ].y + (levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y) / 2;
+			body.position.x = ground[ i ].x + (ground[ i + 1 ].x - ground[ i ].x) / 2;
+			body.position.y = ground[ i ].y + (ground[ i + 1 ].y - ground[ i ].y) / 2;
 			body.rotation = angle;
 
 			body.space = space;
