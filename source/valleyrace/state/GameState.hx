@@ -28,6 +28,7 @@ import openfl.geom.Rectangle;
 import valleyrace.AppConfig;
 import valleyrace.assets.CarDatas;
 import valleyrace.common.PlayerInfo;
+import valleyrace.config.TextureConfig;
 import valleyrace.datatype.LevelData;
 import valleyrace.game.Background;
 import valleyrace.game.Car;
@@ -491,9 +492,8 @@ class GameState extends FlxState
 		var generatedTerrain:BrushTerrain = new BrushTerrain(
 			levelData.cameraBounds,
 			backgroundData.polygon,
-			//backgroundData.polygon
-			HPPAssetManager.getGraphic("terrain_ground_texture_" + worldId + "0000"),
-			HPPAssetManager.getGraphic("terrain_fill_texture_" + worldId + "0000"),
+			HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainGroundGraphic(backgroundData.terrainTextureId)),
+			HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainFillGraphic(backgroundData.terrainTextureId)),
 			64,
 			15
 		);

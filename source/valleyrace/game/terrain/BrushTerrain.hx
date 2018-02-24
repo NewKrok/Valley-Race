@@ -29,6 +29,10 @@ class BrushTerrain extends FlxSpriteGroup
 	{
 		super();
 
+		// To fix start graphic
+		groundPoints.push(groundPoints[1].copyTo());
+		groundPoints.push(groundPoints[2].copyTo());
+
 		groundBaseXOffset = groundPoints[0].x < 0 ? -groundPoints[0].x : 0;
 		groundPoints = optimizeGroundPointsToGraphics(groundPoints, brushTexture.width, textureMaxWidth);
 		BrushArea.lw = textureHeight;
@@ -42,29 +46,24 @@ class BrushTerrain extends FlxSpriteGroup
 		}
 
 		var brushArea:BrushArea;
-		var index:Int = cast groundPoints.length - 1;
 
-		for (i in 0...cast groundPoints.length)
+		for (i in 0...groundPoints.length)
 		{
 			if (i == 0)
 			{
 				brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y);
 				linePointsInput.push(brushArea);
+				graphicContainer.graphics.moveTo(groundPoints[i].x, groundPoints[i].y);
 			}
 			else
 			{
 				brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y, linePointsInput[linePointsInput.length - 1]);
 				linePointsInput.push(brushArea);
-			}
-			if (i == groundPoints.length - 2)
-			{
-				brushArea = new BrushArea(groundPoints[i + 1].x, groundPoints[i + 1].y, linePointsInput[linePointsInput.length - 1]);
-				linePointsInput.push(brushArea);
+				graphicContainer.graphics.lineTo(groundPoints[i].x, groundPoints[i].y);
 			}
 
-			index--;
+			if (i == groundPoints.length - 3) graphicContainer.graphics.endFill();
 		}
-		graphicContainer.graphics.endFill();
 
 		calculateGraphicTriangles();
 
@@ -136,7 +135,7 @@ class BrushTerrain extends FlxSpriteGroup
 		uvtData = [];
 		var lp:BrushArea;
 
-		for (i in 1...linePointsInput.length)
+		for (i in 0...linePointsInput.length)
 		{
 			lp = linePointsInput[i];
 			if (lp.currentLength > lastLength + segLength)
@@ -148,7 +147,7 @@ class BrushTerrain extends FlxSpriteGroup
 		var count = 0;
 
 		var index:Int = 0;
-		for (i in 0...cast linePoints.length / 2 - 1)
+		for (i in 0...Math.floor(linePoints.length / 2))
 		{
 			lp = linePoints[index];
 			vertices = vertices.concat([lp.xL + groundBaseXOffset, lp.yL, lp.xR + groundBaseXOffset, lp.yR]);

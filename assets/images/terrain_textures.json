@@ -2,39 +2,31 @@
 	"frames": {
 		"terrain_fill_texture_00000":
 		{
-			"frame": {"x":5,"y":5,"w":200,"h":200},
+			"frame": {"x":5,"y":5,"w":100,"h":100},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
-			"sourceSize": {"w":200,"h":200}
+			"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+			"sourceSize": {"w":100,"h":100}
 		},
 		"terrain_fill_texture_10000":
 		{
-			"frame": {"x":2,"y":2,"w":201,"h":200},
+			"frame": {"x":110,"y":5,"w":100,"h":100},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":201,"h":200},
-			"sourceSize": {"w":200,"h":200}
+			"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+			"sourceSize": {"w":100,"h":100}
 		},
 		"terrain_fill_texture_20000":
 		{
-			"frame": {"x":2,"y":205,"w":200,"h":200},
+			"frame": {"x":215,"y":5,"w":100,"h":100},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
-			"sourceSize": {"w":200,"h":200}
-		},
-		"terrain_fill_texture_30000":
-		{
-			"frame": {"x":205,"y":205,"w":200,"h":194},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":200,"h":194},
-			"sourceSize": {"w":200,"h":194}
+			"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+			"sourceSize": {"w":100,"h":100}
 		},
 		"terrain_ground_texture_00000":
 		{
-			"frame": {"x":5,"y":215,"w":127,"h":30},
+			"frame": {"x":5,"y":110,"w":127,"h":30},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":127,"h":30},
@@ -42,27 +34,19 @@
 		},
 		"terrain_ground_texture_10000":
 		{
-			"frame": {"x":133,"y":473,"w":128,"h":68},
+			"frame": {"x":135,"y":110,"w":127,"h":30},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":128,"h":68},
-			"sourceSize": {"w":128,"h":68}
+			"spriteSourceSize": {"x":0,"y":0,"w":127,"h":30},
+			"sourceSize": {"w":127,"h":30}
 		},
 		"terrain_ground_texture_20000":
 		{
-			"frame": {"x":352,"y":402,"w":144,"h":68},
+			"frame": {"x":265,"y":110,"w":127,"h":30},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":144,"h":68},
-			"sourceSize": {"w":144,"h":68}
-		},
-		"terrain_ground_texture_30000":
-		{
-			"frame": {"x":205,"y":402,"w":144,"h":68},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":144,"h":68},
-			"sourceSize": {"w":144,"h":68}
+			"spriteSourceSize": {"x":0,"y":0,"w":127,"h":30},
+			"sourceSize": {"w":127,"h":30}
 		}
 	}
 }
