@@ -47,6 +47,30 @@
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":127,"h":30},
 			"sourceSize": {"w":127,"h":30}
+		},
+		"terrain_fill_texture_dark_00000":
+		{
+			"frame": {"x":5,"y":145,"w":100,"h":100},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+			"sourceSize": {"w":100,"h":100}
+		},
+		"terrain_fill_texture_dark_10000":
+		{
+			"frame": {"x":110,"y":145,"w":100,"h":100},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+			"sourceSize": {"w":100,"h":100}
+		},
+		"terrain_fill_texture_dark_20000":
+		{
+			"frame": {"x":215,"y":145,"w":100,"h":100},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+			"sourceSize": {"w":100,"h":100}
 		}
 	}
 }

@@ -1,4 +1,5 @@
 package valleyrace.state;
+
 import apostx.replaykit.Playback;
 import apostx.replaykit.Recorder;
 import flixel.FlxCamera;
@@ -72,7 +73,6 @@ class GameState extends FlxState
 	var background:Background;
 
 	var container:FlxSpriteGroup;
-	var terrainContainer:FlxSpriteGroup;
 	var coinContainer:FlxSpriteGroup;
 	var libraryElementContainer:FlxSpriteGroup;
 
@@ -180,15 +180,6 @@ class GameState extends FlxState
 
 	function setLevelDataScale():Void
 	{
-		for (background in levelData.polygonBackgroundData)
-			for (i in 0...background.polygon.length)
-				background.polygon[i] = new FlxPoint(background.polygon[i].x * LEVEL_DATA_SCALE, background.polygon[i].y * LEVEL_DATA_SCALE);
-
-
-		for (i in 0...levelData.starPoints.length)
-			levelData.starPoints[i] = new FlxPoint(levelData.starPoints[i].x * LEVEL_DATA_SCALE, levelData.starPoints[i].y * LEVEL_DATA_SCALE);
-
-
 		if (levelData.bridgePoints != null)
 		{
 			for (i in 0...levelData.bridgePoints.length)
@@ -247,7 +238,8 @@ class GameState extends FlxState
 		createCamera();
 		createPhysicsWorld();
 
-		for (backgroundData in levelData.polygonBackgroundData) createGroundPhysics(backgroundData.polygon);
+		for (backgroundData in levelData.polygonGroundData) createGroundPhysics(backgroundData.polygon);
+		for (ground in levelData.polygonBackgroundData) createPolygonGraphics(ground);
 
 		createGhostCar();
 		createCar();
@@ -255,7 +247,7 @@ class GameState extends FlxState
 		createBridges();
 		createSmallRocks();
 
-		for (ground in levelData.polygonBackgroundData) createGroundGraphics(ground);
+		for (ground in levelData.polygonGroundData) createPolygonGraphics(ground);
 
 		createCoins();
 		createLibraryElements();
@@ -485,14 +477,17 @@ class GameState extends FlxState
 		walls.space = space;
 	}
 
-	function createGroundGraphics(backgroundData:LevelPolygonBackgroundData):Void
+	function createPolygonGraphics(backgroundData:PolygonBackgroundData):Void
 	{
-		container.add(terrainContainer = new FlxSpriteGroup());
+		var terrainContainer = new FlxSpriteGroup();
+		container.add(terrainContainer);
 
 		var generatedTerrain:BrushTerrain = new BrushTerrain(
 			levelData.cameraBounds,
 			backgroundData.polygon,
-			HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainGroundGraphic(backgroundData.terrainTextureId)),
+			TextureConfig.getPolygonTerrainGroundGraphic(backgroundData.terrainTextureId) == ""
+				? null
+				: HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainGroundGraphic(backgroundData.terrainTextureId)),
 			HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainFillGraphic(backgroundData.terrainTextureId)),
 			64,
 			15
@@ -509,12 +504,14 @@ class GameState extends FlxState
 		filter.collisionGroup = CPhysicsValue.GROUND_FILTER_CATEGORY;
 		filter.collisionMask = CPhysicsValue.GROUND_FILTER_MASK;
 
-		for (i in 0...ground.length - 1)
+		var groundCopy = ground.concat([new FlxPoint(ground[0].x, ground[0].y)]);
+
+		for (i in 0...groundCopy.length - 1)
 		{
-			var angle:Float = Math.atan2(ground[ i + 1 ].y - ground[ i ].y, ground[ i + 1 ].x - ground[ i ].x);
+			var angle:Float = Math.atan2(groundCopy[ i + 1 ].y - groundCopy[ i ].y, groundCopy[ i + 1 ].x - groundCopy[ i ].x);
 			var distance:Float = Math.sqrt(
-				Math.pow(Math.abs(ground[ i + 1 ].x - ground[ i ].x), 2) +
-				Math.pow(Math.abs(ground[ i + 1 ].y - ground[ i ].y), 2)
+				Math.pow(Math.abs(groundCopy[ i + 1 ].x - groundCopy[ i ].x), 2) +
+				Math.pow(Math.abs(groundCopy[ i + 1 ].y - groundCopy[ i ].y), 2)
 			);
 
 			var body:Body = new Body(BodyType.STATIC);
@@ -522,8 +519,8 @@ class GameState extends FlxState
 			body.shapes.add(new Polygon(Polygon.box(distance, 1)));
 			body.setShapeMaterials(CPhysicsValue.MATERIAL_NORMAL_GROUND);
 			body.setShapeFilters(filter);
-			body.position.x = ground[ i ].x + (ground[ i + 1 ].x - ground[ i ].x) / 2;
-			body.position.y = ground[ i ].y + (ground[ i + 1 ].y - ground[ i ].y) / 2;
+			body.position.x = groundCopy[ i ].x + (groundCopy[ i + 1 ].x - groundCopy[ i ].x) / 2;
+			body.position.y = groundCopy[ i ].y + (groundCopy[ i + 1 ].y - groundCopy[ i ].y) / 2;
 			body.rotation = angle;
 
 			body.space = space;

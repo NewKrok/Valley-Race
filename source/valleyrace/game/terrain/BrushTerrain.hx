@@ -23,27 +23,26 @@ class BrushTerrain extends FlxSpriteGroup
 	var uvtData:Array<Float>;
 	var lastLength:Float = 0;
 	var segLength:Float = 0;
-	var groundBaseXOffset:Float;
+	var groundBaseXOffset:Float = 0;
+	var groundBaseYOffset:Float = 0;
 
 	public function new (levelSize:Rectangle, groundPoints:Array<FlxPoint>, brushTexture:FlxGraphic, terrainContentTexture:FlxGraphic, textureMaxWidth:Float, textureHeight:Float)
 	{
 		super();
 
 		// To fix start graphic
+		groundPoints.push(groundPoints[0].copyTo());
 		groundPoints.push(groundPoints[1].copyTo());
 		groundPoints.push(groundPoints[2].copyTo());
 
 		groundBaseXOffset = groundPoints[0].x < 0 ? -groundPoints[0].x : 0;
-		groundPoints = optimizeGroundPointsToGraphics(groundPoints, brushTexture.width, textureMaxWidth);
+		groundBaseYOffset = groundPoints[0].y < 0 ? -groundPoints[0].y : 0;
+
+		if (brushTexture != null) groundPoints = optimizeGroundPointsToGraphics(groundPoints, brushTexture.width, textureMaxWidth);
 		BrushArea.lw = textureHeight;
 
 		var graphicContainer:Sprite = new Sprite();
 		graphicContainer.graphics.beginBitmapFill(terrainContentTexture.bitmap);
-
-		for (point in groundPoints)
-		{
-			graphicContainer.graphics.lineTo(point.x, point.y);
-		}
 
 		var brushArea:BrushArea;
 
@@ -51,31 +50,41 @@ class BrushTerrain extends FlxSpriteGroup
 		{
 			if (i == 0)
 			{
-				brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y);
-				linePointsInput.push(brushArea);
+				if (brushTexture != null)
+				{
+					brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y);
+					linePointsInput.push(brushArea);
+				}
 				graphicContainer.graphics.moveTo(groundPoints[i].x, groundPoints[i].y);
 			}
 			else
 			{
-				brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y, linePointsInput[linePointsInput.length - 1]);
-				linePointsInput.push(brushArea);
+				if (brushTexture != null)
+				{
+					brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y, linePointsInput[linePointsInput.length - 1]);
+					linePointsInput.push(brushArea);
+				}
 				graphicContainer.graphics.lineTo(groundPoints[i].x, groundPoints[i].y);
 			}
 
 			if (i == groundPoints.length - 3) graphicContainer.graphics.endFill();
 		}
 
-		calculateGraphicTriangles();
+		if (brushTexture != null)
+		{
+			calculateGraphicTriangles();
 
-		var brushBitmapData = new BitmapData(cast brushTexture.bitmap.width, cast brushTexture.bitmap.height, true, 0x60);
-		brushBitmapData.draw(brushTexture.bitmap);
-		renderTriangles(graphicContainer, brushBitmapData);
+			var brushBitmapData = new BitmapData(cast brushTexture.bitmap.width, cast brushTexture.bitmap.height, true, 0x60);
+			brushBitmapData.draw(brushTexture.bitmap);
+			renderTriangles(graphicContainer, brushBitmapData);
+		}
 
 		var graphicBitmap:BitmapData = new BitmapData(cast levelSize.width, cast levelSize.height, true, 0x60);
 		graphicBitmap.draw(graphicContainer);
 
-		var maxBlockSize:UInt = 2048;
-		var pieces:UInt = Math.ceil(graphicContainer.width / maxBlockSize);
+		var maxBlockSize:UInt = 1024;
+		var pieces:UInt = Math.ceil(graphicBitmap.width / maxBlockSize);
+
 		for (i in 0...pieces)
 		{
 			var tmpBitmapData:BitmapData = new BitmapData(maxBlockSize, maxBlockSize, true, 0x60);
@@ -150,7 +159,7 @@ class BrushTerrain extends FlxSpriteGroup
 		for (i in 0...Math.floor(linePoints.length / 2))
 		{
 			lp = linePoints[index];
-			vertices = vertices.concat([lp.xL + groundBaseXOffset, lp.yL, lp.xR + groundBaseXOffset, lp.yR]);
+			vertices = vertices.concat([lp.xL + groundBaseXOffset, lp.yL + groundBaseYOffset, lp.xR + groundBaseXOffset, lp.yR + groundBaseYOffset]);
 
 			if (index == linePoints.length - 1)
 			{
@@ -161,7 +170,7 @@ class BrushTerrain extends FlxSpriteGroup
 				lp = linePoints[index + 1];
 			}
 
-			vertices = vertices.concat([lp.xL + groundBaseXOffset, lp.yL, lp.xR + groundBaseXOffset, lp.yR]);
+			vertices = vertices.concat([lp.xL + groundBaseXOffset, lp.yL + groundBaseYOffset, lp.xR + groundBaseXOffset, lp.yR + groundBaseYOffset]);
 			indices = indices.concat([count, count + 1, count + 2, count + 1, count + 2, count + 3]);
 			indices = indices.concat([count + 2, count + 3, count + 4, count + 3, count + 4, count + 5]);
 			uvtData = uvtData.concat([0, 0, 0, 1, .5, 0, .5, 1]);

@@ -15,7 +15,8 @@ typedef LevelData =
 	@:optional var starValues( default, default ):Array<UInt>;
 	var startPoint( default, default ):FlxPoint;
 	var finishPoint( default, default ):FlxPoint;
-	var polygonBackgroundData( default, default ):Array<LevelPolygonBackgroundData>;
+	var polygonGroundData( default, default ):Array<PolygonBackgroundData>; // Background with physics
+	var polygonBackgroundData( default, default ):Array<PolygonBackgroundData>; // Simple background
 	var starPoints( default, default ):Array<FlxPoint>;
 
 	//@:optional var libraryElements( default, default ):String;
@@ -28,7 +29,7 @@ typedef LevelData =
 	@:optional var libraryElements( default, default ):Array<LibraryElement>;
 }
 
-typedef LevelPolygonBackgroundData =
+typedef PolygonBackgroundData =
 {
 	var polygon:Array<FlxPoint>;
 	var terrainTextureId:String;
