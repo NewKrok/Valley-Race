@@ -15,7 +15,7 @@
 	<SubTexture name="coin0001" x="440" y="5" width="50" height="50"/>
 	<SubTexture name="coin0002" x="495" y="5" width="50" height="50"/>
 	<SubTexture name="coin0003" x="550" y="5" width="50" height="50"/>
-	<SubTexture name="table_world_0_b" x="620" y="5" width="75" height="117"/>
+	<SubTexture name="finish_table" x="620" y="5" width="75" height="117"/>
 	<SubTexture name="bridge" x="345" y="70" width="71" height="23"/>
 	<SubTexture name="gui_coin_back" x="710" y="5" width="137" height="50"/>
 	<SubTexture name="gui_coin_back_max" x="345" y="165" width="161" height="74"/>

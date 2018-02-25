@@ -209,17 +209,7 @@ class GameState extends FlxState
 				levelData.libraryElements[i].x *= LEVEL_DATA_SCALE;
 				levelData.libraryElements[i].y *= LEVEL_DATA_SCALE;
 			}
-		}
-
-		levelData.startPoint = new FlxPoint(levelData.startPoint.x * LEVEL_DATA_SCALE, levelData.startPoint.y * LEVEL_DATA_SCALE);
-		levelData.finishPoint = new FlxPoint(levelData.finishPoint.x * LEVEL_DATA_SCALE, levelData.finishPoint.y * LEVEL_DATA_SCALE);
-
-		levelData.cameraBounds = new Rectangle(
-			levelData.cameraBounds.x * LEVEL_DATA_SCALE,
-			levelData.cameraBounds.y * LEVEL_DATA_SCALE,
-			levelData.cameraBounds.width * LEVEL_DATA_SCALE,
-			levelData.cameraBounds.height * LEVEL_DATA_SCALE
-		);*/
+		}*/
 	}
 
 	function build():Void

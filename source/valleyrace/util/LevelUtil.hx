@@ -39,6 +39,18 @@ class LevelUtil
 
 			for (i in 0...level.starPoints.length)
 				level.starPoints[i] = new FlxPoint(level.starPoints[i].x, level.starPoints[i].y);
+
+			if (level.gameObjects == null) level.gameObjects = [];
+			level.gameObjects.push({
+				x: level.finishPoint.x,
+				y: level.finishPoint.y,
+				pivotX: 0,
+				pivotY: 0,
+				scaleX: 1,
+				scaleY: 1,
+				rotation: 0,
+				texture: "finish_table",
+			});
 		}
 		catch( e:String )
 		{
