@@ -66,11 +66,10 @@ class Coin extends FlxSpriteGroup
 	{
 		super.reset(x, y);
 
+		scale.set(1, 1);
 		isCollected = false;
 		visible = true;
 		alpha = 1;
-		angle = 0;
-		scale.set(1, 1);
 
 		disposeTween();
 	}

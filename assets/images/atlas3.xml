@@ -58,4 +58,7 @@
 	<SubTexture name="car_preview_2" x="1340" y="165" width="141" height="86"/>
 	<SubTexture name="upgrade_button" x="1170" y="225" width="136" height="28"/>
 	<SubTexture name="coin_small" x="925" y="65" width="20" height="20"/>
+	<SubTexture name="table_warning" x="1500" y="160" width="75" height="117"/>
+	<SubTexture name="table_direction" x="1585" y="160" width="75" height="117"/>
+	<SubTexture name="table_danger" x="1670" y="160" width="75" height="117"/>
 </TextureAtlas>

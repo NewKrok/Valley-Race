@@ -1,6 +1,7 @@
 package valleyrace.datatype;
 
 import flixel.math.FlxPoint;
+import hpp.util.GeomUtil.SimplePoint;
 import openfl.geom.Rectangle;
 
 /**
@@ -9,24 +10,23 @@ import openfl.geom.Rectangle;
  */
 typedef LevelData =
 {
-	var worldId( default, default ):UInt;
-	var levelId( default, default ):UInt;
-	var cameraBounds( default, default ):Rectangle;
-	@:optional var starValues( default, default ):Array<UInt>;
-	var startPoint( default, default ):FlxPoint;
-	var finishPoint( default, default ):FlxPoint;
-	var polygonGroundData( default, default ):Array<PolygonBackgroundData>; // Background with physics
-	var polygonBackgroundData( default, default ):Array<PolygonBackgroundData>; // Simple background
-	var starPoints( default, default ):Array<FlxPoint>;
+	var worldId(default, default):UInt;
+	var levelId(default, default):UInt;
+	var cameraBounds(default, default):Rectangle;
+	var startPoint(default, default):FlxPoint;
+	var finishPoint(default, default):FlxPoint;
+	var polygonGroundData(default, default):Array<PolygonBackgroundData>; // Background with physics
+	var polygonBackgroundData(default, default):Array<PolygonBackgroundData>; // Simple background
+	var collectableItems(default, default):Array<FlxPoint>;
 
-	//@:optional var libraryElements( default, default ):String;
-	//@:optional var staticElementData( default, default ):String;
-	//@:optional var staticElementData( default, default ):String;
-	//@:optional var rectangleBackgroundData( default, default ):String;
-	@:optional var replay( default, default ):String;
-	@:optional var bridgePoints( default, default ):Array<BridgeData>;
-	@:optional var gameObjects( default, default ):Array<GameObject>;
-	@:optional var libraryElements( default, default ):Array<LibraryElement>;
+	//@:optional var libraryElements(default, default):String;
+	//@:optional var rectangleBackgroundData(default, default):String;
+
+	@:optional var starValues(default, default):Array<UInt>;
+	@:optional var staticElementData(default, default):Array<StaticElement>;
+	@:optional var replay(default, default):String;
+	@:optional var bridgePoints(default, default):Array<BridgeData>;
+	@:optional var libraryElements(default, default):Array<LibraryElement>;
 }
 
 typedef PolygonBackgroundData =
@@ -43,16 +43,15 @@ typedef BridgeData =
 	var bridgeBY:Float;
 }
 
-typedef GameObject =
+typedef StaticElement =
 {
-	var x:Float;
-	var y:Float;
+	var position:SimplePoint;
 	var pivotX:Float;
 	var pivotY:Float;
 	var scaleX:Float;
 	var scaleY:Float;
 	var rotation:Float;
-	var texture:String;
+	var elementId:String;
 }
 
 typedef LibraryElement =

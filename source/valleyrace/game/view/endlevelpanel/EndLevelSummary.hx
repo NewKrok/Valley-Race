@@ -110,9 +110,9 @@ class EndLevelSummary extends FlxSpriteGroup
 		timeEntry.setValue(Math.floor(AppConfig.MAXIMUM_GAME_TIME_BONUS - currentTime / 10));
 
 		coinCounter.setValue(currentCollectedCoins);
-		coinCounter.setMaxValue(levelData.starPoints.length);
+		coinCounter.setMaxValue(levelData.collectableItems.length);
 		coinEntry.setValue(currentCollectedCoins * AppConfig.COIN_SCORE_MULTIPLIER);
-		coinEntry.setBonusValue(levelData.starPoints.length == currentCollectedCoins ? AppConfig.ALL_COINS_COLLECTED_BONUS : 0);
+		coinEntry.setBonusValue(levelData.collectableItems.length == currentCollectedCoins ? AppConfig.ALL_COINS_COLLECTED_BONUS : 0);
 
 		frontflipEntry.setCounter(countOfFrontFlip);
 		frontflipEntry.setValue(countOfFrontFlip * CScore.SCORE_FRONT_FLIP);

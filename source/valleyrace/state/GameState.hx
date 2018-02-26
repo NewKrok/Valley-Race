@@ -91,7 +91,7 @@ class GameState extends FlxState
 
 	var coins:Array<Coin>;
 
-	var gameObjects:Array<FlxSprite>;
+	var staticElements:Array<FlxSprite>;
 
 	var recorder:Recorder;
 	var basePlayback:Playback;
@@ -190,26 +190,6 @@ class GameState extends FlxState
 				levelData.bridgePoints[i].bridgeBY *= LEVEL_DATA_SCALE;
 			}
 		}
-/*
-		if (levelData.gameObjects != null)
-		{
-			for (i in 0...levelData.gameObjects.length)
-			{
-				levelData.gameObjects[i].x *= LEVEL_DATA_SCALE;
-				levelData.gameObjects[i].y *= LEVEL_DATA_SCALE;
-				levelData.gameObjects[i].pivotX *= LEVEL_DATA_SCALE;
-				levelData.gameObjects[i].pivotY *= LEVEL_DATA_SCALE;
-			}
-		}
-
-		if (levelData.libraryElements != null)
-		{
-			for (i in 0...levelData.libraryElements.length)
-			{
-				levelData.libraryElements[i].x *= LEVEL_DATA_SCALE;
-				levelData.libraryElements[i].y *= LEVEL_DATA_SCALE;
-			}
-		}*/
 	}
 
 	function build():Void
@@ -232,8 +212,8 @@ class GameState extends FlxState
 		for (ground in levelData.polygonBackgroundData) createPolygonGraphics(ground);
 
 		createGhostCar();
+		createStaticElements();
 		createCar();
-		createGameObjects();
 		createBridges();
 		createSmallRocks();
 
@@ -251,7 +231,7 @@ class GameState extends FlxState
 				add(snow);
 		}
 
-		add(gameGui = new GameGui(resume, pauseRequest, levelData.starPoints.length));
+		add(gameGui = new GameGui(resume, pauseRequest, levelData.collectableItems.length));
 
 		//cast(camera, HPPCamera).addZoomResistanceToSprite(gameGui);
 		//cast(camera, HPPCamera).addZoomResistanceToSprite(background);
@@ -302,7 +282,7 @@ class GameState extends FlxState
 
 		for (i in 0...coins.length)
 		{
-			coins[ i ].reset(levelData.starPoints[ i ].x, levelData.starPoints[ i ].y);
+			coins[ i ].reset(levelData.collectableItems[ i ].x, levelData.collectableItems[ i ].y);
 		}
 
 		for (i in 0...smallRocks.length)
@@ -608,23 +588,23 @@ class GameState extends FlxState
 		container.add(car);
 	}
 
-	function createGameObjects():Void
+	function createStaticElements():Void
 	{
-		gameObjects = [];
+		staticElements = [];
 
-		if (levelData.gameObjects != null)
+		if (levelData.staticElementData != null)
 		{
-			for (i in 0...levelData.gameObjects.length)
+			for (element in levelData.staticElementData)
 			{
-				var selectedObject:FlxSprite = HPPAssetManager.getSprite(levelData.gameObjects[ i ].texture);
+				var selectedObject:FlxSprite = HPPAssetManager.getSprite(element.elementId);
 
-				selectedObject.setPosition(levelData.gameObjects[ i ].x, levelData.gameObjects[ i ].y);
-				selectedObject.origin.set(levelData.gameObjects[ i ].pivotX, levelData.gameObjects[ i ].pivotY);
-				selectedObject.scale.set(levelData.gameObjects[ i ].scaleX, levelData.gameObjects[ i ].scaleY);
-				selectedObject.angle = levelData.gameObjects[ i ].rotation;
+				selectedObject.setPosition(element.position.x, element.position.y);
+				selectedObject.origin.set(element.pivotX, element.pivotY);
+				selectedObject.scale.set(element.scaleX, element.scaleY);
+				selectedObject.angle = element.rotation;
 
 				container.add(selectedObject);
-				gameObjects.push(selectedObject);
+				staticElements.push(selectedObject);
 			}
 		}
 	}
@@ -635,9 +615,9 @@ class GameState extends FlxState
 
 		container.add(coinContainer = new FlxSpriteGroup());
 
-		for (i in 0...levelData.starPoints.length)
+		for (i in 0...levelData.collectableItems.length)
 		{
-			coins.push(cast coinContainer.add(new Coin(levelData.starPoints[ i ].x, levelData.starPoints[ i ].y)));
+			coins.push(cast coinContainer.add(new Coin(levelData.collectableItems[ i ].x, levelData.collectableItems[ i ].y)));
 		}
 	}
 
@@ -1063,7 +1043,7 @@ class GameState extends FlxState
 		result = Math.floor(AppConfig.MAXIMUM_GAME_TIME_BONUS - gameTime / 10);
 		result += collectedCoin * AppConfig.COIN_SCORE_MULTIPLIER;
 		result += collectedExtraCoins;
-		result += levelData.starPoints.length == collectedCoin ? AppConfig.ALL_COINS_COLLECTED_BONUS : 0;
+		result += levelData.collectableItems.length == collectedCoin ? AppConfig.ALL_COINS_COLLECTED_BONUS : 0;
 
 		return result;
 	}
