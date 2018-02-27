@@ -36,9 +36,9 @@ class Coin extends FlxSpriteGroup
 
 		tween = FlxTween.tween(
 			this,
-			{ alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? 0 : 1 },
+			{ alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? .1 : 1 },
 			.6,
-			{ type: FlxTween.ONESHOT, onComplete: tweenCompleted }
+			{ onComplete: tweenCompleted }
 		);
 
 		FlxTween.tween(
@@ -58,6 +58,8 @@ class Coin extends FlxSpriteGroup
 	function tweenCompleted(tween:FlxTween):Void
 	{
 		visible = false;
+		alpha = 1;
+		mc.stop();
 
 		disposeTween();
 	}
@@ -66,10 +68,10 @@ class Coin extends FlxSpriteGroup
 	{
 		super.reset(x, y);
 
+		mc.gotoAndPlay(1);
 		scale.set(1, 1);
 		isCollected = false;
 		visible = true;
-		alpha = 1;
 
 		disposeTween();
 	}

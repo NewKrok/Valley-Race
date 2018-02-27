@@ -18,11 +18,11 @@ typedef LevelData =
 	var polygonGroundData(default, default):Array<PolygonBackgroundData>; // Background with physics
 	var polygonBackgroundData(default, default):Array<PolygonBackgroundData>; // Simple background
 	var collectableItems(default, default):Array<FlxPoint>;
+	var starValues(default, default):Array<UInt>;
 
 	//@:optional var libraryElements(default, default):String;
 	//@:optional var rectangleBackgroundData(default, default):String;
 
-	@:optional var starValues(default, default):Array<UInt>;
 	@:optional var staticElementData(default, default):Array<StaticElement>;
 	@:optional var replay(default, default):String;
 	@:optional var bridgePoints(default, default):Array<BridgeData>;
