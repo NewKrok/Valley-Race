@@ -10,6 +10,7 @@ class AbstractCar extends FlxSpriteGroup
 {
 	var carData:CarData;
 
+	public var carScale:Float;
 	public var carBodyGraphics:FlxSprite;
 	public var wheelRightGraphics:FlxSprite;
 	public var wheelLeftGraphics:FlxSprite;
@@ -26,6 +27,8 @@ class AbstractCar extends FlxSpriteGroup
 	{
 		super();
 
+		carScale = scale;
+
 		this.carData = carData;
 
 		buildGraphics();
@@ -33,6 +36,12 @@ class AbstractCar extends FlxSpriteGroup
 		carBodyGraphics.scale = new FlxPoint(scale, scale);
 		wheelRightGraphics.scale = new FlxPoint(scale, scale);
 		wheelLeftGraphics.scale = new FlxPoint(scale, scale);
+		wheelBackTopHolderGraphics.scale = new FlxPoint(scale, scale);
+		wheelBackBottomHolderGraphics.scale = new FlxPoint(scale, scale);
+		wheelFrontTopHolderGraphics.scale = new FlxPoint(scale, scale);
+		wheelFrontBottomHolderGraphics.scale = new FlxPoint(scale, scale);
+		backSpring.scale = new FlxPoint(scale, scale);
+		frontSpring.scale = new FlxPoint(scale, scale);
 	}
 
 	function buildGraphics():Void

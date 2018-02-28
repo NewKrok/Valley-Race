@@ -62,8 +62,6 @@ import valleyrace.util.SavedDataUtil;
 
 class GameState extends FlxState
 {
-	inline static var LEVEL_DATA_SCALE:Float = 1;
-
 	var space:Space;
 
 	var startLevelPanel:StartLevelPanel;
@@ -100,7 +98,6 @@ class GameState extends FlxState
 
 	var car:Car;
 	var baseGhostCar:GhostCar;
-	var playerGhostCar:GhostCar;
 	var snow:Snow;
 
 	var effects:Array<FlxSprite> = [];
@@ -159,7 +156,6 @@ class GameState extends FlxState
 		loadAssets();
 
 		levelData = LevelUtil.LevelDataFromJson(Assets.getText("assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json"));
-		setLevelDataScale();
 
 		try {
 			baseReplayData = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + ".txt");
@@ -176,20 +172,6 @@ class GameState extends FlxState
 		HPPAssetManager.loadXMLAtlas("assets/images/atlas3.png", "assets/images/atlas3.xml");
 
 		HPPAssetManager.loadJsonAtlas("assets/images/terrain_textures.png", "assets/images/terrain_textures.json");
-	}
-
-	function setLevelDataScale():Void
-	{
-		if (levelData.bridgePoints != null)
-		{
-			for (i in 0...levelData.bridgePoints.length)
-			{
-				levelData.bridgePoints[i].bridgeAX *= LEVEL_DATA_SCALE;
-				levelData.bridgePoints[i].bridgeAY *= LEVEL_DATA_SCALE;
-				levelData.bridgePoints[i].bridgeBX *= LEVEL_DATA_SCALE;
-				levelData.bridgePoints[i].bridgeBY *= LEVEL_DATA_SCALE;
-			}
-		}
 	}
 
 	function build():Void
@@ -302,16 +284,6 @@ class GameState extends FlxState
 
 		start();
 
-		if (levelInfo.replayCarId != playerGhostCar.id)
-		{
-			var childIndex:UInt = container.group.members.indexOf(playerGhostCar);
-			container.remove(playerGhostCar);
-
-			playerGhostCar = new GhostCar(CarDatas.getData(levelInfo.replayCarId), 1);
-			playerGhostCar.alpha = .3;
-			container.insert(childIndex, playerGhostCar);
-		}
-
 		resetReplayKit();
 
 		openStartLevelPanelRequest();
@@ -336,14 +308,7 @@ class GameState extends FlxState
 			basePlayback.showSnapshot(0);
 		}
 
-		if (levelInfo.replay != null)
-		{
-			playerPlayback = new Playback(playerGhostCar, levelInfo.replay);
-			playerPlayback.showSnapshot(0);
-		}
-
 		baseGhostCar.visible = false;
-		playerGhostCar.visible = false;
 	}
 
 	function resetCrates():Void
@@ -399,7 +364,6 @@ class GameState extends FlxState
 		totalPausedTime += now - pauseStartTime;
 
 		baseGhostCar.visible = true;
-		playerGhostCar.visible = true;
 
 		if (recorder != null)
 		{
@@ -572,19 +536,13 @@ class GameState extends FlxState
 
 	function createGhostCar():Void
 	{
-		baseGhostCar = new GhostCar(CarDatas.getData(worldId == 0 ? 0 : 1), 1);
-		baseGhostCar.color = 0x00000000;
-		baseGhostCar.alpha = .3;
+		baseGhostCar = new GhostCar(CarDatas.getData(1), .75);
 		container.add(baseGhostCar);
-
-		playerGhostCar = new GhostCar(CarDatas.getData(levelInfo.replayCarId), 1);
-		playerGhostCar.alpha = .3;
-		container.add(playerGhostCar);
 	}
 
 	function createCar():Void
 	{
-		car = new Car(space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData(PlayerInfo.selectedCarId), 1, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK);
+		car = new Car(space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData(PlayerInfo.selectedCarId), .75, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK);
 		container.add(car);
 	}
 
@@ -852,8 +810,8 @@ class GameState extends FlxState
 			var selectedCarFog:CarFog = usedCarFogs[ usedCarFogs.length - 1 ];
 			selectedCarFog.visible = true;
 			selectedCarFog.alpha = 1;
-			selectedCarFog.x = car.carBodyPhysics.position.x - 140 * Math.cos(carAngleInRad);
-			selectedCarFog.y = car.carBodyPhysics.position.y - 140 * Math.sin(carAngleInRad);
+			selectedCarFog.x = car.carBodyPhysics.position.x - 140 * car.carScale * Math.cos(carAngleInRad);
+			selectedCarFog.y = car.carBodyPhysics.position.y - 140 * car.carScale * Math.sin(carAngleInRad);
 			selectedCarFog.startAnim(carAngleInRad);
 		}
 	}
@@ -1001,7 +959,7 @@ class GameState extends FlxState
 		}
 
 		// Temporary for save base replays
-		//trace(recorder.toString());
+		trace(recorder.toString());
 
 		levelInfo.time = (levelInfo.time > gameTime || levelInfo.time == 0) ? gameTime : levelInfo.time;
 		levelInfo.score = levelInfo.score < score ? score : levelInfo.score;

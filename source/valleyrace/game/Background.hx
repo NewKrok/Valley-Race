@@ -45,10 +45,10 @@ class Background extends FlxSpriteGroup
 		removeCurrent();
 
 		backgroundDatas = [];
-		addBackground('back_world_' + worldId + '_a00', 100, new FlxPoint(.1, .1), -.5);
-		addBackground('back_world_' + worldId + '_b00', 150, new FlxPoint(.35, .35), -.5);
-		addBackground('back_world_' + worldId + '_c00', 200, new FlxPoint(.45, .45), -.5);
-		addBackground('back_world_' + worldId + '_d00', 250, new FlxPoint(.55, .55), -.5);
+		addBackground('back_world_' + worldId + '_a00', 200, new FlxPoint(.1, .1), -.5);
+		addBackground('back_world_' + worldId + '_b00', 250, new FlxPoint(.35, .35), -.5);
+		addBackground('back_world_' + worldId + '_c00', 350, new FlxPoint(.45, .45), -.5);
+		addBackground('back_world_' + worldId + '_d00', 400, new FlxPoint(.55, .55), -.5);
 
 		update(1);
 	}

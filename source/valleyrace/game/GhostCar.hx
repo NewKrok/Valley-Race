@@ -17,6 +17,12 @@ class GhostCar extends AbstractCar implements IPlaybackPerformer
 		unserializeSprite(from, to, percent, carBodyGraphics);
 		unserializeSprite(from, to, percent, wheelRightGraphics);
 		unserializeSprite(from, to, percent, wheelLeftGraphics);
+		unserializeSprite(from, to, percent, frontSpring);
+		unserializeSprite(from, to, percent, backSpring);
+		unserializeSprite(from, to, percent, wheelBackTopHolderGraphics);
+		unserializeSprite(from, to, percent, wheelBackBottomHolderGraphics);
+		unserializeSprite(from, to, percent, wheelFrontTopHolderGraphics);
+		unserializeSprite(from, to, percent, wheelFrontBottomHolderGraphics);
 	}
 
 	private function unserializeSprite(from:Unserializer, to:Unserializer, percent:Float, sprite:FlxSprite):Void

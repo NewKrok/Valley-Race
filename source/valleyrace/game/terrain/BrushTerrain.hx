@@ -82,20 +82,26 @@ class BrushTerrain extends FlxSpriteGroup
 		var graphicBitmap:BitmapData = new BitmapData(cast levelSize.width, cast levelSize.height, true, 0x60);
 		graphicBitmap.draw(graphicContainer);
 
-		var maxBlockSize:UInt = 1024;
-		var pieces:UInt = Math.ceil(graphicBitmap.width / maxBlockSize);
+		var maxBlockSize:UInt = 512;
+		var piecesX:UInt = Math.ceil(graphicBitmap.width / maxBlockSize);
+		var piecesY:UInt = Math.ceil(graphicBitmap.height / maxBlockSize);
 
-		for (i in 0...pieces)
+		for (i in 0...piecesX)
 		{
-			var tmpBitmapData:BitmapData = new BitmapData(maxBlockSize, maxBlockSize, true, 0x60);
-			var offsetMatrix:Matrix = new Matrix();
-			offsetMatrix.tx = -i * maxBlockSize;
-			tmpBitmapData.draw(graphicContainer, offsetMatrix);
+			for (j in 0...piecesY)
+			{
+				var tmpBitmapData:BitmapData = new BitmapData(maxBlockSize, maxBlockSize, true, 0x60);
+				var offsetMatrix:Matrix = new Matrix();
+				offsetMatrix.tx = -i * maxBlockSize;
+				offsetMatrix.ty = -j * maxBlockSize;
+				tmpBitmapData.draw(graphicContainer, offsetMatrix);
 
-			var container:FlxSprite = new FlxSprite();
-			container.loadGraphic(tmpBitmapData);
-			container.x = i * maxBlockSize;
-			add(container);
+				var container:FlxSprite = new FlxSprite();
+				container.loadGraphic(tmpBitmapData);
+				container.x = i * maxBlockSize;
+				container.y = j * maxBlockSize;
+				add(container);
+			}
 		}
 	}
 
