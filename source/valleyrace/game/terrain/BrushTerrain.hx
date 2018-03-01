@@ -2,12 +2,14 @@ package valleyrace.game.terrain;
 
 import flash.geom.Matrix;
 import flixel.FlxSprite;
-import flixel.graphics.FlxGraphic;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
+import hpp.flixel.util.HPPAssetManager;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
+import valleyrace.config.TextureConfig;
+import valleyrace.datatype.LevelData.PolygonBackgroundData;
 
 /**
  * ...
@@ -26,57 +28,77 @@ class BrushTerrain extends FlxSpriteGroup
 	var groundBaseXOffset:Float = 0;
 	var groundBaseYOffset:Float = 0;
 
-	public function new (levelSize:Rectangle, groundPoints:Array<FlxPoint>, brushTexture:FlxGraphic, terrainContentTexture:FlxGraphic, textureMaxWidth:Float, textureHeight:Float)
+	public function new (levelSize:Rectangle, polygonBackgroundDatas:Array<PolygonBackgroundData>, textureMaxWidth:Float, textureHeight:Float)
 	{
 		super();
 
-		// To fix start graphic
-		groundPoints.push(groundPoints[0].copyTo());
-		groundPoints.push(groundPoints[1].copyTo());
-		groundPoints.push(groundPoints[2].copyTo());
-
-		groundBaseXOffset = groundPoints[0].x < 0 ? -groundPoints[0].x : 0;
-		groundBaseYOffset = groundPoints[0].y < 0 ? -groundPoints[0].y : 0;
-
-		if (brushTexture != null) groundPoints = optimizeGroundPointsToGraphics(groundPoints, brushTexture.width, textureMaxWidth);
-		BrushArea.lw = textureHeight;
-
 		var graphicContainer:Sprite = new Sprite();
-		graphicContainer.graphics.beginBitmapFill(terrainContentTexture.bitmap);
 
-		var brushArea:BrushArea;
-
-		for (i in 0...groundPoints.length)
+		for (polygonBackgroundData in polygonBackgroundDatas)
 		{
-			if (i == 0)
+			var brushTexture = TextureConfig.getPolygonTerrainGroundGraphic(polygonBackgroundData.terrainTextureId) == ""
+				? null
+				: HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainGroundGraphic(polygonBackgroundData.terrainTextureId));
+
+			var terrainContentTexture = HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainFillGraphic(polygonBackgroundData.terrainTextureId));
+
+			var groundPoints = polygonBackgroundData.polygon;
+
+			graphicContainer.graphics.beginBitmapFill(terrainContentTexture.bitmap);
+
+			// To fix start graphic
+			groundPoints.push(groundPoints[0].copyTo());
+			groundPoints.push(groundPoints[1].copyTo());
+			groundPoints.push(groundPoints[2].copyTo());
+
+			groundBaseXOffset = groundPoints[0].x < 0 ? -groundPoints[0].x : 0;
+			groundBaseYOffset = groundPoints[0].y < 0 ? -groundPoints[0].y : 0;
+
+			if (brushTexture != null) groundPoints = optimizeGroundPointsToGraphics(groundPoints, brushTexture.width, textureMaxWidth);
+			BrushArea.lw = textureHeight;
+
+			var brushArea:BrushArea;
+
+			for (i in 0...groundPoints.length)
 			{
-				if (brushTexture != null)
+				if (i == 0)
 				{
-					brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y);
-					linePointsInput.push(brushArea);
+					if (brushTexture != null)
+					{
+						brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y);
+						linePointsInput.push(brushArea);
+					}
+					graphicContainer.graphics.moveTo(groundPoints[i].x, groundPoints[i].y);
 				}
-				graphicContainer.graphics.moveTo(groundPoints[i].x, groundPoints[i].y);
+				else
+				{
+					if (brushTexture != null)
+					{
+						brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y, linePointsInput[linePointsInput.length - 1]);
+						linePointsInput.push(brushArea);
+					}
+					graphicContainer.graphics.lineTo(groundPoints[i].x, groundPoints[i].y);
+				}
+
+				if (i == groundPoints.length - 3) graphicContainer.graphics.endFill();
 			}
-			else
+
+			if (brushTexture != null)
 			{
-				if (brushTexture != null)
-				{
-					brushArea = new BrushArea(groundPoints[i].x, groundPoints[i].y, linePointsInput[linePointsInput.length - 1]);
-					linePointsInput.push(brushArea);
-				}
-				graphicContainer.graphics.lineTo(groundPoints[i].x, groundPoints[i].y);
+				calculateGraphicTriangles();
+
+				var brushBitmapData = new BitmapData(cast brushTexture.bitmap.width, cast brushTexture.bitmap.height, true, 0x60);
+				brushBitmapData.draw(brushTexture.bitmap);
+				renderTriangles(graphicContainer, brushBitmapData);
 			}
 
-			if (i == groundPoints.length - 3) graphicContainer.graphics.endFill();
-		}
-
-		if (brushTexture != null)
-		{
-			calculateGraphicTriangles();
-
-			var brushBitmapData = new BitmapData(cast brushTexture.bitmap.width, cast brushTexture.bitmap.height, true, 0x60);
-			brushBitmapData.draw(brushTexture.bitmap);
-			renderTriangles(graphicContainer, brushBitmapData);
+			linePointsInput = [];
+			linePoints = [];
+			vertices = [];
+			indices = [];
+			uvtData = [];
+			lastLength = 0;
+			segLength = 0;
 		}
 
 		var graphicBitmap:BitmapData = new BitmapData(cast levelSize.width, cast levelSize.height, true, 0x60);

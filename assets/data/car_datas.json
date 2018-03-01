@@ -1,7 +1,7 @@
 {
 	"carDatas":[
 		{
-			"name": "Flamy",
+			"name": "Player car 1",
 			"id": 0,
 			"graphicId": 0,
 			"starRequired": 0,
@@ -15,7 +15,7 @@
 			"backWheelYOffset": 25
 		},
 		{
-			"name": "TEMP 2",
+			"name": "Player car 2",
 			"id": 1,
 			"graphicId": 1,
 			"starRequired": 0,
@@ -29,7 +29,7 @@
 			"backWheelYOffset": 25
 		},
 		{
-			"name": "TEMP 3",
+			"name": "Player car 3",
 			"id": 2,
 			"graphicId": 2,
 			"starRequired": 0,
@@ -41,6 +41,48 @@
 			"firstWheelYOffset": 25,
 			"backWheelXOffset": -12,
 			"backWheelYOffset": 25
+		},
+		{
+			"name": "Enemy car 1",
+			"id": 3,
+			"graphicId": 3,
+			"starRequired": 0,
+			"price": 		[],
+			"speed": 		[],
+			"rotation": 	[],
+			"elasticity": 	[],
+			"firstWheelXOffset": 0,
+			"firstWheelYOffset": 0,
+			"backWheelXOffset": -0,
+			"backWheelYOffset": 0
+		},
+		{
+			"name": "Enemy car 2",
+			"id": 4,
+			"graphicId": 4,
+			"starRequired": 0,
+			"price": 		[],
+			"speed": 		[],
+			"rotation": 	[],
+			"elasticity": 	[],
+			"firstWheelXOffset": 0,
+			"firstWheelYOffset": 0,
+			"backWheelXOffset": -0,
+			"backWheelYOffset": 0
+		},
+		{
+			"name": "Enemy car 3",
+			"id": 5,
+			"graphicId": 5,
+			"starRequired": 0,
+			"price": 		[],
+			"speed": 		[],
+			"rotation": 	[],
+			"elasticity": 	[],
+			"firstWheelXOffset": 0,
+			"firstWheelYOffset": 0,
+			"backWheelXOffset": -0,
+			"backWheelYOffset": 0
 		}
 	]
 }

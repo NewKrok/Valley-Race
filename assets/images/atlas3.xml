@@ -5,9 +5,15 @@
 	<SubTexture name="car_body_0" x="5" y="5" width="250" height="123"/>
 	<SubTexture name="car_body_1" x="280" y="485" width="250" height="126"/>
 	<SubTexture name="car_body_2" x="5" y="485" width="250" height="123"/>
+	<SubTexture name="car_body_3" x="1340" y="290" width="250" height="123"/>
+	<SubTexture name="car_body_4" x="1610" y="290" width="250" height="123"/>
+	<SubTexture name="car_body_5" x="1340" y="430" width="250" height="123"/>
 	<SubTexture name="wheel_0" x="260" y="5" width="80" height="80"/>
 	<SubTexture name="wheel_1" x="540" y="465" width="80" height="80"/>
 	<SubTexture name="wheel_2" x="630" y="465" width="80" height="80"/>
+	<SubTexture name="wheel_3" x="1755" y="160" width="80" height="80"/>
+	<SubTexture name="wheel_4" x="1840" y="160" width="80" height="80"/>
+	<SubTexture name="wheel_5" x="1925" y="160" width="80" height="80"/>
 	<SubTexture name="car_fog" x="345" y="5" width="31" height="25"/>
 	<SubTexture name="small_rock_0_1" x="345" y="35" width="12" height="9"/>
 	<SubTexture name="small_rock_0_2" x="345" y="50" width="12" height="14"/>
@@ -15,7 +21,6 @@
 	<SubTexture name="coin0001" x="440" y="5" width="50" height="50"/>
 	<SubTexture name="coin0002" x="495" y="5" width="50" height="50"/>
 	<SubTexture name="coin0003" x="550" y="5" width="50" height="50"/>
-	<SubTexture name="finish_table" x="620" y="5" width="75" height="117"/>
 	<SubTexture name="bridge" x="345" y="70" width="71" height="23"/>
 	<SubTexture name="gui_coin_back" x="710" y="5" width="137" height="50"/>
 	<SubTexture name="gui_coin_back_max" x="345" y="165" width="161" height="74"/>
@@ -58,7 +63,8 @@
 	<SubTexture name="car_preview_2" x="1340" y="165" width="141" height="86"/>
 	<SubTexture name="upgrade_button" x="1170" y="225" width="136" height="28"/>
 	<SubTexture name="coin_small" x="925" y="65" width="20" height="20"/>
-	<SubTexture name="table_warning" x="1500" y="160" width="75" height="117"/>
-	<SubTexture name="table_direction" x="1585" y="160" width="75" height="117"/>
-	<SubTexture name="table_danger" x="1670" y="160" width="75" height="117"/>
+	<SubTexture name="table_warning" x="1500" y="160" width="51" height="80"/>
+	<SubTexture name="table_direction" x="1585" y="160" width="51" height="80"/>
+	<SubTexture name="table_danger" x="1670" y="160" width="51" height="80"/>
+	<SubTexture name="finish_table" x="620" y="5" width="51" height="80"/>
 </TextureAtlas>

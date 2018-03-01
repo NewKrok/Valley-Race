@@ -5,7 +5,7 @@ import flixel.FlxSprite;
 import haxe.Unserializer;
 import valleyrace.datatype.CarData;
 
-class GhostCar extends AbstractCar implements IPlaybackPerformer
+class OpponentCar extends AbstractCar implements IPlaybackPerformer
 {
 	public function new(carData:CarData, scale:Float = 1)
 	{

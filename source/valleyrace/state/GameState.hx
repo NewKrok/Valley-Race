@@ -36,7 +36,7 @@ import valleyrace.game.Car;
 import valleyrace.game.CarFog;
 import valleyrace.game.Coin;
 import valleyrace.game.GameGui;
-import valleyrace.game.GhostCar;
+import valleyrace.game.OpponentCar;
 import valleyrace.game.NotificationHandler.Notification;
 import valleyrace.game.SmallRock;
 import valleyrace.game.constant.CGameTimeValue;
@@ -92,13 +92,13 @@ class GameState extends FlxState
 	var staticElements:Array<FlxSprite>;
 
 	var recorder:Recorder;
-	var basePlayback:Playback;
-	var playerPlayback:Playback;
-	var baseReplayData:String;
 
 	var car:Car;
-	var baseGhostCar:GhostCar;
 	var snow:Snow;
+
+	var opponents:Array<OpponentCar>;
+	var replayDatas:Array<String>;
+	var playbacks:Array<Playback>;
 
 	var effects:Array<FlxSprite> = [];
 	var crates:Array<AbstractCrate> = [];
@@ -158,7 +158,10 @@ class GameState extends FlxState
 		levelData = LevelUtil.LevelDataFromJson(Assets.getText("assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json"));
 
 		try {
-			baseReplayData = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + ".txt");
+			replayDatas = [];
+			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_0.txt"));
+			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_1.txt"));
+			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_2.txt"));
 		}
 		catch (e:Dynamic){ trace("Invalid or missing replay data."); }
 
@@ -191,15 +194,15 @@ class GameState extends FlxState
 		createPhysicsWorld();
 
 		for (backgroundData in levelData.polygonGroundData) createGroundPhysics(backgroundData.polygon);
-		for (ground in levelData.polygonBackgroundData) createPolygonGraphics(ground);
+		createPolygonGraphics(levelData.polygonBackgroundData);
 
-		createGhostCar();
+		createOpponentCars();
 		createStaticElements();
 		createCar();
 		createBridges();
 		createSmallRocks();
 
-		for (ground in levelData.polygonGroundData) createPolygonGraphics(ground);
+		createPolygonGraphics(levelData.polygonGroundData);
 
 		createCoins();
 		createLibraryElements();
@@ -297,18 +300,25 @@ class GameState extends FlxState
 		recorder = new Recorder(car);
 		recorder.enableAutoRecording(250);
 
-		if (basePlayback != null) basePlayback.dispose();
-		if (playerPlayback != null) playerPlayback.dispose();
-
-		var replayData:String = levelInfo.replay == null ? levelData.replay : levelInfo.replay;
-
-		if (baseReplayData != null)
+		if (playbacks != null)
 		{
-			basePlayback = new Playback(baseGhostCar, baseReplayData);
-			basePlayback.showSnapshot(0);
+			for (playback in playbacks)
+			{
+				playback.dispose();
+				playbacks.remove(playback);
+			}
 		}
+		playbacks = [];
 
-		baseGhostCar.visible = false;
+		if (replayDatas != null)
+		{
+			for (i in 0...replayDatas.length)
+			{
+				var playback = new Playback(opponents[i], replayDatas[i]);
+				playback.showSnapshot(0);
+				playbacks.push(playback);
+			}
+		}
 	}
 
 	function resetCrates():Void
@@ -363,8 +373,6 @@ class GameState extends FlxState
 
 		totalPausedTime += now - pauseStartTime;
 
-		baseGhostCar.visible = true;
-
 		if (recorder != null)
 		{
 			recorder.resume();
@@ -411,18 +419,14 @@ class GameState extends FlxState
 		walls.space = space;
 	}
 
-	function createPolygonGraphics(backgroundData:PolygonBackgroundData):Void
+	function createPolygonGraphics(polygonBackgroundData:Array<PolygonBackgroundData>):Void
 	{
 		var terrainContainer = new FlxSpriteGroup();
 		container.add(terrainContainer);
 
 		var generatedTerrain:BrushTerrain = new BrushTerrain(
 			levelData.cameraBounds,
-			backgroundData.polygon,
-			TextureConfig.getPolygonTerrainGroundGraphic(backgroundData.terrainTextureId) == ""
-				? null
-				: HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainGroundGraphic(backgroundData.terrainTextureId)),
-			HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainFillGraphic(backgroundData.terrainTextureId)),
+			polygonBackgroundData,
 			64,
 			15
 		);
@@ -534,10 +538,20 @@ class GameState extends FlxState
 		}
 	}
 
-	function createGhostCar():Void
+	function createOpponentCars():Void
 	{
-		baseGhostCar = new GhostCar(CarDatas.getData(1), .75);
-		container.add(baseGhostCar);
+		if (replayDatas != null)
+		{
+			opponents = [];
+
+			for (i in 0...replayDatas.length)
+			{
+				var id:UInt = Math.floor(Math.random() * 6);
+				var opponent = new OpponentCar(CarDatas.getData(id), .75);
+				opponents.push(opponent);
+				container.add(opponent);
+			}
+		}
 	}
 
 	function createCar():Void
@@ -731,11 +745,11 @@ class GameState extends FlxState
 				pauseRequest(null);
 		}
 
-		if (basePlayback != null)
-			basePlayback.showSnapshot(recorder.getElapsedTime());
-
-		if (playerPlayback != null)
-			playerPlayback.showSnapshot(recorder.getElapsedTime());
+		if (playbacks != null)
+		{
+			for (playback in playbacks)
+				playback.showSnapshot(recorder.getElapsedTime());
+		}
 	}
 
 	function calculateGameTime():Void
