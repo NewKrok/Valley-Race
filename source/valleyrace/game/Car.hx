@@ -52,6 +52,7 @@ class Car extends AbstractCar implements IRecorderPerformer
 	public var onAirStartGameTime:Float;
 	public var jumpAngle:Float = 0;
 	public var lastAngleOnGround:Float = 0;
+	public var isHorizontalMoveDisabled:Bool = false;
 
 	public var leftWheelOnAir(default, null):Bool;
 	public var rightWheelOnAir(default, null):Bool;
@@ -183,6 +184,13 @@ class Car extends AbstractCar implements IRecorderPerformer
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+
+		if (isHorizontalMoveDisabled)
+		{
+			carBodyPhysics.velocity.x = 0;
+			wheelLeftPhysics.velocity.x = 0;
+			wheelRightPhysics.velocity.x = 0;
+		}
 
 		carBodyGraphics.x = carBodyPhysics.position.x - carBodyGraphics.origin.x;
 		carBodyGraphics.y = carBodyPhysics.position.y - carBodyGraphics.origin.y;

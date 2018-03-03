@@ -57,6 +57,7 @@ import valleyrace.game.substate.EndLevelPanel;
 import valleyrace.game.substate.PausePanel;
 import valleyrace.game.substate.StartLevelPanel;
 import valleyrace.game.terrain.BrushTerrain;
+import valleyrace.game.substate.LevelPreloader;
 import valleyrace.state.MenuState.MenuSubStateType;
 import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil;
@@ -68,6 +69,7 @@ class GameState extends FlxState
 
 	var space:Space;
 
+	var levelPreloader:LevelPreloader;
 	var startLevelPanel:StartLevelPanel;
 	var endLevelPanel:EndLevelPanel;
 	var pausePanel:PausePanel;
@@ -138,9 +140,13 @@ class GameState extends FlxState
 	var now:Float;
 
 	var levelInfo:LevelSavedData;
+	var buildStep:UInt = 0;
+	var isBuilt:Bool = false;
 
 	public function new(worldId:UInt, levelId:UInt):Void
 	{
+		super();
+
 		this.worldId = worldId;
 		this.levelId = levelId;
 
@@ -149,8 +155,6 @@ class GameState extends FlxState
 		levelInfo.isLastPlayed = true;
 		SavedDataUtil.setLastPlayedWorldId(worldId);
 		SavedDataUtil.save();
-
-		super();
 	}
 
 	override public function create():Void
@@ -164,12 +168,15 @@ class GameState extends FlxState
 		try {
 			replayDatas = [];
 			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_0.txt"));
-			//replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_1.txt"));
-			//replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_2.txt"));
+			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_1.txt"));
+			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_2.txt"));
 		}
 		catch (e:Dynamic){ trace("Invalid or missing replay data."); }
 
-		build();
+		levelPreloader = new LevelPreloader();
+		openSubState(levelPreloader);
+
+		Timer.delay(build, 10);
 	}
 
 	function loadAssets():Void
@@ -183,57 +190,81 @@ class GameState extends FlxState
 
 	function build():Void
 	{
-		destroySubStates = false;
-
-		pausePanel = new PausePanel(resumeRequest, restartRequest, exitRequest);
-		endLevelPanel = new EndLevelPanel(levelInfo, levelData, restartRequest, exitRequest, nextLevelRequest, prevLevelRequest);
-
-		lastCameraStepOffset = new FlxPoint();
-
-		add(background = new Background(worldId));
-		add(container = new FlxSpriteGroup());
-
-		createCarFogs();
-		createCamera();
-		createPhysicsWorld();
-
-		for (i in 0...levelData.polygonGroundData.length)
-			for (j in 0...levelData.polygonGroundData[i].length)
-				for (backgroundData in levelData.polygonGroundData[i][j])
-					createGroundPhysics(i, j, backgroundData.polygon);
-
-		for (i in 0...levelData.polygonBackgroundData.length)
-			for (j in 0...levelData.polygonBackgroundData[i].length)
-				createPolygonGraphics(i, j, levelData.polygonBackgroundData[i][j]);
-
-		createOpponentCars();
-		createStaticElements();
-		createCar();
-		createBridges();
-		createSmallRocks();
-
-		for (i in 0...levelData.polygonGroundData.length)
-			for (j in 0...levelData.polygonGroundData[i].length)
-				createPolygonGraphics(i, j, levelData.polygonGroundData[i][j]);
-
-		createCoins();
-		createLibraryElements();
-
-		camera.follow(car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate);
-
-		switch (worldId)
+		switch (buildStep)
 		{
+			case 0:
+				destroySubStates = false;
+				pausePanel = new PausePanel(resumeRequest, restartRequest, exitRequest);
+
 			case 1:
-				snow = new Snow();
-				add(snow);
+				endLevelPanel = new EndLevelPanel(levelInfo, levelData, restartRequest, exitRequest, nextLevelRequest, prevLevelRequest);
+
+			case 2:
+				lastCameraStepOffset = new FlxPoint();
+
+				add(background = new Background(worldId));
+				add(container = new FlxSpriteGroup());
+
+				createCarFogs();
+				createCamera();
+				createPhysicsWorld();
+
+			case 3:
+				for (i in 0...levelData.polygonGroundData.length)
+					for (j in 0...levelData.polygonGroundData[i].length)
+						for (backgroundData in levelData.polygonGroundData[i][j])
+							createGroundPhysics(i, j, backgroundData.polygon);
+
+			case 4:
+				for (i in 0...levelData.polygonBackgroundData.length)
+					for (j in 0...levelData.polygonBackgroundData[i].length)
+						createPolygonGraphics(i, j, levelData.polygonBackgroundData[i][j]);
+
+			case 5:
+				createOpponentCars();
+				createStaticElements();
+				createCar();
+				createBridges();
+				createSmallRocks();
+
+			case 6:
+				for (i in 0...levelData.polygonGroundData.length)
+					for (j in 0...levelData.polygonGroundData[i].length)
+						createPolygonGraphics(i, j, levelData.polygonGroundData[i][j]);
+
+			case 7:
+				createCoins();
+				createLibraryElements();
+
+				camera.follow(car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate);
+
+				switch (worldId)
+				{
+					case 1:
+						snow = new Snow();
+						add(snow);
+				}
+
+				add(gameGui = new GameGui(resume, pauseRequest, levelData.collectableItems.length));
+
+			case 8:
+				levelPreloader.hide(removePreloader);
+				return;
 		}
 
-		add(gameGui = new GameGui(resume, pauseRequest, levelData.collectableItems.length));
+		levelPreloader.step();
+		buildStep++;
+		Timer.delay(build, 10);
+	}
 
-		//cast(camera, HPPCamera).addZoomResistanceToSprite(gameGui);
-		//cast(camera, HPPCamera).addZoomResistanceToSprite(background);
+	function removePreloader()
+	{
+		closeSubState();
+		remove(levelPreloader);
+		levelPreloader = null;
 
 		reset();
+		isBuilt = true;
 	}
 
 	function openStartLevelPanelRequest(target:HPPButton = null):Void
@@ -287,7 +318,7 @@ class GameState extends FlxState
 			smallRocks[ i ].reset(0, 0);
 		}
 
-		car.teleportTo(levelData.startPoint.x, levelData.startPoint.y);
+		car.teleportTo(levelData.startPoint.x, levelData.startPoint.y); // -100 / -200 / -300 for ghosts
 
 		cast(camera, HPPCamera).resetPosition();
 		camera.focusOn(car.carBodyGraphics.getPosition());
@@ -714,7 +745,9 @@ class GameState extends FlxState
 			space.step(CPhysicsValue.STEP);
 		}
 
-		if (isGamePaused)
+		if (car != null) car.isHorizontalMoveDisabled = isGamePaused;
+
+		if (isGamePaused || !isBuilt)
 		{
 			return;
 		}

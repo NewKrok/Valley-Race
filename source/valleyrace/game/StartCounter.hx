@@ -3,7 +3,8 @@ package valleyrace.game;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
-import haxe.Timer;
+import flixel.tweens.FlxTween;
+import flixel.tweens.misc.VarTween;
 import hpp.flixel.util.HPPAssetManager;
 
 /**
@@ -16,6 +17,7 @@ class StartCounter extends FlxSpriteGroup
 
 	var counterImages:Array<FlxSprite>;
 	var animationIndex:UInt;
+	var tween:VarTween;
 
 	public function new(onCompleteCallback:Void->Void)
 	{
@@ -36,7 +38,7 @@ class StartCounter extends FlxSpriteGroup
 			var counterImage:FlxSprite = HPPAssetManager.getSprite("counter_" + i);
 			counterImages.push(counterImage);
 			counterImage.visible = false;
-			counterImage.x = FlxG.stage.stageWidth / 2 + 50;
+			counterImage.x = FlxG.stage.stageWidth  - 200;
 			counterImage.y = FlxG.stage.stageHeight / 2 - counterImage.height / 2;
 			add(counterImage);
 		}
@@ -54,6 +56,13 @@ class StartCounter extends FlxSpriteGroup
 	public function stop():Void
 	{
 		resetCounterImages();
+
+		if (tween != null)
+		{
+			tween.cancel();
+			tween.destroy();
+			tween = null;
+		}
 	}
 
 	public function start():Void
@@ -78,6 +87,6 @@ class StartCounter extends FlxSpriteGroup
 
 		counterImages[ animationIndex++ ].visible = true;
 
-		Timer.delay(handleNextStep, 1000);
+		tween = FlxTween.tween(this, {}, 1, { onComplete: function(_) { handleNextStep(); }});
 	}
 }
