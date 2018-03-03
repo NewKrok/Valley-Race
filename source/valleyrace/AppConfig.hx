@@ -1,4 +1,5 @@
 package valleyrace;
+import hpp.util.GeomUtil.SimplePoint;
 
 /**
  * ...
@@ -7,7 +8,10 @@ package valleyrace;
 class AppConfig
 {
 	public static inline var GAME_NAME:String = "ValleyRace";
-	public static inline var GAME_VERSION:String = "0.0.2";
+	public static inline var GAME_VERSION:String = "0.0.3";
+
+	public static var WORLD_PIECE_SIZE:SimplePoint = { x: 5000, y: 2000 };
+	public static var WORLD_BLOCK_SIZE:SimplePoint = { x: 500, y: 500 };
 
 	public static inline var MAXIMUM_GAME_TIME_BONUS:Int = 20000;
 	public static inline var COIN_SCORE_MULTIPLIER:Int = 250;

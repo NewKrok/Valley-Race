@@ -15,8 +15,8 @@ typedef LevelData =
 	var cameraBounds(default, default):Rectangle;
 	var startPoint(default, default):FlxPoint;
 	var finishPoint(default, default):FlxPoint;
-	var polygonGroundData(default, default):Array<PolygonBackgroundData>; // Background with physics
-	var polygonBackgroundData(default, default):Array<PolygonBackgroundData>; // Simple background
+	var polygonGroundData(default, default):Array<Array<Array<PolygonBackgroundData>>>; // Background with physics
+	var polygonBackgroundData(default, default):Array<Array<Array<PolygonBackgroundData>>>; // Simple background
 	var collectableItems(default, default):Array<FlxPoint>;
 	var starValues(default, default):Array<UInt>;
 
@@ -33,6 +33,7 @@ typedef PolygonBackgroundData =
 {
 	var polygon:Array<FlxPoint>;
 	var terrainTextureId:String;
+	var usedWorldBlocks:Array<SimplePoint>;
 }
 
 typedef BridgeData =

@@ -11,7 +11,9 @@ import valleyrace.datatype.LevelData;
  */
 class LevelUtil
 {
-	private static var worldNames:Array<String> = [
+	static inline var LEVEL_SCALE:Float = 1;
+
+	static var worldNames:Array<String> = [
 		"Pine Mountain",
 		"Ice World",
 		"Desert Valley",
@@ -26,23 +28,51 @@ class LevelUtil
 		{
 			level = Json.parse(jsonData);
 
-			for (background in level.polygonGroundData)
-				for (i in 0...background.polygon.length)
-					background.polygon[i] = new FlxPoint(background.polygon[i].x, background.polygon[i].y);
+			level.startPoint = new FlxPoint(
+				level.startPoint.x * LEVEL_SCALE,
+				level.startPoint.y * LEVEL_SCALE
+			);
 
-			if (level.polygonBackgroundData != null)
+			level.cameraBounds.x *= LEVEL_SCALE;
+			level.cameraBounds.y *= LEVEL_SCALE;
+			level.cameraBounds.width *= LEVEL_SCALE;
+			level.cameraBounds.height *= LEVEL_SCALE;
+
+			for (backgroundDataRow in level.polygonGroundData)
+				for (backgroundDataCol in backgroundDataRow)
+					for (background in backgroundDataCol)
+						for (i in 0...background.polygon.length)
+							background.polygon[i] = new FlxPoint(
+								background.polygon[i].x * LEVEL_SCALE,
+								background.polygon[i].y * LEVEL_SCALE
+							);
+
+			for (backgroundDataRow in level.polygonBackgroundData)
+				for (backgroundDataCol in backgroundDataRow)
+					for (background in backgroundDataCol)
+						for (i in 0...background.polygon.length)
+							background.polygon[i] = new FlxPoint(
+								background.polygon[i].x * LEVEL_SCALE,
+								background.polygon[i].y * LEVEL_SCALE
+							);
+
+			for (bridge in level.bridgePoints)
 			{
-				for (background in level.polygonBackgroundData)
-					for (i in 0...background.polygon.length)
-						background.polygon[i] = new FlxPoint(background.polygon[i].x, background.polygon[i].y);
-			} else level.polygonBackgroundData = [];
+				bridge.bridgeAX *= LEVEL_SCALE;
+				bridge.bridgeAY *= LEVEL_SCALE;
+				bridge.bridgeBX *= LEVEL_SCALE;
+				bridge.bridgeBY *= LEVEL_SCALE;
+			}
 
 			for (i in 0...level.collectableItems.length)
-				level.collectableItems[i] = new FlxPoint(level.collectableItems[i].x, level.collectableItems[i].y);
+				level.collectableItems[i] = new FlxPoint(
+					level.collectableItems[i].x * LEVEL_SCALE,
+					level.collectableItems[i].y * LEVEL_SCALE
+				);
 
 			if (level.staticElementData == null) level.staticElementData = [];
 			level.staticElementData.push({
-				position: { x: level.finishPoint.x, y: level.finishPoint.y },
+				position: { x: level.finishPoint.x * LEVEL_SCALE, y: level.finishPoint.y * LEVEL_SCALE },
 				pivotX: 0,
 				pivotY: 0,
 				scaleX: 1,

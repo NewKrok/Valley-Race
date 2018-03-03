@@ -17,6 +17,7 @@ import haxe.Timer;
 import hpp.flixel.HPPCamera;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
+import hpp.openfl.util.SpriteUtil;
 import nape.constraint.PivotJoint;
 import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
@@ -25,6 +26,7 @@ import nape.phys.BodyType;
 import nape.shape.Polygon;
 import nape.space.Space;
 import openfl.Assets;
+import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import valleyrace.AppConfig;
 import valleyrace.assets.CarDatas;
@@ -62,6 +64,8 @@ import valleyrace.util.SavedDataUtil;
 
 class GameState extends FlxState
 {
+	static inline var CAR_SCALE:Float = .75;
+
 	var space:Space;
 
 	var startLevelPanel:StartLevelPanel;
@@ -160,8 +164,8 @@ class GameState extends FlxState
 		try {
 			replayDatas = [];
 			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_0.txt"));
-			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_1.txt"));
-			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_2.txt"));
+			//replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_1.txt"));
+			//replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_2.txt"));
 		}
 		catch (e:Dynamic){ trace("Invalid or missing replay data."); }
 
@@ -193,8 +197,14 @@ class GameState extends FlxState
 		createCamera();
 		createPhysicsWorld();
 
-		for (backgroundData in levelData.polygonGroundData) createGroundPhysics(backgroundData.polygon);
-		createPolygonGraphics(levelData.polygonBackgroundData);
+		for (i in 0...levelData.polygonGroundData.length)
+			for (j in 0...levelData.polygonGroundData[i].length)
+				for (backgroundData in levelData.polygonGroundData[i][j])
+					createGroundPhysics(i, j, backgroundData.polygon);
+
+		for (i in 0...levelData.polygonBackgroundData.length)
+			for (j in 0...levelData.polygonBackgroundData[i].length)
+				createPolygonGraphics(i, j, levelData.polygonBackgroundData[i][j]);
 
 		createOpponentCars();
 		createStaticElements();
@@ -202,7 +212,9 @@ class GameState extends FlxState
 		createBridges();
 		createSmallRocks();
 
-		createPolygonGraphics(levelData.polygonGroundData);
+		for (i in 0...levelData.polygonGroundData.length)
+			for (j in 0...levelData.polygonGroundData[i].length)
+				createPolygonGraphics(i, j, levelData.polygonGroundData[i][j]);
 
 		createCoins();
 		createLibraryElements();
@@ -419,22 +431,26 @@ class GameState extends FlxState
 		walls.space = space;
 	}
 
-	function createPolygonGraphics(polygonBackgroundData:Array<PolygonBackgroundData>):Void
+	function createPolygonGraphics(row:UInt, col:UInt, polygonBackgroundData:Array<PolygonBackgroundData>):Void
 	{
 		var terrainContainer = new FlxSpriteGroup();
 		container.add(terrainContainer);
 
 		var generatedTerrain:BrushTerrain = new BrushTerrain(
-			levelData.cameraBounds,
+			row, col,
+			{ x: AppConfig.WORLD_PIECE_SIZE.x, y: AppConfig.WORLD_PIECE_SIZE.y },
 			polygonBackgroundData,
 			64,
 			15
 		);
+		generatedTerrain.scrollFactor.set();
+		generatedTerrain.x = row * AppConfig.WORLD_PIECE_SIZE.x;
+		generatedTerrain.y = col * AppConfig.WORLD_PIECE_SIZE.y;
 
 		terrainContainer.add(generatedTerrain);
 	}
 
-	function createGroundPhysics(ground:Array<FlxPoint>):Void
+	function createGroundPhysics(row:UInt, col:UInt, ground:Array<FlxPoint>):Void
 	{
 		groundBodies = [];
 
@@ -442,7 +458,16 @@ class GameState extends FlxState
 		filter.collisionGroup = CPhysicsValue.GROUND_FILTER_CATEGORY;
 		filter.collisionMask = CPhysicsValue.GROUND_FILTER_MASK;
 
-		var groundCopy = ground.concat([new FlxPoint(ground[0].x, ground[0].y)]);
+		var groundCopy:Array<FlxPoint> = [];
+		for (point in ground)
+			groundCopy.push(new FlxPoint(point.x, point.y));
+		groundCopy.push(new FlxPoint(ground[0].x, ground[0].y));
+
+		for (point in groundCopy)
+		{
+			point.x += row * AppConfig.WORLD_PIECE_SIZE.x;
+			point.y += col * AppConfig.WORLD_PIECE_SIZE.y;
+		}
 
 		for (i in 0...groundCopy.length - 1)
 		{
@@ -547,7 +572,7 @@ class GameState extends FlxState
 			for (i in 0...replayDatas.length)
 			{
 				var id:UInt = Math.floor(Math.random() * 6);
-				var opponent = new OpponentCar(CarDatas.getData(id), .75);
+				var opponent = new OpponentCar(CarDatas.getData(id), CAR_SCALE);
 				opponents.push(opponent);
 				container.add(opponent);
 			}
@@ -556,7 +581,7 @@ class GameState extends FlxState
 
 	function createCar():Void
 	{
-		car = new Car(space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData(PlayerInfo.selectedCarId), .75, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK);
+		car = new Car(space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData(PlayerInfo.selectedCarId), CAR_SCALE, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK);
 		container.add(car);
 	}
 
@@ -832,12 +857,21 @@ class GameState extends FlxState
 
 	function checkCoinPickUp():Void
 	{
+		var backWheelMidPoint:FlxPoint = car.wheelLeftGraphics.getMidpoint();
+		var frontWheelMidPoint:FlxPoint = car.wheelRightGraphics.getMidpoint();
+
 		for (i in 0...coins.length)
 		{
 			var coin:Coin = coins[ i ];
+			var coinMidPoint:FlxPoint = coin.getMidpoint();
 
-			if (!coin.isCollected && coin.overlaps(car.carBodyGraphics))
-			{
+			if (
+				!coin.isCollected
+				&& (
+					Point.distance(new Point(coinMidPoint.x, coinMidPoint.y), new Point(frontWheelMidPoint.x, frontWheelMidPoint.y)) < coin.width / 2 + car.wheelRightGraphics.width / 2 - 5
+					|| Point.distance(new Point(coinMidPoint.x, coinMidPoint.y), new Point(backWheelMidPoint.x, backWheelMidPoint.y)) < coin.width / 2 + car.wheelLeftGraphics.width / 2 - 5
+				)
+			){
 				coin.collect();
 				collectedCoin++;
 			}

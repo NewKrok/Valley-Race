@@ -29,7 +29,18 @@ class OpponentCar extends AbstractCar implements IPlaybackPerformer
 	{
 		sprite.x = calculateLinearTransitionValue(from.unserialize(), to.unserialize(), percent);
 		sprite.y = calculateLinearTransitionValue(from.unserialize(), to.unserialize(), percent);
-		sprite.angle = calculateLinearTransitionValue(from.unserialize(), to.unserialize(), percent);
+		var fromAngle:Float = from.unserialize();
+		while (fromAngle > 360) fromAngle -= 360;
+		var toAngle:Float = to.unserialize();
+		while (toAngle > 360) toAngle -= 360;
+
+		if (fromAngle - 300 > toAngle) toAngle += 360;
+		if (toAngle - 300 > fromAngle) fromAngle += 360;
+
+
+		var newAngle:Float = calculateLinearTransitionValue(fromAngle, toAngle, percent);
+		trace(fromAngle,toAngle,newAngle);
+		sprite.angle = newAngle;
 	}
 
 	private function calculateLinearTransitionValue(from:Float, to:Float, percent:Float):Float

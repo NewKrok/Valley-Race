@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import hpp.flixel.util.HPPAssetManager;
+import hpp.util.GeomUtil.SimplePoint;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
@@ -28,21 +29,26 @@ class BrushTerrain extends FlxSpriteGroup
 	var groundBaseXOffset:Float = 0;
 	var groundBaseYOffset:Float = 0;
 
-	public function new (levelSize:Rectangle, polygonBackgroundDatas:Array<PolygonBackgroundData>, textureMaxWidth:Float, textureHeight:Float)
+	public function new (row:UInt, col:UInt, size:SimplePoint, polygonBackgroundDatas:Array<PolygonBackgroundData>, textureMaxWidth:Float, textureHeight:Float)
 	{
 		super();
 
 		var graphicContainer:Sprite = new Sprite();
+		var usedWorldBlocks:Array<SimplePoint> = [];
 
 		for (polygonBackgroundData in polygonBackgroundDatas)
 		{
+			usedWorldBlocks = usedWorldBlocks.concat(polygonBackgroundData.usedWorldBlocks);
+
 			var brushTexture = TextureConfig.getPolygonTerrainGroundGraphic(polygonBackgroundData.terrainTextureId) == ""
 				? null
 				: HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainGroundGraphic(polygonBackgroundData.terrainTextureId));
 
 			var terrainContentTexture = HPPAssetManager.getGraphic(TextureConfig.getPolygonTerrainFillGraphic(polygonBackgroundData.terrainTextureId));
 
-			var groundPoints = polygonBackgroundData.polygon;
+			var groundPoints:Array<FlxPoint> = [];
+			for (point in polygonBackgroundData.polygon)
+				groundPoints.push(new FlxPoint(point.x, point.y));
 
 			graphicContainer.graphics.beginBitmapFill(terrainContentTexture.bitmap);
 
@@ -101,28 +107,40 @@ class BrushTerrain extends FlxSpriteGroup
 			segLength = 0;
 		}
 
-		var graphicBitmap:BitmapData = new BitmapData(cast levelSize.width, cast levelSize.height, true, 0x60);
-		graphicBitmap.draw(graphicContainer);
-
 		var maxBlockSize:UInt = 512;
-		var piecesX:UInt = Math.ceil(graphicBitmap.width / maxBlockSize);
-		var piecesY:UInt = Math.ceil(graphicBitmap.height / maxBlockSize);
+		var piecesX:UInt = Math.ceil(size.x / maxBlockSize);
+		var piecesY:UInt = Math.ceil(size.y / maxBlockSize);
 
 		for (i in 0...piecesX)
 		{
 			for (j in 0...piecesY)
 			{
-				var tmpBitmapData:BitmapData = new BitmapData(maxBlockSize, maxBlockSize, true, 0x60);
-				var offsetMatrix:Matrix = new Matrix();
-				offsetMatrix.tx = -i * maxBlockSize;
-				offsetMatrix.ty = -j * maxBlockSize;
-				tmpBitmapData.draw(graphicContainer, offsetMatrix);
+				var isUsedBlock:Bool = false;
+				for (block in usedWorldBlocks)
+				{
+					if (
+						block.x - (row * Math.floor(AppConfig.WORLD_PIECE_SIZE.x / AppConfig.WORLD_BLOCK_SIZE.x)) == i
+						&& block.y - (col * Math.floor(AppConfig.WORLD_PIECE_SIZE.y / AppConfig.WORLD_BLOCK_SIZE.y)) == j
+					){
+						isUsedBlock = true;
+						break;
+					}
+				}
 
-				var container:FlxSprite = new FlxSprite();
-				container.loadGraphic(tmpBitmapData);
-				container.x = i * maxBlockSize;
-				container.y = j * maxBlockSize;
-				add(container);
+				if (isUsedBlock)
+				{
+					var tmpBitmapData:BitmapData = new BitmapData(maxBlockSize, maxBlockSize, true, 0x60);
+					var offsetMatrix:Matrix = new Matrix();
+					offsetMatrix.tx = -i * maxBlockSize;
+					offsetMatrix.ty = -j * maxBlockSize;
+					tmpBitmapData.draw(graphicContainer, offsetMatrix);
+
+					var container:FlxSprite = new FlxSprite();
+					container.loadGraphic(tmpBitmapData);
+					container.x = i * maxBlockSize;
+					container.y = j * maxBlockSize;
+					add(container);
+				}
 			}
 		}
 	}

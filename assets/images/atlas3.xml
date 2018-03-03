@@ -17,10 +17,10 @@
 	<SubTexture name="car_fog" x="345" y="5" width="31" height="25"/>
 	<SubTexture name="small_rock_0_1" x="345" y="35" width="12" height="9"/>
 	<SubTexture name="small_rock_0_2" x="345" y="50" width="12" height="14"/>
-	<SubTexture name="coin0000" x="385" y="5" width="50" height="50"/>
-	<SubTexture name="coin0001" x="440" y="5" width="50" height="50"/>
-	<SubTexture name="coin0002" x="495" y="5" width="50" height="50"/>
-	<SubTexture name="coin0003" x="550" y="5" width="50" height="50"/>
+	<SubTexture name="coin0000" x="385" y="5" width="35" height="35"/>
+	<SubTexture name="coin0001" x="425" y="5" width="35" height="35"/>
+	<SubTexture name="coin0002" x="465" y="5" width="35" height="35"/>
+	<SubTexture name="coin0003" x="505" y="5" width="35" height="35"/>
 	<SubTexture name="bridge" x="345" y="70" width="71" height="23"/>
 	<SubTexture name="gui_coin_back" x="710" y="5" width="137" height="50"/>
 	<SubTexture name="gui_coin_back_max" x="345" y="165" width="161" height="74"/>
