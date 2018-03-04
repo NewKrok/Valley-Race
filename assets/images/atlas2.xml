@@ -17,15 +17,6 @@
 	<SubTexture name="back_world_0_d0002" x="1718" y="540" width="284" height="357"/>
 	<SubTexture name="back_world_0_d0003" x="2002" y="540" width="284" height="357"/>
 
-
-	<SubTexture name="back_world_3_a0000" x="2" y="2" width="284" height="900" pivotX="0" pivotY="0"/>
-	<SubTexture name="back_world_3_a0001" x="2" y="905" width="284" height="900"/>
-	<SubTexture name="back_world_3_a0002" x="289" y="2" width="284" height="900"/>
-	<SubTexture name="back_world_3_a0003" x="289" y="905" width="284" height="900"/>
-	<SubTexture name="back_world_3_b0000" x="576" y="2" width="284" height="621" pivotX="0" pivotY="-37.8"/>
-	<SubTexture name="back_world_3_b0001" x="576" y="626" width="284" height="621"/>
-	<SubTexture name="back_world_3_b0002" x="576" y="1250" width="284" height="621"/>
-	<SubTexture name="back_world_3_b0003" x="863" y="2" width="284" height="621"/>
 	<SubTexture name="candy_ball_a" x="2" y="1808" width="30" height="30" pivotX="0" pivotY="0"/>
 	<SubTexture name="candy_ball_b" x="35" y="1808" width="30" height="30" pivotX="0" pivotY="0"/>
 	<SubTexture name="candy_ball_c" x="2" y="1841" width="30" height="30" pivotX="0" pivotY="0"/>

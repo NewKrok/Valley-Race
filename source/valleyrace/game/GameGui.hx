@@ -62,6 +62,10 @@ class GameGui extends FlxSpriteGroup
 		topContainer.add(backFlipCounter = new BonusCounter("gui_backflip_back"));
 		topContainer.add(wheelieCounter = new BonusCounter("gui_wheelie_back"));
 
+		frontFlipCounter.visible = false;
+		backFlipCounter.visible = false;
+		wheelieCounter.visible = false;
+
 		add(topContainer);
 		add(startCounter = new StartCounter(resumeGameCallBack));
 

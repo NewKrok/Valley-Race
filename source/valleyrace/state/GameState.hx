@@ -242,12 +242,12 @@ class GameState extends FlxState
 
 				camera.follow(car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate);
 
-				switch (worldId)
+				/*switch (worldId)
 				{
 					case 1:
 						snow = new Snow();
 						add(snow);
-				}
+				}*/
 
 				add(gameGui = new GameGui(resume, pauseRequest, levelData.collectableItems.length));
 
@@ -661,7 +661,7 @@ class GameState extends FlxState
 
 		for (i in 0...30)
 		{
-			var smallRock:SmallRock = new SmallRock("small_rock_" + worldId + "_" + Math.floor(Math.random() * 2 + 1), releaseSmallRock);
+			var smallRock:SmallRock = new SmallRock("small_rock_" + (worldId == 0 || worldId == 1 ? 0 : worldId) + "_" + Math.floor(Math.random() * 2 + 1), releaseSmallRock);
 			container.add(smallRock);
 			smallRocks.push(smallRock);
 		}
