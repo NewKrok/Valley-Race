@@ -68,6 +68,7 @@ class CarDatas
 	public static function getLeveledData(carId:UInt):CarLeveledData
 	{
 		var baseData:CarData = getData(carId);
+		//var level:UInt = 0;//SavedDataUtil.getPlayerInfo().carDatas[carId].level;
 		var level:UInt = SavedDataUtil.getPlayerInfo().carDatas[carId].level;
 
 		return {

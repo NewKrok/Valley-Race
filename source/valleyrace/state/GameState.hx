@@ -322,7 +322,8 @@ class GameState extends FlxState
 			smallRocks[ i ].reset(0, 0);
 		}
 
-		car.teleportTo(levelData.startPoint.x, levelData.startPoint.y); // -100 / -200 / -300 for ghosts
+		//car.teleportTo(levelData.startPoint.x - 180, levelData.startPoint.y); // -180 / -360 / -540 for ghosts
+		car.teleportTo(levelData.startPoint.x, levelData.startPoint.y);
 
 		cast(camera, HPPCamera).resetPosition();
 		camera.focusOn(car.carBodyGraphics.getPosition());
@@ -991,14 +992,17 @@ class GameState extends FlxState
 
 	function checkLoose():Void
 	{
-		if (!isLost && !isWon && (car.isCarCrashed || gameTime >= CGameTimeValue.MAXIMUM_GAME_TIME))
+		var isTimeout:Bool = gameTime >= CGameTimeValue.MAXIMUM_GAME_TIME;
+		var isFallDown:Bool = car.carBodyGraphics.y > levelData.cameraBounds.y + levelData.cameraBounds.height;
+
+		if (!isLost && !isWon && (car.isCarCrashed || isTimeout || isFallDown))
 		{
 			isLost = true;
 
-			if (car.isCarCrashed)
+			if (car.isCarCrashed || isFallDown)
 			{
 				camera.shake(.02, .2);
-				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_CRUSHED);
+				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - (isFallDown ? 100 : 20), GameEffect.TYPE_CRUSHED);
 			}
 			else
 			{
