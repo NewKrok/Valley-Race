@@ -46,9 +46,9 @@ class Background extends FlxSpriteGroup
 
 		backgroundDatas = [];
 		addBackground('back_world_' + worldId + '_a00', 200, new FlxPoint(.1, .1), -.5);
-		addBackground('back_world_' + worldId + '_b00', 250, new FlxPoint(.35, .35), -.5);
-		addBackground('back_world_' + worldId + '_c00', 350, new FlxPoint(.45, .45), -.5);
-		addBackground('back_world_' + worldId + '_d00', 400, new FlxPoint(.55, .55), -.5);
+		addBackground('back_world_' + worldId + '_b00', 300, new FlxPoint(.35, .35), -.5);
+		addBackground('back_world_' + worldId + '_c00', 400, new FlxPoint(.45, .45), -.5);
+		addBackground('back_world_' + worldId + '_d00', 550, new FlxPoint(.55, .55), -.5);
 
 		update(1);
 	}

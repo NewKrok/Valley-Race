@@ -165,11 +165,15 @@ class GameState extends FlxState
 
 		levelData = LevelUtil.LevelDataFromJson(Assets.getText("assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json"));
 
+		replayDatas = [];
+
 		try {
-			replayDatas = [];
-			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_0.txt"));
-			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_1.txt"));
-			replayDatas.push(Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_2.txt"));
+			var replayData:String = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_0.txt");
+			if (replayData != null) replayDatas.push(replayData);
+			replayData = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_1.txt");
+			if (replayData != null) replayDatas.push(replayData);
+			replayData = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_2.txt");
+			if (replayData != null) replayDatas.push(replayData);
 		}
 		catch (e:Dynamic){ trace("Invalid or missing replay data."); }
 
@@ -548,7 +552,7 @@ class GameState extends FlxState
 		var bridgeElementWidth:UInt = 60;
 		var bridgeElementHeight:UInt = 25;
 		var bridgeDistance:Float = pointA.distanceTo(pointB);
-		var pieces:UInt = Math.floor(bridgeDistance / bridgeElementWidth) + 1;
+		var pieces:UInt = Math.round(bridgeDistance / bridgeElementWidth) + 1;
 
 		if (bridgeDistance % bridgeElementWidth == 0)
 		{

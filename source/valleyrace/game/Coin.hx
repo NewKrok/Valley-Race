@@ -37,20 +37,20 @@ class Coin extends FlxSpriteGroup
 		tween = FlxTween.tween(
 			this,
 			{ alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? .1 : 1 },
-			.6,
+			.4,
 			{ onComplete: tweenCompleted }
 		);
 
 		FlxTween.tween(
 			scale,
 			{ x: 1.5, y: 1.5 },
-			.3
+			.2
 		);
 
 		FlxTween.tween(
 			scale,
 			{ x: .2, y: .2 },
-			.3,
+			.2,
 			{ startDelay: .3, ease: FlxEase.quadIn }
 		);
 	}
