@@ -58,13 +58,9 @@ class GameGui extends FlxSpriteGroup
 
 		topContainer.add(timeCounter = new TimeCounter());
 		topContainer.add(coinCounter = new CoinCounter(0, maxCoinCount));
-		topContainer.add(frontFlipCounter = new BonusCounter("gui_frontflip_back"));
-		topContainer.add(backFlipCounter = new BonusCounter("gui_backflip_back"));
-		topContainer.add(wheelieCounter = new BonusCounter("gui_wheelie_back"));
-
-		frontFlipCounter.visible = false;
-		backFlipCounter.visible = false;
-		wheelieCounter.visible = false;
+		/*topContainer.add(*/frontFlipCounter = new BonusCounter("gui_frontflip_back");// );
+		/*topContainer.add(*/backFlipCounter = new BonusCounter("gui_backflip_back");// );
+		/*topContainer.add(*/wheelieCounter = new BonusCounter("gui_wheelie_back");// );
 
 		add(topContainer);
 		add(startCounter = new StartCounter(resumeGameCallBack));

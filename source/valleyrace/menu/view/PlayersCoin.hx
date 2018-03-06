@@ -22,7 +22,6 @@ class PlayersCoin extends FlxSpriteGroup
 		super(10);
 
 		var coinView:FlxSprite = HPPAssetManager.getSprite("coin0000");
-		coinView.scale.set(.7, .7);
 		add(coinView);
 
 		levelText = new FlxText(0, 0, 0, NumberUtil.formatNumber(defaultValue), 35);
@@ -30,7 +29,7 @@ class PlayersCoin extends FlxSpriteGroup
 		levelText.color = FlxColor.YELLOW;
 		levelText.font = Fonts.HOLLYWOOD;
 		levelText.x = coinView.width + 5;
-		levelText.y = 12;
+		levelText.y = 5;
 		add(levelText);
 	}
 

@@ -8,6 +8,7 @@ import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.util.NumberUtil;
 import valleyrace.assets.Fonts;
+import valleyrace.common.view.ReachedStarView;
 import valleyrace.datatype.LevelData;
 import valleyrace.game.constant.CGameTimeValue;
 import valleyrace.game.constant.CScore;
@@ -33,6 +34,7 @@ class EndLevelSummary extends FlxSpriteGroup
 	var wheelieEntry:EndLevelEntry;
 
 	var coinCounter:CoinCounter;
+	var reachedStarView:ReachedStarView;
 
 	public function new(levelInfo:LevelSavedData, levelData:LevelData)
 	{
@@ -42,22 +44,19 @@ class EndLevelSummary extends FlxSpriteGroup
 		this.levelInfo = levelInfo;
 		this.levelData = levelData;
 
-		var background:FlxSprite = new FlxSprite().makeGraphic(400, 440, FlxColor.BLACK);
+		var background:FlxSprite = new FlxSprite().makeGraphic(480, 440, FlxColor.BLACK);
 		background.alpha = .9;
 		add(background);
 
-		var title:FlxText = new FlxText(0, 0, background.width, "RACE COMPLETED ", 45);
-		title.autoSize = true;
-		title.color = FlxColor.YELLOW;
-		title.font = Fonts.HOLLYWOOD;
-		title.alignment = "center";
-		title.y = 19;
-		add(title);
+		reachedStarView = new ReachedStarView();
+		reachedStarView.x = background.width / 2 - reachedStarView.width / 2;
+		reachedStarView.y = 19;
+		add(reachedStarView);
 
 		createDetails();
 		createTotalScore();
 
-		updateView(0, 0, 0, 0, 0, 0);
+		updateView(0, 0, 0, 0, 0, 0, 0);
 	}
 
 	function createDetails():Void
@@ -83,11 +82,11 @@ class EndLevelSummary extends FlxSpriteGroup
 		totalScoreTitle.font = Fonts.HOLLYWOOD;
 		totalScoreContainer.add(totalScoreTitle);
 
-		totalScore = new FlxText(0, 0, 320, NumberUtil.formatNumber(levelInfo.score), 45);
+		totalScore = new FlxText(0, 0, 170, NumberUtil.formatNumber(levelInfo.score), 45);
 		totalScore.autoSize = true;
 		totalScore.color = FlxColor.YELLOW;
 		totalScore.font = Fonts.HOLLYWOOD;
-		totalScore.alignment = "center";
+		totalScore.alignment = "right";
 		totalScoreContainer.add(totalScore);
 
 		totalScoreContainer.x = 24;
@@ -96,6 +95,7 @@ class EndLevelSummary extends FlxSpriteGroup
 	}
 
 	public function updateView(
+		starCount,
 		currentScore:UInt,
 		currentTime:Float,
 		currentCollectedCoins:UInt,
@@ -104,6 +104,8 @@ class EndLevelSummary extends FlxSpriteGroup
 		countOfNiceWheelie:UInt
 	)
 	{
+		reachedStarView.setStarCount(starCount);
+
 		totalScore.text = NumberUtil.formatNumber(currentScore);
 
 		timeEntry.setCounter(CGameTimeValue.MAXIMUM_GAME_TIME - currentTime);

@@ -12,13 +12,14 @@ import hpp.ui.HAlign;
 import hpp.util.NumberUtil;
 import valleyrace.AppConfig;
 import valleyrace.assets.Fonts;
+import valleyrace.common.view.ReachedStarView;
 import valleyrace.common.view.SmallButton;
 import valleyrace.datatype.LevelData;
-import valleyrace.common.view.ReachedStarView;
 import valleyrace.game.view.endlevelpanel.EndLevelSummary;
+import valleyrace.menu.view.PlayersCoin;
 import valleyrace.util.LevelUtil;
+import valleyrace.util.SavedDataUtil;
 import valleyrace.util.SavedDataUtil.LevelSavedData;
-
 
 /**
  * ...
@@ -30,6 +31,7 @@ class EndLevelPanel extends FlxSubState
 	var footer:FlxSpriteGroup;
 	var endLevelSummary:EndLevelSummary;
 	var reachedStarView:ReachedStarView;
+	var playersCoin:PlayersCoin;
 
 	var startButton:HPPButton;
 	var exitButton:HPPButton;
@@ -89,6 +91,7 @@ class EndLevelPanel extends FlxSubState
 	function build()
 	{
 		buildHeader();
+		buildContent();
 		buildFooter();
 		add(endLevelSummary = new EndLevelSummary(levelInfo, levelData));
 		endLevelSummary.y = 100;
@@ -104,37 +107,9 @@ class EndLevelPanel extends FlxSubState
 		background.alpha = .8;
 		header.add(background);
 
-		var scoreWrapper = new HPPVUIBox(0, HAlign.LEFT);
-		var scoreContainer = new HPPHUIBox(15);
-
-		var bestScoreLabelText:FlxText = new FlxText(0, 0, 0, "Best score ", 25);
-		bestScoreLabelText.autoSize = true;
-		bestScoreLabelText.color = FlxColor.WHITE;
-		bestScoreLabelText.alignment = "left";
-		bestScoreLabelText.font = Fonts.HOLLYWOOD;
-		scoreContainer.add(bestScoreLabelText);
-		bestScoreText = new FlxText(0, 0, 0, levelInfo.isCompleted ? NumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
-		bestScoreText.autoSize = true;
-		bestScoreText.color = FlxColor.YELLOW;
-		bestScoreText.alignment = "left";
-		bestScoreText.font = Fonts.HOLLYWOOD;
-		scoreContainer.add(bestScoreText);
-		scoreWrapper.add(scoreContainer);
-
-		highscoreText = new FlxText(0, 0, 0, "NEW HIGHSCORE! ", 25);
-		highscoreText.autoSize = true;
-		highscoreText.color = FlxColor.WHITE;
-		highscoreText.alignment = "left";
-		highscoreText.font = Fonts.HOLLYWOOD;
-		highscoreText.visible = currentScore >= levelInfo.score;
-		scoreContainer.add(highscoreText);
-
-		reachedStarView = new ReachedStarView();
-		scoreWrapper.add(reachedStarView);
-
-		scoreWrapper.x = 30;
-		scoreWrapper.y = 17;
-		header.add(scoreWrapper);
+		header.add(playersCoin = new PlayersCoin(SavedDataUtil.getPlayerInfo().coin));
+		playersCoin.x = 20;
+		playersCoin.y = 17;
 
 		var titleContainer:HPPVUIBox = new HPPVUIBox(-20, HAlign.RIGHT);
 		var levelText:FlxText = new FlxText(0, 0, 0, "RACE " + (levelInfo.levelId + 1), 45);
@@ -151,7 +126,56 @@ class EndLevelPanel extends FlxSubState
 		titleContainer.y = 17;
 		header.add(titleContainer);
 
+		var title:FlxText = new FlxText(0, 0, background.width, "RACE COMPLETED ", 45);
+		title.autoSize = true;
+		title.color = FlxColor.YELLOW;
+		title.font = Fonts.HOLLYWOOD;
+		title.alignment = "center";
+		title.x = FlxG.stage.stageWidth / 2 - title.width / 2;
+		title.y = 35;
+		header.add(title);
+
 		add(header);
+	}
+
+	function buildContent()
+	{
+		var scoreContainer = new HPPHUIBox(15);
+		scoreContainer.scrollFactor.set();
+
+		var bestScoreLabelText:FlxText = new FlxText(0, 0, 0, "Best score ", 25);
+		bestScoreLabelText.autoSize = true;
+		bestScoreLabelText.color = FlxColor.WHITE;
+		bestScoreLabelText.alignment = "left";
+		bestScoreLabelText.font = Fonts.HOLLYWOOD;
+		bestScoreLabelText.borderSize = 2;
+		bestScoreLabelText.borderColor = FlxColor.BLACK;
+		bestScoreLabelText.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
+		scoreContainer.add(bestScoreLabelText);
+		bestScoreText = new FlxText(0, 0, 0, levelInfo.isCompleted ? NumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
+		bestScoreText.autoSize = true;
+		bestScoreText.color = FlxColor.YELLOW;
+		bestScoreText.alignment = "left";
+		bestScoreText.font = Fonts.HOLLYWOOD;
+		bestScoreText.borderSize = 2;
+		bestScoreText.borderColor = FlxColor.BLACK;
+		bestScoreText.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
+		scoreContainer.add(bestScoreText);
+
+		highscoreText = new FlxText(0, 0, 0, "NEW HIGHSCORE! ", 25);
+		highscoreText.autoSize = true;
+		highscoreText.color = FlxColor.WHITE;
+		highscoreText.alignment = "left";
+		highscoreText.font = Fonts.HOLLYWOOD;
+		highscoreText.borderSize = 2;
+		highscoreText.borderColor = FlxColor.BLACK;
+		highscoreText.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
+		highscoreText.visible = currentScore >= levelInfo.score;
+		scoreContainer.add(highscoreText);
+
+		scoreContainer.x = FlxG.stage.stageWidth - scoreContainer.width - 20;
+		scoreContainer.y = FlxG.stage.stageHeight - scoreContainer.height - 100;
+		add(scoreContainer);
 	}
 
 	function buildFooter():Void
@@ -211,11 +235,12 @@ class EndLevelPanel extends FlxSubState
 
 		if (!isBuilt) return;
 
-		reachedStarView.setStarCount(levelInfo.starCount);
+		playersCoin.updateValue(SavedDataUtil.getPlayerInfo().coin);
+
 		bestScoreText.text = NumberUtil.formatNumber(levelInfo.score);
 		highscoreText.visible = currentScore >= levelInfo.score;
 
-		endLevelSummary.updateView(currentScore, currentTime, currentCollectedCoins, countOfFrontFlip, countOfBackFlip, countOfNiceWheelie);
+		endLevelSummary.updateView(levelInfo.starCount, currentScore, currentTime, currentCollectedCoins, countOfFrontFlip, countOfBackFlip, countOfNiceWheelie);
 	}
 
 	override public function update(elapsed:Float):Void
