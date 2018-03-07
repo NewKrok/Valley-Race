@@ -13,13 +13,17 @@ import valleyrace.assets.Fonts;
  * ...
  * @author Krisztian Somoracz
  */
-class PlayersCoin extends FlxSpriteGroup
+class CoinView extends FlxSpriteGroup
 {
 	var levelText:FlxText;
+	var customScale:Float;
 
-	public function new(defaultValue:UInt = 0)
+	public function new(defaultValue:UInt = 0, customScale:Float = 1)
 	{
 		super(10);
+
+		this.customScale = customScale;
+		scale.set(customScale, customScale);
 
 		var coinView:FlxSprite = HPPAssetManager.getSprite("coin0000");
 		add(coinView);
@@ -40,11 +44,11 @@ class PlayersCoin extends FlxSpriteGroup
 
 	override function get_width():Float
 	{
-		return levelText != null ? levelText.x + levelText.width : 0;
+		return levelText != null ? (levelText.x + levelText.width) * customScale : 0;
 	}
 
 	override function get_height():Float
 	{
-		return levelText != null ? levelText.y + levelText.height : 0;
+		return levelText != null ? (levelText.y + levelText.height) * customScale : 0;
 	}
 }

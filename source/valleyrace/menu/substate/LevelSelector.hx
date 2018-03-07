@@ -14,7 +14,7 @@ import valleyrace.common.PlayerInfo;
 import valleyrace.common.view.SmallButton;
 import valleyrace.menu.view.CarPreview;
 import valleyrace.menu.view.LevelSelectorPage;
-import valleyrace.menu.view.PlayersCoin;
+import valleyrace.menu.view.CoinView;
 import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil;
 
@@ -30,7 +30,7 @@ class LevelSelector extends FlxSubState
 
 	var header:FlxSpriteGroup;
 	var footer:FlxSpriteGroup;
-	var playersCoin:PlayersCoin;
+	var playersCoin:CoinView;
 	var contentHolder:HPPVUIBox;
 
 	var onBackRequest:HPPButton->Void;
@@ -69,7 +69,7 @@ class LevelSelector extends FlxSubState
 		background.alpha = .5;
 		header.add(background);
 
-		header.add(playersCoin = new PlayersCoin(SavedDataUtil.getPlayerInfo().coin));
+		header.add(playersCoin = new CoinView(SavedDataUtil.getPlayerInfo().coin));
 		playersCoin.x = 20;
 		playersCoin.y = 8;
 

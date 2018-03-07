@@ -15,8 +15,9 @@ import valleyrace.assets.Fonts;
 import valleyrace.common.view.ReachedStarView;
 import valleyrace.common.view.SmallButton;
 import valleyrace.datatype.LevelData;
+import valleyrace.game.LevelEndData;
 import valleyrace.game.view.endlevelpanel.EndLevelSummary;
-import valleyrace.menu.view.PlayersCoin;
+import valleyrace.menu.view.CoinView;
 import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil;
 import valleyrace.util.SavedDataUtil.LevelSavedData;
@@ -31,7 +32,7 @@ class EndLevelPanel extends FlxSubState
 	var footer:FlxSpriteGroup;
 	var endLevelSummary:EndLevelSummary;
 	var reachedStarView:ReachedStarView;
-	var playersCoin:PlayersCoin;
+	var playersCoin:CoinView;
 
 	var startButton:HPPButton;
 	var exitButton:HPPButton;
@@ -50,13 +51,7 @@ class EndLevelPanel extends FlxSubState
 	var levelData:LevelData;
 
 	var isBuilt:Bool = false;
-	var currentScore:UInt;
-	var currentTime:Float;
-	var currentCollectedCoins:UInt;
-	var currentEarnedStarCounts:UInt;
-	var countOfFrontFlip:UInt;
-	var countOfBackFlip:UInt;
-	var countOfNiceWheelie:UInt;
+	var levelEndData:LevelEndData;
 
 	function new(levelInfo:LevelSavedData, levelData:LevelData, restartRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
 	{
@@ -77,15 +72,7 @@ class EndLevelPanel extends FlxSubState
 		build();
 		isBuilt = true;
 
-		updateView(
-			currentScore,
-			currentTime,
-			currentCollectedCoins,
-			currentEarnedStarCounts,
-			countOfFrontFlip,
-			countOfBackFlip,
-			countOfNiceWheelie
-		);
+		updateView(levelEndData);
 	}
 
 	function build()
@@ -107,7 +94,7 @@ class EndLevelPanel extends FlxSubState
 		background.alpha = .8;
 		header.add(background);
 
-		header.add(playersCoin = new PlayersCoin(SavedDataUtil.getPlayerInfo().coin));
+		header.add(playersCoin = new CoinView(SavedDataUtil.getPlayerInfo().coin));
 		playersCoin.x = 20;
 		playersCoin.y = 17;
 
@@ -162,20 +149,23 @@ class EndLevelPanel extends FlxSubState
 		bestScoreText.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
 		scoreContainer.add(bestScoreText);
 
+		scoreContainer.x = FlxG.stage.stageWidth - scoreContainer.width - 20;
+		scoreContainer.y = FlxG.stage.stageHeight - scoreContainer.height - 100;
+		add(scoreContainer);
+
 		highscoreText = new FlxText(0, 0, 0, "NEW HIGHSCORE! ", 25);
+		highscoreText.scrollFactor.set();
 		highscoreText.autoSize = true;
-		highscoreText.color = FlxColor.WHITE;
+		highscoreText.color = FlxColor.YELLOW;
 		highscoreText.alignment = "left";
 		highscoreText.font = Fonts.HOLLYWOOD;
 		highscoreText.borderSize = 2;
 		highscoreText.borderColor = FlxColor.BLACK;
 		highscoreText.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
-		highscoreText.visible = currentScore >= levelInfo.score;
-		scoreContainer.add(highscoreText);
-
-		scoreContainer.x = FlxG.stage.stageWidth - scoreContainer.width - 20;
-		scoreContainer.y = FlxG.stage.stageHeight - scoreContainer.height - 100;
-		add(scoreContainer);
+		highscoreText.visible = levelEndData.totalScore > levelInfo.score;
+		highscoreText.x = FlxG.stage.stageWidth - highscoreText.width - 20;
+		highscoreText.y = FlxG.stage.stageHeight - highscoreText.height - 130;
+		add(highscoreText);
 	}
 
 	function buildFooter():Void
@@ -215,32 +205,18 @@ class EndLevelPanel extends FlxSubState
 		return levelInfo.isCompleted && levelInfo.levelId != 23;
 	}
 
-	public function updateView(
-		currentScore:UInt,
-		currentTime:Float,
-		currentCollectedCoins:UInt,
-		currentEarnedStarCounts:UInt,
-		countOfFrontFlip:UInt,
-		countOfBackFlip:UInt,
-		countOfNiceWheelie:UInt
-	):Void
+	public function updateView(levelEndData:LevelEndData):Void
 	{
-		this.currentTime = currentTime;
-		this.currentScore = currentScore;
-		this.currentCollectedCoins = currentCollectedCoins;
-		this.currentEarnedStarCounts = currentEarnedStarCounts;
-		this.countOfFrontFlip = countOfFrontFlip;
-		this.countOfBackFlip = countOfBackFlip;
-		this.countOfNiceWheelie = countOfNiceWheelie;
+		this.levelEndData = levelEndData;
 
 		if (!isBuilt) return;
 
 		playersCoin.updateValue(SavedDataUtil.getPlayerInfo().coin);
 
 		bestScoreText.text = NumberUtil.formatNumber(levelInfo.score);
-		highscoreText.visible = currentScore >= levelInfo.score;
+		highscoreText.visible = levelEndData.totalScore > levelInfo.score;
 
-		endLevelSummary.updateView(levelInfo.starCount, currentScore, currentTime, currentCollectedCoins, countOfFrontFlip, countOfBackFlip, countOfNiceWheelie);
+		endLevelSummary.updateView(levelEndData);
 	}
 
 	override public function update(elapsed:Float):Void

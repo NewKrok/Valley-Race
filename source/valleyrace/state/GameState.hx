@@ -17,7 +17,6 @@ import haxe.Timer;
 import hpp.flixel.HPPCamera;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.openfl.util.SpriteUtil;
 import nape.constraint.PivotJoint;
 import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
@@ -27,19 +26,18 @@ import nape.shape.Polygon;
 import nape.space.Space;
 import openfl.Assets;
 import openfl.geom.Point;
-import openfl.geom.Rectangle;
 import valleyrace.AppConfig;
 import valleyrace.assets.CarDatas;
 import valleyrace.common.PlayerInfo;
-import valleyrace.config.TextureConfig;
 import valleyrace.datatype.LevelData;
 import valleyrace.game.Background;
 import valleyrace.game.Car;
 import valleyrace.game.CarFog;
 import valleyrace.game.Coin;
 import valleyrace.game.GameGui;
-import valleyrace.game.OpponentCar;
+import valleyrace.game.LevelEndData;
 import valleyrace.game.NotificationHandler.Notification;
+import valleyrace.game.OpponentCar;
 import valleyrace.game.SmallRock;
 import valleyrace.game.constant.CGameTimeValue;
 import valleyrace.game.constant.CLibraryElement;
@@ -54,13 +52,14 @@ import valleyrace.game.library.crate.SmallLongCrate;
 import valleyrace.game.library.crate.SmallRampCrate;
 import valleyrace.game.snow.Snow;
 import valleyrace.game.substate.EndLevelPanel;
+import valleyrace.game.substate.LevelPreloader;
 import valleyrace.game.substate.PausePanel;
 import valleyrace.game.substate.StartLevelPanel;
 import valleyrace.game.terrain.BrushTerrain;
-import valleyrace.game.substate.LevelPreloader;
 import valleyrace.state.MenuState.MenuSubStateType;
 import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil;
+import valleyrace.util.ScoreUtil;
 
 
 class GameState extends FlxState
@@ -124,7 +123,6 @@ class GameState extends FlxState
 	var totalPausedTime:Float = 0;
 
 	var collectedCoin:UInt = 0;
-	var collectedExtraCoins:UInt = 0;
 
 	var countOfFrontFlip:UInt = 0;
 	var countOfBackFlip:UInt = 0;
@@ -283,6 +281,7 @@ class GameState extends FlxState
 		openSubState(startLevelPanel);
 
 		gameGui.visible = false;
+		winRutin();
 	}
 
 	function reset():Void
@@ -297,7 +296,6 @@ class GameState extends FlxState
 		isGameStarted = false;
 		isGamePaused = false;
 		collectedCoin = 0;
-		collectedExtraCoins = 0;
 		countOfFrontFlip = 0;
 		countOfBackFlip = 0;
 		countOfNiceWheelie = 0;
@@ -1009,12 +1007,6 @@ class GameState extends FlxState
 				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_TIME_OUT);
 			}
 
-			if (!levelInfo.isCompleted || levelInfo.replay == null || !levelInfo.isFullReplay)
-			{
-				levelInfo.replay = recorder.toString();
-				levelInfo.replayCarId = PlayerInfo.selectedCarId;
-			}
-
 			Timer.delay(restartRutin, 1500);
 		}
 	}
@@ -1036,24 +1028,23 @@ class GameState extends FlxState
 	{
 		recorder.takeSnapshot();
 
-		var score:UInt = calculateScore();
-
-		var starCount:UInt = scoreToStarCount(score);
-
-		if (score >= levelInfo.score || levelInfo.replay == null || !levelInfo.isCompleted || !levelInfo.isFullReplay)
-		{
-			levelInfo.replay = recorder.toString();
-			levelInfo.replayCarId = PlayerInfo.selectedCarId;
-			levelInfo.isFullReplay = true;
-		}
+		var levelEndData = new LevelEndData();
+		levelEndData.gameTime = gameTime;
+		levelEndData.collectedCoin = collectedCoin;
+		levelEndData.isAllCoinCollected = collectedCoin == levelData.collectableItems.length;
+		levelEndData.countOfFrontFlip = countOfFrontFlip;
+		levelEndData.countOfBackFlip = countOfBackFlip;
+		levelEndData.countOfNiceWheelie = countOfNiceWheelie;
+		levelEndData.totalScore = ScoreUtil.calculateTotalScore(levelEndData);
+		levelEndData.starCount = ScoreUtil.scoreToStarCount(levelEndData.totalScore, levelData.starValues);
 
 		// Temporary for save base replays
 		trace(recorder.toString());
 
 		levelInfo.time = (levelInfo.time > gameTime || levelInfo.time == 0) ? gameTime : levelInfo.time;
-		levelInfo.score = levelInfo.score < score ? score : levelInfo.score;
+		levelInfo.score = levelInfo.score < levelEndData.totalScore ? levelEndData.totalScore : levelInfo.score;
 		levelInfo.isCompleted = true;
-		levelInfo.starCount = levelInfo.starCount < starCount ? starCount : levelInfo.starCount;
+		levelInfo.starCount = levelInfo.starCount < levelEndData.starCount ? levelEndData.starCount : levelInfo.starCount;
 		levelInfo.collectedCoins = levelInfo.collectedCoins < collectedCoin ? collectedCoin : levelInfo.collectedCoins;
 
 		var nextLevelInfo:LevelSavedData;
@@ -1072,53 +1063,13 @@ class GameState extends FlxState
 
 		persistentUpdate = false;
 		openSubState(endLevelPanel);
-		endLevelPanel.updateView(
-			score,
-			gameTime,
-			collectedCoin,
-			starCount,
-			countOfFrontFlip,
-			countOfBackFlip,
-			countOfNiceWheelie
-		);
+		endLevelPanel.updateView(levelEndData);
 		gameGui.visible = false;
-	}
-
-	function calculateScore():UInt
-	{
-		var result = 0;
-		result = Math.floor(AppConfig.MAXIMUM_GAME_TIME_BONUS - gameTime / 10);
-		result += collectedCoin * AppConfig.COIN_SCORE_MULTIPLIER;
-		result += collectedExtraCoins;
-		result += levelData.collectableItems.length == collectedCoin ? AppConfig.ALL_COINS_COLLECTED_BONUS : 0;
-
-		return result;
-	}
-
-	public function scoreToStarCount(value:UInt):UInt
-	{
-		var starCount:UInt = 0;
-
-		for(i in 0...levelData.starValues.length)
-		{
-			if(value >= levelData.starValues[i])
-			{
-				starCount = i + 1;
-			}
-			else
-			{
-				return starCount;
-			}
-		}
-
-		return starCount;
 	}
 
 	function startFrontFlipRutin():Void
 	{
 		countOfFrontFlip++;
-
-		collectedExtraCoins += CScore.SCORE_FRONT_FLIP;
 
 		gameGui.updateFrontFlipCount(countOfFrontFlip);
 		gameGui.addNotification(Notification.FRONT_FLIP);
@@ -1128,8 +1079,6 @@ class GameState extends FlxState
 	{
 		countOfBackFlip++;
 
-		collectedExtraCoins += CScore.SCORE_BACK_FLIP;
-
 		gameGui.updateBackFlipCount(countOfBackFlip);
 		gameGui.addNotification(Notification.BACK_FLIP);
 	}
@@ -1137,8 +1086,6 @@ class GameState extends FlxState
 	function startNiceWheelieTimeRutin():Void
 	{
 		countOfNiceWheelie++;
-
-		collectedExtraCoins += CScore.SCORE_NICE_WHEELIE_TIME;
 
 		gameGui.updateWheelieCount(countOfNiceWheelie);
 		gameGui.addNotification(Notification.NICE_WHEELIE);

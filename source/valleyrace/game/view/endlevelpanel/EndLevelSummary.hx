@@ -6,15 +6,18 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
+import hpp.flixel.ui.PlaceHolder;
 import hpp.util.NumberUtil;
 import valleyrace.assets.Fonts;
 import valleyrace.common.view.ReachedStarView;
 import valleyrace.datatype.LevelData;
+import valleyrace.game.LevelEndData;
 import valleyrace.game.constant.CGameTimeValue;
 import valleyrace.game.constant.CScore;
 import valleyrace.game.view.counter.BonusCounter;
 import valleyrace.game.view.counter.CoinCounter;
 import valleyrace.game.view.counter.TimeCounter;
+import valleyrace.menu.view.CoinView;
 import valleyrace.util.SavedDataUtil.LevelSavedData;
 
 /**
@@ -26,6 +29,7 @@ class EndLevelSummary extends FlxSpriteGroup
 	var levelInfo:LevelSavedData;
 	var levelData:LevelData;
 	var totalScore:FlxText;
+	var totalCoinView:CoinView;
 
 	var timeEntry:EndLevelEntry;
 	var coinEntry:EndLevelEntry;
@@ -56,7 +60,7 @@ class EndLevelSummary extends FlxSpriteGroup
 		createDetails();
 		createTotalScore();
 
-		updateView(0, 0, 0, 0, 0, 0, 0);
+		updateView(new LevelEndData());
 	}
 
 	function createDetails():Void
@@ -82,7 +86,7 @@ class EndLevelSummary extends FlxSpriteGroup
 		totalScoreTitle.font = Fonts.HOLLYWOOD;
 		totalScoreContainer.add(totalScoreTitle);
 
-		totalScore = new FlxText(0, 0, 170, NumberUtil.formatNumber(levelInfo.score), 45);
+		totalScore = new FlxText(0, 0, 160, NumberUtil.formatNumber(levelInfo.score), 45);
 		totalScore.autoSize = true;
 		totalScore.color = FlxColor.YELLOW;
 		totalScore.font = Fonts.HOLLYWOOD;
@@ -92,37 +96,40 @@ class EndLevelSummary extends FlxSpriteGroup
 		totalScoreContainer.x = 24;
 		totalScoreContainer.y = height - totalScoreContainer.height + 5;
 		add(totalScoreContainer);
+
+		totalCoinView = new CoinView(0, .7);
+		totalCoinView.x = 360;
+		totalCoinView.y = 387;
+		add(totalCoinView);
 	}
 
-	public function updateView(
-		starCount,
-		currentScore:UInt,
-		currentTime:Float,
-		currentCollectedCoins:UInt,
-		countOfFrontFlip:UInt,
-		countOfBackFlip:UInt,
-		countOfNiceWheelie:UInt
-	)
+	public function updateView(levelEndData:LevelEndData)
 	{
-		reachedStarView.setStarCount(starCount);
+		reachedStarView.setStarCount(levelEndData.starCount);
 
-		totalScore.text = NumberUtil.formatNumber(currentScore);
+		totalScore.text = NumberUtil.formatNumber(levelEndData.totalScore);
+		totalCoinView.updateValue(levelEndData.totalCollectedCoin);
 
-		timeEntry.setCounter(CGameTimeValue.MAXIMUM_GAME_TIME - currentTime);
-		timeEntry.setValue(Math.floor(AppConfig.MAXIMUM_GAME_TIME_BONUS - currentTime / 10));
+		timeEntry.setCounter(CGameTimeValue.MAXIMUM_GAME_TIME - levelEndData.gameTime);
+		timeEntry.setCoinValue(levelEndData.coinCountForTime);
+		timeEntry.setValue(levelEndData.scoreForGameTime);
 
-		coinCounter.setValue(currentCollectedCoins);
+		coinCounter.setValue(levelEndData.collectedCoin);
 		coinCounter.setMaxValue(levelData.collectableItems.length);
-		coinEntry.setValue(currentCollectedCoins * AppConfig.COIN_SCORE_MULTIPLIER);
-		coinEntry.setBonusValue(levelData.collectableItems.length == currentCollectedCoins ? AppConfig.ALL_COINS_COLLECTED_BONUS : 0);
+		coinEntry.setValue(levelEndData.scoreForCoin);
+		coinEntry.setCoinValue(levelEndData.collectedCoin + levelEndData.coinCountForMaxCoins);
+		coinEntry.setBonusValue(levelEndData.isAllCoinCollected ? CScore.ALL_COINS_COLLECTED_BONUS_SCORE : 0);
 
-		frontflipEntry.setCounter(countOfFrontFlip);
-		frontflipEntry.setValue(countOfFrontFlip * CScore.SCORE_FRONT_FLIP);
+		frontflipEntry.setCounter(levelEndData.countOfFrontFlip);
+		frontflipEntry.setValue(levelEndData.scoreForFrontFlip);
+		frontflipEntry.setCoinValue(levelEndData.coinCountForFrontFlip);
 
-		backflipEntry.setCounter(countOfBackFlip);
-		backflipEntry.setValue(countOfBackFlip * CScore.SCORE_BACK_FLIP);
+		backflipEntry.setCounter(levelEndData.countOfBackFlip);
+		backflipEntry.setValue(levelEndData.scoreForBackFlip);
+		backflipEntry.setCoinValue(levelEndData.coinCountForBackFlip);
 
-		wheelieEntry.setCounter(countOfNiceWheelie);
-		wheelieEntry.setValue(countOfNiceWheelie * CScore.SCORE_NICE_WHEELIE_TIME);
+		wheelieEntry.setCounter(levelEndData.countOfNiceWheelie);
+		wheelieEntry.setValue(levelEndData.scoreForWheelie);
+		wheelieEntry.setCoinValue(levelEndData.coinCountForWheelie);
 	}
 }

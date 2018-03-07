@@ -62,10 +62,18 @@ class SavedDataUtil
 					time:0,
 					isEnabled:true,
 					isCompleted:false,
-					isLastPlayed:true,
-					replay:null,
-					replayCarId:0,
-					isFullReplay: false
+					isLastPlayed:true
+				},
+				{
+					worldId:1,
+					levelId:0,
+					score:0,
+					starCount:0,
+					collectedCoins:0,
+					time:0,
+					isEnabled:true,
+					isCompleted:false,
+					isLastPlayed:true
 				}
 			];
 		}
@@ -100,9 +108,6 @@ class SavedDataUtil
 
 			if (levelInfo.worldId == worldId && levelInfo.levelId == levelId)
 			{
-				// Hotfix for some debug version
-				if (Math.isNaN(levelInfo.replayCarId)) levelInfo.replayCarId = 0;
-
 				return levelInfo;
 			}
 		}
@@ -116,10 +121,7 @@ class SavedDataUtil
 			time:0,
 			isEnabled:false,
 			isCompleted:false,
-			isLastPlayed:false,
-			replay:null,
-			replayCarId:0,
-			isFullReplay: false
+			isLastPlayed:false
 		};
 		gameSave.data.levelInfos.push(newEntry);
 
@@ -196,7 +198,4 @@ typedef LevelSavedData = {
 	var isEnabled:Bool;
 	var isCompleted:Bool;
 	var isLastPlayed:Bool;
-	var replay:String;
-	var replayCarId:UInt;
-	var isFullReplay:Bool;
 }

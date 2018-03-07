@@ -6,6 +6,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import hpp.util.NumberUtil;
 import valleyrace.assets.Fonts;
+import valleyrace.menu.view.CoinView;
 
 /**
  * ...
@@ -16,6 +17,7 @@ class EndLevelEntry extends FlxSpriteGroup
 	var valueText:FlxText;
 	var bonusText:FlxText;
 	var counter:IValueContainer;
+	var coinView:CoinView;
 
 	public function new(counter:IValueContainer, isWhite:Bool = false)
 	{
@@ -25,7 +27,7 @@ class EndLevelEntry extends FlxSpriteGroup
 		background.alpha = isWhite ? .1 : 0;
 		add(background);
 
-		valueText = new FlxText(0, 0, background.width - 144, "W ", 30);
+		valueText = new FlxText(0, 0, background.width - 154, "W ", 30);
 		valueText.autoSize = true;
 		valueText.color = 0xFF26FF92;
 		valueText.alignment = "right";
@@ -33,7 +35,7 @@ class EndLevelEntry extends FlxSpriteGroup
 		valueText.y = 20;
 		add(valueText);
 
-		bonusText = new FlxText(0, 0, background.width - 144, "W ", 20);
+		bonusText = new FlxText(0, 0, background.width - 154, "W ", 20);
 		bonusText.autoSize = true;
 		bonusText.color = FlxColor.WHITE;
 		bonusText.alignment = "right";
@@ -46,11 +48,21 @@ class EndLevelEntry extends FlxSpriteGroup
 		counter.x = 24;
 		counter.y = background.height / 2 - counter.height / 2;
 		add(cast counter);
+
+		coinView = new CoinView(0, .7);
+		coinView.x = 360;
+		coinView.y = background.height / 2 - coinView.height / 2;
+		add(coinView);
 	}
 
 	public function setValue(v:Float):Void
 	{
 		valueText.text = NumberUtil.formatNumber(v);
+	}
+
+	public function setCoinValue(v:UInt):Void
+	{
+		coinView.updateValue(v);
 	}
 
 	public function setCounter(v:Float):Void
@@ -63,5 +75,10 @@ class EndLevelEntry extends FlxSpriteGroup
 		bonusText.text = "+" + NumberUtil.formatNumber(v) + " BONUS";
 		bonusText.visible = v != 0;
 		valueText.y = y + (bonusText.visible ? 10 : 20);
+	}
+
+	override function get_height():Float
+	{
+		return 60;
 	}
 }

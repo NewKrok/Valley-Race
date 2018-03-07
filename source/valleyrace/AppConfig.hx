@@ -1,4 +1,5 @@
 package valleyrace;
+
 import hpp.util.GeomUtil.SimplePoint;
 
 /**
@@ -12,10 +13,6 @@ class AppConfig
 
 	public static var WORLD_PIECE_SIZE:SimplePoint = { x: 5000, y: 2000 };
 	public static var WORLD_BLOCK_SIZE:SimplePoint = { x: 500, y: 500 };
-
-	public static inline var MAXIMUM_GAME_TIME_BONUS:Int = 20000;
-	public static inline var COIN_SCORE_MULTIPLIER:Int = 250;
-	public static inline var ALL_COINS_COLLECTED_BONUS:Int = 1000;
 
 	public static var IS_ALPHA_ANIMATION_ENABLED:Bool = false;
 
