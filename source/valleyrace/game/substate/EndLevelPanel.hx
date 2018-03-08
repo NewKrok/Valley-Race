@@ -14,13 +14,16 @@ import valleyrace.AppConfig;
 import valleyrace.assets.Fonts;
 import valleyrace.common.view.ReachedStarView;
 import valleyrace.common.view.SmallButton;
+import valleyrace.common.view.WarningSign;
 import valleyrace.datatype.LevelData;
 import valleyrace.game.LevelEndData;
 import valleyrace.game.view.endlevelpanel.EndLevelSummary;
 import valleyrace.menu.view.CoinView;
+import valleyrace.menu.view.RaceFinishPosition;
 import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil;
 import valleyrace.util.SavedDataUtil.LevelSavedData;
+import valleyrace.util.ShopHelper;
 
 /**
  * ...
@@ -36,8 +39,12 @@ class EndLevelPanel extends FlxSubState
 
 	var startButton:HPPButton;
 	var exitButton:HPPButton;
+	var restartButton:HPPButton;
 	var nextButton:HPPButton;
 	var prevButton:HPPButton;
+
+	var nextLevelWarning:WarningSign;
+	var endLevelWarning:WarningSign;
 
 	var restartRequest:HPPButton->Void;
 	var exitRequest:HPPButton->Void;
@@ -46,6 +53,8 @@ class EndLevelPanel extends FlxSubState
 
 	var bestScoreText:FlxText;
 	var highscoreText:FlxText;
+
+	var raceFinishPosition:RaceFinishPosition;
 
 	var levelInfo:LevelSavedData;
 	var levelData:LevelData;
@@ -82,6 +91,7 @@ class EndLevelPanel extends FlxSubState
 		buildFooter();
 		add(endLevelSummary = new EndLevelSummary(levelInfo, levelData));
 		endLevelSummary.y = 100;
+
 	}
 
 	function buildHeader():Void
@@ -162,10 +172,15 @@ class EndLevelPanel extends FlxSubState
 		highscoreText.borderSize = 2;
 		highscoreText.borderColor = FlxColor.BLACK;
 		highscoreText.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
-		highscoreText.visible = levelEndData.totalScore > levelInfo.score;
+		highscoreText.visible = levelEndData.isHighscore;
 		highscoreText.x = FlxG.stage.stageWidth - highscoreText.width - 20;
 		highscoreText.y = FlxG.stage.stageHeight - highscoreText.height - 130;
 		add(highscoreText);
+
+		add(raceFinishPosition = new RaceFinishPosition());
+		raceFinishPosition.scrollFactor.set();
+		raceFinishPosition.x = FlxG.stage.stageWidth - raceFinishPosition.width - 20;
+		raceFinishPosition.y = 115;
 	}
 
 	function buildFooter():Void
@@ -179,7 +194,7 @@ class EndLevelPanel extends FlxSubState
 
 		var buttonContainer:HPPHUIBox = new HPPHUIBox(30);
 		buttonContainer.add(exitButton = new SmallButton("EXIT", exitRequest));
-		buttonContainer.add(exitButton = new SmallButton("RESTART", restartRequest));
+		buttonContainer.add(restartButton = new SmallButton("RESTART", restartRequest));
 		footer.add(buttonContainer);
 		buttonContainer.x = 30;
 		buttonContainer.y = (background.height - 50) / 2 - buttonContainer.height / 2;
@@ -190,6 +205,14 @@ class EndLevelPanel extends FlxSubState
 		buttonContainerRight.x = FlxG.stage.stageWidth - buttonContainerRight.width - 30;
 		buttonContainerRight.y = (background.height - 50) / 2 - buttonContainer.height / 2;
 		footer.add(buttonContainerRight);
+
+		footer.add(endLevelWarning = new WarningSign());
+		endLevelWarning.x = exitButton.x + exitButton.width;
+		endLevelWarning.y = exitButton.y;
+
+		footer.add(nextLevelWarning = new WarningSign());
+		nextLevelWarning.x = nextButton.x + nextButton.width;
+		nextLevelWarning.y = nextButton.y;
 
 		footer.y = FlxG.stage.stageHeight - footer.height + 50;
 		add(footer);
@@ -214,9 +237,13 @@ class EndLevelPanel extends FlxSubState
 		playersCoin.updateValue(SavedDataUtil.getPlayerInfo().coin);
 
 		bestScoreText.text = NumberUtil.formatNumber(levelInfo.score);
-		highscoreText.visible = levelEndData.totalScore > levelInfo.score;
+		highscoreText.visible = levelEndData.isHighscore;
 
 		endLevelSummary.updateView(levelEndData);
+		raceFinishPosition.setFinishPosition(levelEndData.position, levelEndData.isUnlockedNextLevel);
+
+		nextLevelWarning.visible = levelEndData.isUnlockedNextLevel;
+		endLevelWarning.visible = ShopHelper.isPossibleToBuySomething();
 	}
 
 	override public function update(elapsed:Float):Void

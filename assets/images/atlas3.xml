@@ -67,4 +67,6 @@
 	<SubTexture name="table_direction" x="1585" y="160" width="51" height="80"/>
 	<SubTexture name="table_danger" x="1670" y="160" width="51" height="80"/>
 	<SubTexture name="finish_table" x="620" y="5" width="51" height="80"/>
+	<SubTexture name="race_position_back" x="1875" y="250" width="125" height="47"/>
+	<SubTexture name="warning_icon" x="875" y="65" width="42" height="42"/>
 </TextureAtlas>

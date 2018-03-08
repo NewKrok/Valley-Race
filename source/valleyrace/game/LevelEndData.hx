@@ -11,6 +11,9 @@ class LevelEndData
 {
 	public var totalScore:UInt;
 	public var starCount:UInt;
+	public var position:UInt;
+	public var isUnlockedNextLevel:Bool;
+	public var isHighscore:Bool;
 
 	public var collectedCoin(default, set):UInt;
 	public var gameTime(default, set):Float;

@@ -19,6 +19,7 @@ class CarPreview extends FlxSpriteGroup
 {
 	public var isSelected(default, set):Bool;
 	public var id:UInt;
+	public var isUnlocked:Bool;
 
 	var background:FlxSprite;
 	var carDetails:CarDetails;
@@ -44,6 +45,7 @@ class CarPreview extends FlxSpriteGroup
 		carData = CarDatas.getData(id);
 		baseContainer.add(HPPAssetManager.getSprite("car_preview_" + id));
 		baseContainer.add(carDetails = new CarDetails(upgradeRequest, carData, savedCarData.isUnlocked, savedCarData.level));
+		isUnlocked = savedCarData.isUnlocked;
 
 		baseContainer.x = width / 2 - baseContainer.width / 2;
 		baseContainer.y = height / 2 - baseContainer.height / 2;
@@ -63,6 +65,8 @@ class CarPreview extends FlxSpriteGroup
 
 		if (!savedCarData.isUnlocked)
 			savedCarData.isUnlocked = true;
+
+		isUnlocked = savedCarData.isUnlocked;
 
 		onCarUpgrade();
 	}

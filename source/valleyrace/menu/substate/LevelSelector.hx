@@ -100,6 +100,8 @@ class LevelSelector extends FlxSubState
 
 	function onCarSelect(p:CarPreview)
 	{
+		if (!p.isUnlocked) return;
+
 		for (preview in carPreviews)
 			preview.isSelected = p == preview;
 

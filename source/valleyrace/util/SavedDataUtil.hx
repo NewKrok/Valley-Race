@@ -27,7 +27,7 @@ class SavedDataUtil
 		if (gameSave.data.playerInfo == null)
 		{
 			gameSave.data.playerInfo = {
-				coin: 99999,
+				coin: 999,
 				selectedCar: 0,
 				carDatas: [
 					{ id: 0, isUnlocked: true, level: 0 },
@@ -54,26 +54,26 @@ class SavedDataUtil
 		{
 			gameSave.data.levelInfos = [
 				{
-					worldId:0,
-					levelId:0,
-					score:0,
-					starCount:0,
-					collectedCoins:0,
-					time:0,
-					isEnabled:true,
-					isCompleted:false,
-					isLastPlayed:true
+					worldId: 0,
+					levelId: 0,
+					score: 0,
+					starCount: 0,
+					collectedCoins: 0,
+					time: 0,
+					isEnabled: true,
+					isCompleted: false,
+					isLastPlayed: true
 				},
 				{
-					worldId:1,
-					levelId:0,
-					score:0,
-					starCount:0,
-					collectedCoins:0,
-					time:0,
-					isEnabled:true,
-					isCompleted:false,
-					isLastPlayed:true
+					worldId: 1,
+					levelId: 0,
+					score: 0,
+					starCount: 0,
+					collectedCoins: 0,
+					time: 0,
+					isEnabled: true,
+					isCompleted: false,
+					isLastPlayed: false
 				}
 			];
 		}
@@ -113,15 +113,15 @@ class SavedDataUtil
 		}
 
 		var newEntry:LevelSavedData = {
-			worldId:worldId,
-			levelId:levelId,
-			score:0,
-			starCount:0,
-			collectedCoins:0,
-			time:0,
-			isEnabled:false,
-			isCompleted:false,
-			isLastPlayed:false
+			worldId: worldId,
+			levelId: levelId,
+			score: 0,
+			starCount: 0,
+			collectedCoins: 0,
+			time: 0,
+			isEnabled: false,
+			isCompleted: false,
+			isLastPlayed: false
 		};
 		gameSave.data.levelInfos.push(newEntry);
 

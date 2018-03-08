@@ -1028,14 +1028,32 @@ class GameState extends FlxState
 	{
 		recorder.takeSnapshot();
 
+		var nextLevelInfo:LevelSavedData;
+		var isNewLevelUnlocked:Bool = false;
+		if (levelId < 4)
+		{
+			nextLevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);
+			if (!nextLevelInfo.isEnabled) isNewLevelUnlocked = true;
+			nextLevelInfo.isEnabled = true;
+		}
+		if (levelId == 4 && worldId == 0)
+		{
+			nextLevelInfo = SavedDataUtil.getLevelInfo(worldId + 1, 0);
+			if (!nextLevelInfo.isEnabled) isNewLevelUnlocked = true;
+			nextLevelInfo.isEnabled = true;
+		}
+
 		var levelEndData = new LevelEndData();
+		levelEndData.isUnlockedNextLevel = isNewLevelUnlocked;
 		levelEndData.gameTime = gameTime;
+		levelEndData.position = calculatePosition();
 		levelEndData.collectedCoin = collectedCoin;
 		levelEndData.isAllCoinCollected = collectedCoin == levelData.collectableItems.length;
 		levelEndData.countOfFrontFlip = countOfFrontFlip;
 		levelEndData.countOfBackFlip = countOfBackFlip;
 		levelEndData.countOfNiceWheelie = countOfNiceWheelie;
 		levelEndData.totalScore = ScoreUtil.calculateTotalScore(levelEndData);
+		levelEndData.isHighscore = levelEndData.totalScore > levelInfo.score;
 		levelEndData.starCount = ScoreUtil.scoreToStarCount(levelEndData.totalScore, levelData.starValues);
 
 		// Temporary for save base replays
@@ -1047,24 +1065,25 @@ class GameState extends FlxState
 		levelInfo.starCount = levelInfo.starCount < levelEndData.starCount ? levelEndData.starCount : levelInfo.starCount;
 		levelInfo.collectedCoins = levelInfo.collectedCoins < collectedCoin ? collectedCoin : levelInfo.collectedCoins;
 
-		var nextLevelInfo:LevelSavedData;
-		if (levelId < 23)
-		{
-			nextLevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);
-			nextLevelInfo.isEnabled = true;
-		}
-		if (levelId == 23)
-		{
-			nextLevelInfo = SavedDataUtil.getLevelInfo(worldId + 1, 0);
-			nextLevelInfo.isEnabled = true;
-		}
-
-		SavedDataUtil.save();
+		SavedDataUtil.getPlayerInfo().coin += levelEndData.totalCollectedCoin;
 
 		persistentUpdate = false;
 		openSubState(endLevelPanel);
 		endLevelPanel.updateView(levelEndData);
 		gameGui.visible = false;
+
+		SavedDataUtil.save();
+	}
+
+	function calculatePosition():UInt
+	{
+		var position:UInt = 1;
+
+		for (opponent in opponents)
+			if (opponent.x > car.x)
+				position++;
+
+		return position;
 	}
 
 	function startFrontFlipRutin():Void
