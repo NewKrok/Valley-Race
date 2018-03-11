@@ -1,12 +1,17 @@
 package valleyrace.menu.substate;
 
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxText;
+import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
-import hpp.flixel.ui.HPPUIGrid;
-import hpp.flixel.util.HPPAssetManager;
-import valleyrace.common.view.LongButton;
+import hpp.flixel.ui.HPPVUIBox;
+import valleyrace.assets.Fonts;
+import valleyrace.common.view.SmallButton;
+import valleyrace.menu.view.CoinView;
+import valleyrace.menu.view.WorldButton;
 import valleyrace.util.SavedDataUtil;
 
 /**
@@ -15,15 +20,11 @@ import valleyrace.util.SavedDataUtil;
  */
 class WorldSelector extends FlxSubState
 {
-	var levelPackButtonContainer:HPPUIGrid;
-	var controlButtonContainer:FlxSpriteGroup;
+	var levelPackButtonContainer:HPPVUIBox;
 
-	var levelPackButton0:HPPButton;
-	var levelPackButton1:HPPButton;
-	var levelPackButton2:HPPButton;
-	var levelPackButton3:HPPButton;
-
-	var backButton:HPPButton;
+	var header:FlxSpriteGroup;
+	var footer:FlxSpriteGroup;
+	var playersCoin:CoinView;
 
 	var onWorldSelected:UInt->Void;
 	var openWelcomePage:HPPButton->Void;
@@ -40,58 +41,64 @@ class WorldSelector extends FlxSubState
 	{
 		super.create();
 
-		createLevelPackButtons();
-		createControlButtons();
+		buildHeader();
+		buildLevelPackButtons();
+		buildFooter();
 	}
 
-	function createLevelPackButtons():Void
+	function buildHeader():Void
 	{
-		add( levelPackButtonContainer = new HPPUIGrid( 2, 20 ) );
+		header = new FlxSpriteGroup();
+		header.scrollFactor.set();
+
+		var background:FlxSprite = new FlxSprite().makeGraphic(1136, 66, FlxColor.BLACK);
+		background.alpha = .5;
+		header.add(background);
+
+		header.add(playersCoin = new CoinView(SavedDataUtil.getPlayerInfo().coin));
+		playersCoin.x = 20;
+		playersCoin.y = 15;
+
+		var infoText:FlxText = new FlxText(0, 0, 0, "SELECT AREA", 35);
+		infoText.autoSize = true;
+		infoText.color = 0xFFFFFF00;
+		infoText.font = Fonts.HOLLYWOOD;
+		infoText.x = FlxG.stage.stageWidth - infoText.width - 30;
+		infoText.y = 20;
+		header.add(infoText);
+
+		add(header);
+	}
+
+	function buildFooter():Void
+	{
+		footer = new FlxSpriteGroup();
+		footer.scrollFactor.set();
+
+		var background:FlxSprite = new FlxSprite().makeGraphic(1136, 80, FlxColor.BLACK);
+		background.alpha = .5;
+		footer.add(background);
+
+		var backButton = new SmallButton("BACK", openWelcomePage);
+		backButton.x = background.width / 2 - backButton.width / 2;
+		backButton.y = background.height - backButton.height - 12;
+		footer.add(backButton);
+
+		footer.y = FlxG.stage.stageHeight - footer.height;
+		add(footer);
+	}
+
+	function buildLevelPackButtons():Void
+	{
+		levelPackButtonContainer = new HPPVUIBox(10);
 		levelPackButtonContainer.scrollFactor.set();
 
-		levelPackButtonContainer.add( levelPackButton0 = new HPPButton( "", loadWorld0, "level_pack_0" ) );
-		levelPackButton0.overScale = .98;
+		levelPackButtonContainer.add(new WorldButton(0, function() {onWorldSelected(0);}, "world_0_selector_back"));
+		levelPackButtonContainer.add(new WorldButton(1, function() {onWorldSelected(1);}, "world_1_selector_back"));
 
-		levelPackButtonContainer.add( levelPackButton1 = new HPPButton( "", loadWorld1, "level_pack_1" ) );
-		levelPackButton1.overScale = .98;
+		levelPackButtonContainer.x = FlxG.stage.stageWidth / 2 - levelPackButtonContainer.width / 2;
+		levelPackButtonContainer.y = FlxG.stage.stageHeight / 2 - levelPackButtonContainer.height / 2 - 10;
 
-		levelPackButtonContainer.add( levelPackButton2 = new HPPButton( "", loadWorld2, "level_pack_coming_soon"/*"level_pack_2"*/ ) );
-		//levelPackButton2.overScale = .98;
-
-		levelPackButtonContainer.add( levelPackButton3 = new HPPButton( "", loadWorld3, "level_pack_coming_soon" ) );
-		//levelPackButton3.overScale = .98;
-
-		levelPackButtonContainer.x = FlxG.width / 2 - levelPackButtonContainer.width / 2;
-		levelPackButtonContainer.y = FlxG.height / 2 - levelPackButtonContainer.height / 2 - 50;
-	}
-
-	function loadWorld0(target:HPPButton):Void
-	{
-		onWorldSelected(0);
-	}
-
-	function loadWorld1( target:HPPButton ):Void
-	{
-		onWorldSelected(1);
-	}
-
-	function loadWorld2( target:HPPButton ):Void
-	{
-		//onWorldSelected(2);
-	}
-
-	function loadWorld3( target:HPPButton ):Void
-	{
-		//onWorldSelected(3);
-	}
-
-	function createControlButtons()
-	{
-		add( controlButtonContainer = new FlxSpriteGroup() );
-		controlButtonContainer.scrollFactor.set();
-
-		controlButtonContainer.add( backButton = new LongButton( "BACK", openWelcomePage ) );
-		backButton.x = FlxG.width / 2 - backButton.width / 2;
-		backButton.y = FlxG.height - 40 - backButton.height;
+		add(levelPackButtonContainer);
 	}
 }

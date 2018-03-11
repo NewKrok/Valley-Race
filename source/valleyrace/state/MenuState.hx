@@ -48,7 +48,7 @@ class MenuState extends FlxState
 	{
 		super();
 
-		this.startState = startState = MenuSubStateType.LEVEL_SELECTOR;
+		this.startState = startState = MenuSubStateType.WORLD_SELECTOR;
 		config = {worldId:0};
 		this.config = config;
 	}
@@ -118,7 +118,7 @@ class MenuState extends FlxState
 		camera.scroll.set( stage.stageWidth / 2, stage.stageHeight / 2 );
 
 		// To start immediately the game...
-		//FlxG.switchState( new GameState( 0, 0 ) );
+		//FlxG.switchState( new GameState( 1, 0 ) );
 	}
 
 	function openWelcomePage( target:HPPButton = null ):Void

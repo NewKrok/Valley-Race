@@ -71,7 +71,7 @@ class LevelSelector extends FlxSubState
 
 		header.add(playersCoin = new CoinView(SavedDataUtil.getPlayerInfo().coin));
 		playersCoin.x = 20;
-		playersCoin.y = 8;
+		playersCoin.y = 15;
 
 		var worldText:FlxText = new FlxText(0, 0, 0, LevelUtil.getWorldNameByWorldId(worldId).toUpperCase(), 35);
 		worldText.autoSize = true;

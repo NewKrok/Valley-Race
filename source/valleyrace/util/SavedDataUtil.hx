@@ -71,7 +71,7 @@ class SavedDataUtil
 					starCount: 0,
 					collectedCoins: 0,
 					time: 0,
-					isEnabled: true,
+					isEnabled: false,
 					isCompleted: false,
 					isLastPlayed: false
 				}
