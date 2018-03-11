@@ -107,13 +107,16 @@ class LevelEndData
 	{
 		isWon = v;
 
-		scoreForCoin = 0;
-		scoreForFrontFlip = 0;
-		scoreForBackFlip = 0;
-		scoreForWheelie = 0;
-		scoreForGameTime = 0;
+		if (!v)
+		{
+			scoreForCoin = 0;
+			scoreForFrontFlip = 0;
+			scoreForBackFlip = 0;
+			scoreForWheelie = 0;
+			scoreForGameTime = 0;
 
-		coinCountForTime = 0;
+			coinCountForTime = 0;
+		}
 
 		return v;
 	}

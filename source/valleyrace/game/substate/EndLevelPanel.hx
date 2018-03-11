@@ -36,6 +36,7 @@ class EndLevelPanel extends FlxSubState
 	var endLevelSummary:EndLevelSummary;
 	var reachedStarView:ReachedStarView;
 	var playersCoin:CoinView;
+	var scoreContainer:HPPHUIBox;
 
 	var startButton:HPPButton;
 	var exitButton:HPPButton;
@@ -138,7 +139,7 @@ class EndLevelPanel extends FlxSubState
 
 	function buildContent()
 	{
-		var scoreContainer = new HPPHUIBox(15);
+		scoreContainer = new HPPHUIBox(15);
 		scoreContainer.scrollFactor.set();
 
 		var bestScoreLabelText:FlxText = new FlxText(0, 0, 0, "Best score ", 25);
@@ -251,6 +252,8 @@ class EndLevelPanel extends FlxSubState
 		playersCoin.updateValue(SavedDataUtil.getPlayerInfo().coin);
 
 		bestScoreText.text = NumberUtil.formatNumber(levelInfo.score);
+		scoreContainer.x = FlxG.stage.stageWidth - scoreContainer.width - 20;
+
 		highscoreText.visible = levelEndData.isHighscore;
 
 		endLevelSummary.updateView(levelEndData);
@@ -259,6 +262,8 @@ class EndLevelPanel extends FlxSubState
 
 		nextLevelWarning.visible = levelEndData.isUnlockedNextLevel;
 		endLevelWarning.visible = ShopHelper.isPossibleToBuySomething();
+
+		nextButton.visible = canStartNextLevel();
 	}
 
 	override public function update(elapsed:Float):Void

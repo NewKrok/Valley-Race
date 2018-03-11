@@ -27,7 +27,7 @@ class SavedDataUtil
 		if (gameSave.data.playerInfo == null)
 		{
 			gameSave.data.playerInfo = {
-				coin: 999,
+				coin: 0,
 				selectedCar: 0,
 				carDatas: [
 					{ id: 0, isUnlocked: true, level: 0 },

@@ -145,6 +145,7 @@ class GameState extends FlxState
 	var levelInfo:LevelSavedData;
 	var buildStep:UInt = 0;
 	var isBuilt:Bool = false;
+	var playerPosition:UInt = 0;
 
 	public function new(worldId:UInt, levelId:UInt):Void
 	{
@@ -309,6 +310,7 @@ class GameState extends FlxState
 		countOfNiceWheelie = 0;
 		gameTime = 0;
 		totalPausedTime = 0;
+		playerPosition = 0;
 
 		car.isOnWheelie = false;
 		car.isOnAir = false;
@@ -776,6 +778,8 @@ class GameState extends FlxState
 
 		if (!isLost && !isWon)
 		{
+			calculatePosition();
+
 			gameGui.updateRemainingTime(Math.max(0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime));
 			gameGui.updateCoinCount(collectedCoin);
 
@@ -1052,7 +1056,7 @@ class GameState extends FlxState
 		var nextLevelInfo:LevelSavedData;
 		var isNewLevelUnlocked:Bool = false;
 
-		if (isWon)
+		if (isWon && playerPosition == 1)
 		{
 			if (levelId < 4)
 			{
@@ -1071,7 +1075,7 @@ class GameState extends FlxState
 		var levelEndData = new LevelEndData();
 		levelEndData.isUnlockedNextLevel = isNewLevelUnlocked;
 		levelEndData.gameTime = gameTime;
-		levelEndData.position = calculatePosition();
+		levelEndData.position = playerPosition;
 		levelEndData.collectedCoin = collectedCoin;
 		levelEndData.isAllCoinCollected = collectedCoin == levelData.collectableItems.length;
 		levelEndData.countOfFrontFlip = countOfFrontFlip;
@@ -1102,15 +1106,15 @@ class GameState extends FlxState
 		SavedDataUtil.save();
 	}
 
-	function calculatePosition():UInt
+	function calculatePosition():Void
 	{
 		var position:UInt = 1;
 
 		for (opponent in opponents)
-			if (opponent.x > car.x)
+			if (opponent.carBodyGraphics.x > car.carBodyGraphics.x)
 				position++;
 
-		return position;
+		playerPosition = position;
 	}
 
 	function startFrontFlipRutin():Void

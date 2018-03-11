@@ -21,7 +21,7 @@
 	<SubTexture name="world_1_selector_back" x="5" y="1690" width="890" height="230"/>
 	<SubTexture name="world_selector_play" x="1150" y="1005" width="828" height="178"/>
 	<SubTexture name="world_selector_locked" x="1150" y="1185" width="828" height="178"/>
-	<SubTexture name="game_logo" x="5" y="1920" width="660" height="126"/>
+	<SubTexture name="game_logo" x="1150" y="1375" width="348" height="153"/>
 	<SubTexture name="play_button" x="905" y="1460" width="150" height="150"/>
 	<SubTexture name="home_button" x="905" y="1620" width="100" height="100"/>
 	<SubTexture name="facebook_button" x="905" y="1725" width="100" height="100"/>

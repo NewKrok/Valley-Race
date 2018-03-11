@@ -34,8 +34,8 @@ class OpponentCar extends AbstractCar implements IPlaybackPerformer
 		while (fromAngle > 360) fromAngle -= 360;
 		var toAngle:Float = to.unserialize();
 		while (toAngle > 360) toAngle -= 360;
-		if (fromAngle - 300 > toAngle) toAngle += 360;
-		if (toAngle - 300 > fromAngle) fromAngle += 360;
+		if (fromAngle - 180 > toAngle) toAngle += 360;
+		if (toAngle - 180 > fromAngle) fromAngle += 360;
 		var newAngle:Float = calculateLinearTransitionValue(fromAngle, toAngle, percent);
 		sprite.angle = newAngle;
 	}

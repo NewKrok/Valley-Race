@@ -55,7 +55,7 @@ class WelcomePage extends FlxSubState
 		startButton = new HPPButton("", openWorldSelector, "play_button");
 		startButton.overScale = .98;
 		startButton.x = FlxG.stage.stageWidth / 2 - startButton.width / 2;
-		startButton.y = FlxG.stage.stageHeight / 2 - startButton.height / 2 - 20;
+		startButton.y = FlxG.stage.stageHeight / 2 - startButton.height / 2;
 		add(startButton);
 
 		var leftContainer = new HPPHUIBox(10);
