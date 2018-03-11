@@ -8,12 +8,18 @@
 	<SubTexture name="car_body_3" x="1340" y="290" width="250" height="123"/>
 	<SubTexture name="car_body_4" x="1610" y="290" width="250" height="123"/>
 	<SubTexture name="car_body_5" x="1340" y="430" width="250" height="123"/>
+	<SubTexture name="car_body_6" x="1610" y="430" width="250" height="123"/>
+	<SubTexture name="car_body_7" x="715" y="490" width="250" height="123"/>
+	<SubTexture name="car_body_8" x="980" y="490" width="250" height="123"/>
 	<SubTexture name="wheel_0" x="260" y="5" width="80" height="80"/>
 	<SubTexture name="wheel_1" x="540" y="465" width="80" height="80"/>
 	<SubTexture name="wheel_2" x="630" y="465" width="80" height="80"/>
 	<SubTexture name="wheel_3" x="1755" y="160" width="80" height="80"/>
 	<SubTexture name="wheel_4" x="1840" y="160" width="80" height="80"/>
 	<SubTexture name="wheel_5" x="1925" y="160" width="80" height="80"/>
+	<SubTexture name="wheel_6" x="1890" y="310" width="80" height="80"/>
+	<SubTexture name="wheel_7" x="1890" y="400" width="80" height="80"/>
+	<SubTexture name="wheel_8" x="1890" y="490" width="80" height="80"/>
 	<SubTexture name="car_fog" x="345" y="5" width="31" height="25"/>
 	<SubTexture name="small_rock_0_1" x="345" y="35" width="12" height="9"/>
 	<SubTexture name="small_rock_0_2" x="345" y="50" width="12" height="14"/>

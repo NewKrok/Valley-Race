@@ -10,6 +10,7 @@ import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
+import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -56,6 +57,7 @@ import valleyrace.game.substate.LevelPreloader;
 import valleyrace.game.substate.PausePanel;
 import valleyrace.game.substate.StartLevelPanel;
 import valleyrace.game.terrain.BrushTerrain;
+import valleyrace.game.view.CarMarker;
 import valleyrace.state.MenuState.MenuSubStateType;
 import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil;
@@ -73,6 +75,7 @@ class GameState extends FlxState
 	var endLevelPanel:EndLevelPanel;
 	var pausePanel:PausePanel;
 	var gameGui:GameGui;
+	var carMarker:CarMarker;
 	var background:Background;
 
 	var container:FlxSpriteGroup;
@@ -130,8 +133,10 @@ class GameState extends FlxState
 
 	var isLost:Bool;
 	var isWon:Bool;
+	var isLevelFinished:Bool;
 	var canControll:Bool;
 	var isGameStarted:Bool;
+	var isRaceStarted:Bool;
 	var isGamePaused:Bool;
 	var isPhysicsEnabled:Bool;
 
@@ -247,6 +252,7 @@ class GameState extends FlxState
 						add(snow);
 				}*/
 
+				add(carMarker = new CarMarker());
 				add(gameGui = new GameGui(resume, pauseRequest, levelData.collectableItems.length));
 
 			case 8:
@@ -281,18 +287,20 @@ class GameState extends FlxState
 		openSubState(startLevelPanel);
 
 		gameGui.visible = false;
-		winRutin();
+		//gameOverRutin();
 	}
 
 	function reset():Void
 	{
 		isLost = false;
 		isWon = false;
+		isLevelFinished = false;
 		canControll = true;
 		left = false;
 		right = false;
 		up = false;
 		down = false;
+		isRaceStarted = false;
 		isGameStarted = false;
 		isGamePaused = false;
 		collectedCoin = 0;
@@ -323,8 +331,15 @@ class GameState extends FlxState
 		//car.teleportTo(levelData.startPoint.x - 180, levelData.startPoint.y); // -180 / -360 / -540 for ghosts
 		car.teleportTo(levelData.startPoint.x, levelData.startPoint.y);
 
+		carMarker.visible = true;
+		carMarker.x = car.carBodyPhysics.position.x + 10;
+		carMarker.y = car.carBodyPhysics.position.y - 55;
+
+		var w:Float = camera.width / 8;
+		camera.deadzone.x = (camera.width - w) / 2;
 		cast(camera, HPPCamera).resetPosition();
 		camera.focusOn(car.carBodyGraphics.getPosition());
+
 		background.update(1);
 		lastCameraStepOffset.set(camera.scroll.x, camera.scroll.y);
 
@@ -414,8 +429,10 @@ class GameState extends FlxState
 
 	function resume():Void
 	{
+		isRaceStarted = true;
 		isGamePaused = false;
 		isPhysicsEnabled = true;
+		carMarker.visible = false;
 
 		totalPausedTime += now - pauseStartTime;
 
@@ -605,7 +622,7 @@ class GameState extends FlxState
 
 			for (i in 0...replayDatas.length)
 			{
-				var id:UInt = Math.floor(Math.random() * 6);
+				var id:UInt = Math.floor(Math.random() * 6) + 2;
 				var opponent = new OpponentCar(CarDatas.getData(id), CAR_SCALE);
 				opponents.push(opponent);
 				container.add(opponent);
@@ -748,7 +765,7 @@ class GameState extends FlxState
 			space.step(CPhysicsValue.STEP);
 		}
 
-		if (car != null) car.isHorizontalMoveDisabled = isGamePaused;
+		if (car != null) car.isHorizontalMoveDisabled = isGamePaused && !isRaceStarted;
 
 		if (isGamePaused || !isBuilt)
 		{
@@ -1007,7 +1024,10 @@ class GameState extends FlxState
 				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_TIME_OUT);
 			}
 
-			Timer.delay(restartRutin, 1500);
+			var w:Float = camera.width / 8;
+			camera.deadzone.x = (camera.width + w * 5) / 2;
+
+			Timer.delay(gameOverRutin, 1000);
 		}
 	}
 
@@ -1017,30 +1037,35 @@ class GameState extends FlxState
 		//if (!isLost && !isWon && gameTime > 2000) // temporary for instant win
 		{
 			isWon = true;
+			isLevelFinished = true;
 
 			addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_LEVEL_COMPLETED);
 
-			Timer.delay(winRutin, 250);
+			Timer.delay(gameOverRutin, 250);
 		}
 	}
 
-	function winRutin():Void
+	function gameOverRutin():Void
 	{
 		recorder.takeSnapshot();
 
 		var nextLevelInfo:LevelSavedData;
 		var isNewLevelUnlocked:Bool = false;
-		if (levelId < 4)
+
+		if (isWon)
 		{
-			nextLevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);
-			if (!nextLevelInfo.isEnabled) isNewLevelUnlocked = true;
-			nextLevelInfo.isEnabled = true;
-		}
-		if (levelId == 4 && worldId == 0)
-		{
-			nextLevelInfo = SavedDataUtil.getLevelInfo(worldId + 1, 0);
-			if (!nextLevelInfo.isEnabled) isNewLevelUnlocked = true;
-			nextLevelInfo.isEnabled = true;
+			if (levelId < 4)
+			{
+				nextLevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);
+				if (!nextLevelInfo.isEnabled) isNewLevelUnlocked = true;
+				nextLevelInfo.isEnabled = true;
+			}
+			if (levelId == 4 && worldId == 0)
+			{
+				nextLevelInfo = SavedDataUtil.getLevelInfo(worldId + 1, 0);
+				if (!nextLevelInfo.isEnabled) isNewLevelUnlocked = true;
+				nextLevelInfo.isEnabled = true;
+			}
 		}
 
 		var levelEndData = new LevelEndData();
@@ -1052,16 +1077,18 @@ class GameState extends FlxState
 		levelEndData.countOfFrontFlip = countOfFrontFlip;
 		levelEndData.countOfBackFlip = countOfBackFlip;
 		levelEndData.countOfNiceWheelie = countOfNiceWheelie;
-		levelEndData.totalScore = ScoreUtil.calculateTotalScore(levelEndData);
-		levelEndData.isHighscore = levelEndData.totalScore > levelInfo.score;
-		levelEndData.starCount = ScoreUtil.scoreToStarCount(levelEndData.totalScore, levelData.starValues);
+		levelEndData.totalScore = isWon ? ScoreUtil.calculateTotalScore(levelEndData) : 0;
+		levelEndData.isHighscore = isWon ? levelEndData.totalScore > levelInfo.score : false;
+		levelEndData.starCount = isWon ? ScoreUtil.scoreToStarCount(levelEndData.totalScore, levelData.starValues) : 0;
+		levelEndData.isLevelFinished = isLevelFinished;
+		levelEndData.isWon = isWon;
 
 		// Temporary for save base replays
 		trace(recorder.toString());
 
-		levelInfo.time = (levelInfo.time > gameTime || levelInfo.time == 0) ? gameTime : levelInfo.time;
-		levelInfo.score = levelInfo.score < levelEndData.totalScore ? levelEndData.totalScore : levelInfo.score;
-		levelInfo.isCompleted = true;
+		levelInfo.time = (isWon && (levelInfo.time > gameTime || levelInfo.time == 0)) ? gameTime : levelInfo.time;
+		levelInfo.score = (isWon && (levelInfo.score < levelEndData.totalScore)) ? levelEndData.totalScore : levelInfo.score;
+		levelInfo.isCompleted = (isWon && levelEndData.position == 1) ? true : levelInfo.isCompleted;
 		levelInfo.starCount = levelInfo.starCount < levelEndData.starCount ? levelEndData.starCount : levelInfo.starCount;
 		levelInfo.collectedCoins = levelInfo.collectedCoins < collectedCoin ? collectedCoin : levelInfo.collectedCoins;
 

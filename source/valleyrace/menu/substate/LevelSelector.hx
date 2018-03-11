@@ -121,6 +121,9 @@ class LevelSelector extends FlxSubState
 		infoText.color = FlxColor.WHITE;
 		infoText.alignment = "center";
 		infoText.font = Fonts.HOLLYWOOD;
+		infoText.borderSize = 2;
+		infoText.borderColor = 0xFF684511;
+		infoText.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
 
 		contentHolder.add(infoText);
 	}

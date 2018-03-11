@@ -16,4 +16,5 @@
 	<SubTexture name="back_world_1_d0001" x="1434" y="540" width="284" height="405"/>
 	<SubTexture name="back_world_1_d0002" x="1718" y="540" width="284" height="405"/>
 	<SubTexture name="back_world_1_d0003" x="2002" y="540" width="284" height="405"/>
+	<SubTexture name="car_marker" x="1150" y="950" width="161" height="52"/>
 </TextureAtlas>

@@ -14,6 +14,7 @@ class LevelEndData
 	public var position:UInt;
 	public var isUnlockedNextLevel:Bool;
 	public var isHighscore:Bool;
+	public var isLevelFinished:Bool;
 
 	public var collectedCoin(default, set):UInt;
 	public var gameTime(default, set):Float;
@@ -21,6 +22,7 @@ class LevelEndData
 	public var countOfBackFlip(default, set):UInt;
 	public var countOfNiceWheelie(default, set):UInt;
 	public var isAllCoinCollected(default, set):Bool;
+	public var isWon(default, set):Bool;
 
 	public var coinCountForTime(default, null):UInt;
 	public var coinCountForFrontFlip(default, null):UInt;
@@ -99,5 +101,20 @@ class LevelEndData
 	function get_totalCollectedCoin():UInt
 	{
 		return coinCountForBackFlip + coinCountForFrontFlip + coinCountForMaxCoins + coinCountForTime + coinCountForWheelie + collectedCoin;
+	}
+
+	function set_isWon(v:Bool):Bool
+	{
+		isWon = v;
+
+		scoreForCoin = 0;
+		scoreForFrontFlip = 0;
+		scoreForBackFlip = 0;
+		scoreForWheelie = 0;
+		scoreForGameTime = 0;
+
+		coinCountForTime = 0;
+
+		return v;
 	}
 }

@@ -51,6 +51,7 @@ class EndLevelPanel extends FlxSubState
 	var nextLevelRequest:HPPButton->Void;
 	var prevLevelRequest:HPPButton->Void;
 
+	var title:FlxText;
 	var bestScoreText:FlxText;
 	var highscoreText:FlxText;
 
@@ -123,7 +124,7 @@ class EndLevelPanel extends FlxSubState
 		titleContainer.y = 17;
 		header.add(titleContainer);
 
-		var title:FlxText = new FlxText(0, 0, background.width, "RACE COMPLETED ", 45);
+		title = new FlxText(0, 0, background.width, "RACE COMPLETED ", 45);
 		title.autoSize = true;
 		title.color = FlxColor.YELLOW;
 		title.font = Fonts.HOLLYWOOD;
@@ -201,9 +202,11 @@ class EndLevelPanel extends FlxSubState
 
 		var buttonContainerRight:HPPHUIBox = new HPPHUIBox(30);
 		if (canStartPrevLevel()) buttonContainerRight.add(prevButton = new SmallButton("PREV RACE", prevLevelRequest));
-		if (canStartNextLevel()) buttonContainerRight.add(nextButton = new SmallButton("NEXT RACE", nextLevelRequest));
+		buttonContainerRight.add(nextButton = new SmallButton("NEXT RACE", nextLevelRequest));
 		buttonContainerRight.x = FlxG.stage.stageWidth - buttonContainerRight.width - 30;
 		buttonContainerRight.y = (background.height - 50) / 2 - buttonContainer.height / 2;
+		if (!canStartNextLevel()) nextButton.visible = false;
+
 		footer.add(buttonContainerRight);
 
 		footer.add(endLevelWarning = new WarningSign());
@@ -225,7 +228,7 @@ class EndLevelPanel extends FlxSubState
 
 	function canStartNextLevel():Bool
 	{
-		return levelInfo.isCompleted && levelInfo.levelId != 23;
+		return levelInfo.isCompleted && levelInfo.levelId != 4;
 	}
 
 	public function updateView(levelEndData:LevelEndData):Void
@@ -234,6 +237,17 @@ class EndLevelPanel extends FlxSubState
 
 		if (!isBuilt) return;
 
+		if (levelEndData.isWon)
+		{
+			title.text = "RACE COMPLETED";
+			title.color = FlxColor.YELLOW;
+		}
+		else
+		{
+			title.text = "RACE FAILED";
+			title.color = 0xFFFF4D4D;
+		}
+
 		playersCoin.updateValue(SavedDataUtil.getPlayerInfo().coin);
 
 		bestScoreText.text = NumberUtil.formatNumber(levelInfo.score);
@@ -241,6 +255,7 @@ class EndLevelPanel extends FlxSubState
 
 		endLevelSummary.updateView(levelEndData);
 		raceFinishPosition.setFinishPosition(levelEndData.position, levelEndData.isUnlockedNextLevel);
+		raceFinishPosition.visible = levelEndData.isLevelFinished;
 
 		nextLevelWarning.visible = levelEndData.isUnlockedNextLevel;
 		endLevelWarning.visible = ShopHelper.isPossibleToBuySomething();
@@ -270,6 +285,11 @@ class EndLevelPanel extends FlxSubState
 			if ((FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.N) && canStartNextLevel())
 			{
 				nextLevelRequest(null);
+			}
+
+			if (FlxG.keys.justPressed.ENTER && !levelEndData.isWon && !levelInfo.isCompleted)
+			{
+				restartRequest(null);
 			}
 		}
 	}

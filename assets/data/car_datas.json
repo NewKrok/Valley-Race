@@ -83,6 +83,48 @@
 			"firstWheelYOffset": 0,
 			"backWheelXOffset": -0,
 			"backWheelYOffset": 0
+		},
+		{
+			"name": "Enemy car 4",
+			"id": 6,
+			"graphicId": 6,
+			"starRequired": 0,
+			"price": 		[],
+			"speed": 		[],
+			"rotation": 	[],
+			"elasticity": 	[],
+			"firstWheelXOffset": 0,
+			"firstWheelYOffset": 0,
+			"backWheelXOffset": -0,
+			"backWheelYOffset": 0
+		},
+		{
+			"name": "Enemy car 5",
+			"id": 7,
+			"graphicId": 7,
+			"starRequired": 0,
+			"price": 		[],
+			"speed": 		[],
+			"rotation": 	[],
+			"elasticity": 	[],
+			"firstWheelXOffset": 0,
+			"firstWheelYOffset": 0,
+			"backWheelXOffset": -0,
+			"backWheelYOffset": 0
+		},
+		{
+			"name": "Enemy car 6",
+			"id": 8,
+			"graphicId": 8,
+			"starRequired": 0,
+			"price": 		[],
+			"speed": 		[],
+			"rotation": 	[],
+			"elasticity": 	[],
+			"firstWheelXOffset": 0,
+			"firstWheelYOffset": 0,
+			"backWheelXOffset": -0,
+			"backWheelYOffset": 0
 		}
 	]
 }
