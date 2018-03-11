@@ -17,8 +17,19 @@
 	<SubTexture name="back_world_1_d0002" x="1718" y="540" width="284" height="405"/>
 	<SubTexture name="back_world_1_d0003" x="2002" y="540" width="284" height="405"/>
 	<SubTexture name="car_marker" x="1150" y="950" width="161" height="52"/>
-	<SubTexture name="world_0_selector_back" x="5" y="1460" width="890" height="230"/>
-	<SubTexture name="world_1_selector_back" x="5" y="1700" width="890" height="230"/>
+	<SubTexture name="world_0_selector_back" x="5" y="1455" width="890" height="230"/>
+	<SubTexture name="world_1_selector_back" x="5" y="1690" width="890" height="230"/>
 	<SubTexture name="world_selector_play" x="1150" y="1005" width="828" height="178"/>
 	<SubTexture name="world_selector_locked" x="1150" y="1185" width="828" height="178"/>
+	<SubTexture name="game_logo" x="5" y="1920" width="660" height="126"/>
+	<SubTexture name="play_button" x="905" y="1460" width="150" height="150"/>
+	<SubTexture name="home_button" x="905" y="1620" width="100" height="100"/>
+	<SubTexture name="facebook_button" x="905" y="1725" width="100" height="100"/>
+	<SubTexture name="github_button" x="905" y="1830" width="100" height="100"/>
+	<SubTexture name="about_us_button" x="1010" y="1620" width="100" height="100"/>
+	<SubTexture name="options_button" x="1010" y="1725" width="100" height="100"/>
+	<SubTexture name="flixel_logo" x="1990" y="950" width="84" height="84"/>
+	<SubTexture name="flixel_logo" x="1080" y="950" width="84" height="84"/>
+	<SubTexture name="hpp_logo" x="2170" y="950" width="124" height="64"/>
+	<SubTexture name="nape_logo" x="1990" y="1035" width="84" height="109"/>
 </TextureAtlas>
