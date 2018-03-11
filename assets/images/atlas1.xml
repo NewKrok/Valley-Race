@@ -29,7 +29,9 @@
 	<SubTexture name="about_us_button" x="1010" y="1620" width="100" height="100"/>
 	<SubTexture name="options_button" x="1010" y="1725" width="100" height="100"/>
 	<SubTexture name="flixel_logo" x="1990" y="950" width="84" height="84"/>
-	<SubTexture name="flixel_logo" x="1080" y="950" width="84" height="84"/>
+	<SubTexture name="haxe_logo" x="2080" y="950" width="84" height="84"/>
 	<SubTexture name="hpp_logo" x="2170" y="950" width="124" height="64"/>
 	<SubTexture name="nape_logo" x="1990" y="1035" width="84" height="109"/>
+	<SubTexture name="checkbox_on" x="1010" y="1915" width="80" height="80"/>
+	<SubTexture name="checkbox_off" x="1010" y="1830" width="80" height="80"/>
 </TextureAtlas>

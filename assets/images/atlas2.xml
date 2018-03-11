@@ -16,20 +16,4 @@
 	<SubTexture name="back_world_0_d0001" x="1434" y="540" width="284" height="357"/>
 	<SubTexture name="back_world_0_d0002" x="1718" y="540" width="284" height="357"/>
 	<SubTexture name="back_world_0_d0003" x="2002" y="540" width="284" height="357"/>
-
-	<SubTexture name="candy_ball_a" x="2" y="1808" width="30" height="30" pivotX="0" pivotY="0"/>
-	<SubTexture name="candy_ball_b" x="35" y="1808" width="30" height="30" pivotX="0" pivotY="0"/>
-	<SubTexture name="candy_ball_c" x="2" y="1841" width="30" height="30" pivotX="0" pivotY="0"/>
-	<SubTexture name="info_button" x="2" y="1875" width="114" height="132" pivotX="0" pivotY="0"/>
-	<SubTexture name="gui_fps_back" x="120" y="1875" width="135" height="60" pivotX="0" pivotY="0"/>
-	<SubTexture name="checkbox_on" x="120" y="1940" width="160" height="76" pivotX="0" pivotY="0"/>
-	<SubTexture name="checkbox_off" x="290" y="1940" width="160" height="76" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_checkbox_on" x="85" y="1815" width="80" height="30" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_checkbox_off" x="170" y="1815" width="80" height="30" pivotX="0" pivotY="0"/>
-	<SubTexture name="haxe_flixel_logo" x="465" y="1880" width="84" height="84" pivotX="0" pivotY="0"/>
-	<SubTexture name="haxe_logo" x="559" y="1880" width="84" height="84" pivotX="0" pivotY="0"/>
-	<SubTexture name="nape_logo" x="653" y="1880" width="84" height="109" pivotX="0" pivotY="0"/>
-	<SubTexture name="haxe_plus_plus_logo" x="747" y="1880" width="124" height="64" pivotX="0" pivotY="0"/>
-	<SubTexture name="about_us_button" x="885" y="1875" width="114" height="132" pivotX="0" pivotY="0"/>
-	<SubTexture name="app_store_logo" x="465" y="1970" width="151" height="46" pivotX="0" pivotY="0"/>
 </TextureAtlas>

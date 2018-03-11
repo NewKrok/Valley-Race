@@ -10,11 +10,12 @@ import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPToggleButton;
 import hpp.flixel.ui.HPPVUIBox;
+import hpp.flixel.ui.PlaceHolder;
 import hpp.ui.HAlign;
 import hpp.util.JsFullScreenUtil;
 import valleyrace.AppConfig;
 import valleyrace.assets.Fonts;
-import valleyrace.common.view.LongButton;
+import valleyrace.common.view.SmallButton;
 import valleyrace.util.SavedDataUtil;
 
 /**
@@ -61,10 +62,10 @@ class SettingsPage extends FlxSubState
 		container.add( createAlphaAnimationSetting() );
 
 		container.x = FlxG.width / 2 - container.width / 2;
-		container.y = FlxG.height / 2 - container.height / 2;
+		container.y = FlxG.height / 2 - container.height / 2 - 100;
 		add( container );
 
-		add( backButton = new LongButton( "BACK", saveAndClose ) );
+		add( backButton = new SmallButton( "BACK", saveAndClose ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}
@@ -86,6 +87,9 @@ class SettingsPage extends FlxSubState
 		fullScreenCheckBox.isSelected = JsFullScreenUtil.isFullScreen();
 		settingContainer.add( fullScreenCheckBox );
 
+		var textWrapper:HPPVUIBox = new HPPVUIBox();
+		textWrapper.add(new PlaceHolder(1,15));
+
 		fullScreenText = new FlxText();
 		fullScreenText.color = FlxColor.WHITE;
 		fullScreenText.alignment = "left";
@@ -95,7 +99,8 @@ class SettingsPage extends FlxSubState
 		fullScreenText.fieldWidth = 650;
 
 		updateFullScreenText();
-		settingContainer.add(fullScreenText);
+		textWrapper.add(fullScreenText);
+		settingContainer.add(textWrapper);
 
 		#if js
 			untyped __js__('window.addEventListener("resize", ()=>this.updateFullScreenState())');
@@ -137,6 +142,9 @@ class SettingsPage extends FlxSubState
 		alphaAnimationCheckBox.isSelected = AppConfig.IS_ALPHA_ANIMATION_ENABLED;
 		settingContainer.add( alphaAnimationCheckBox );
 
+		var textWrapper:HPPVUIBox = new HPPVUIBox();
+		textWrapper.add(new PlaceHolder(1, 15));
+
 		alphaAnimationsText = new FlxText();
 		alphaAnimationsText.color = FlxColor.WHITE;
 		alphaAnimationsText.alignment = "left";
@@ -144,8 +152,10 @@ class SettingsPage extends FlxSubState
 		alphaAnimationsText.font = Fonts.HOLLYWOOD;
 		alphaAnimationsText.borderStyle = FlxTextBorderStyle.SHADOW;
 		alphaAnimationsText.fieldWidth = 650;
+
 		updateAlphaAnimationText();
-		settingContainer.add( alphaAnimationsText );
+		textWrapper.add(alphaAnimationsText);
+		settingContainer.add(textWrapper);
 
 		return cast settingContainer;
 	}

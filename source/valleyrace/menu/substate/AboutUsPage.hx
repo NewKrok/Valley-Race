@@ -3,18 +3,15 @@ package valleyrace.menu.substate;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
-import flixel.group.FlxSpriteGroup;
+import flixel.addons.ui.ButtonLabelStyle;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
-import hpp.flixel.ui.HPPToggleButton;
 import hpp.flixel.ui.HPPVUIBox;
-import hpp.flixel.util.HPPAssetManager;
-import valleyrace.AppConfig;
-import valleyrace.assets.Fonts;
-import valleyrace.common.view.LongButton;
 import openfl.net.URLRequest;
+import valleyrace.assets.Fonts;
+import valleyrace.common.view.SmallButton;
 
 /**
  * ...
@@ -51,19 +48,36 @@ class AboutUsPage extends FlxSubState
 		container.scrollFactor.set();
 
 		var developerInfoText = new FlxText();
-		developerInfoText.color = FlxColor.CYAN;
+		developerInfoText.color = FlxColor.WHITE;
 		developerInfoText.alignment = "center";
 		developerInfoText.size = 30;
 		developerInfoText.font = Fonts.HOLLYWOOD;
 		developerInfoText.borderStyle = FlxTextBorderStyle.SHADOW;
 		developerInfoText.fieldWidth = 800;
-		developerInfoText.text = "???";
+		developerInfoText.text = "Valley Race game created by Krisztian Somoracz (NewKrok).";
 		container.add(developerInfoText);
+
+		var graphicInfo = new HPPButton(
+			"Base graphics from GameDev Market by Nido",
+			function (_) {
+				openfl.Lib.getURL(new URLRequest("https://www.gamedevmarket.net/asset/monster-truck-game-assets/"), "_blank");
+			}
+		);
+		graphicInfo.label.fieldWidth = 700;
+		graphicInfo.label.color = FlxColor.WHITE;
+		graphicInfo.label.alignment = "center";
+		graphicInfo.label.font = Fonts.HOLLYWOOD;
+		graphicInfo.label.borderStyle = FlxTextBorderStyle.SHADOW;
+		graphicInfo.up_style = new ButtonLabelStyle(null, null, FlxColor.WHITE);
+		graphicInfo.over_style = new ButtonLabelStyle(null, null, FlxColor.YELLOW);
+		graphicInfo.labelSize = 30;
+		graphicInfo.loadGraphicFromSprite(new FlxSprite().makeGraphic(700, 30, FlxColor.TRANSPARENT));
+		container.add(graphicInfo);
 
 		var poweredByContainer:HPPHUIBox = new HPPHUIBox(20);
 
 		var poweredByInfoText = new FlxText();
-		poweredByInfoText.color = FlxColor.CYAN;
+		poweredByInfoText.color = FlxColor.WHITE;
 		poweredByInfoText.alignment = "center";
 		poweredByInfoText.size = 25;
 		poweredByInfoText.font = Fonts.HOLLYWOOD;
@@ -75,7 +89,7 @@ class AboutUsPage extends FlxSubState
 		haxeLogo.overScale = .95;
 		poweredByContainer.add(haxeLogo);
 
-		var haxeFlixelLogo:HPPButton = new HPPButton("", goToHaxeFlixelPage, "haxe_flixel_logo");
+		var haxeFlixelLogo:HPPButton = new HPPButton("", goToHaxeFlixelPage, "flixel_logo");
 		haxeFlixelLogo.overScale = .95;
 		poweredByContainer.add(haxeFlixelLogo);
 
@@ -83,18 +97,18 @@ class AboutUsPage extends FlxSubState
 		napeLogo.overScale = .95;
 		poweredByContainer.add(napeLogo);
 
-		var hppLogo:HPPButton = new HPPButton("", goToHppPage, "haxe_plus_plus_logo");
+		var hppLogo:HPPButton = new HPPButton("", goToHppPage, "hpp_logo");
 		hppLogo.overScale = .95;
 		poweredByContainer.add(hppLogo);
 
 		container.add(poweredByContainer);
 
 		container.x = FlxG.width / 2 - container.width / 2;
-		container.y = FlxG.height / 2 - container.height / 2;
+		container.y = FlxG.height / 2 - container.height / 2 - 100;
 		developerInfoText.fieldWidth = container.width;
 		add( container );
 
-		add( backButton = new LongButton( "BACK", openWelcomePage ) );
+		add( backButton = new SmallButton( "BACK", openWelcomePage ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}

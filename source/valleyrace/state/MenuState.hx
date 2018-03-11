@@ -46,8 +46,12 @@ class MenuState extends FlxState
 	{
 		super();
 
-		this.startState = startState = MenuSubStateType.WELCOME_PAGE;
-		config = {worldId:0};
+		this.startState = startState;
+
+		// Only for test to start with an exact state
+		/*this.startState = startState = MenuSubStateType.WELCOME_PAGE;
+		config = {worldId:0};*/
+
 		this.config = config;
 	}
 
