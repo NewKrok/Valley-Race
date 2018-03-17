@@ -7,9 +7,11 @@ import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
+import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import valleyrace.assets.Fonts;
 import valleyrace.common.view.SmallButton;
+import valleyrace.menu.view.ChallengeWorldButton;
 import valleyrace.menu.view.CoinView;
 import valleyrace.menu.view.WorldButton;
 import valleyrace.util.SavedDataUtil;
@@ -20,8 +22,6 @@ import valleyrace.util.SavedDataUtil;
  */
 class WorldSelector extends FlxSubState
 {
-	var levelPackButtonContainer:HPPVUIBox;
-
 	var header:FlxSpriteGroup;
 	var footer:FlxSpriteGroup;
 	var playersCoin:CoinView;
@@ -90,15 +90,22 @@ class WorldSelector extends FlxSubState
 
 	function buildLevelPackButtons():Void
 	{
-		levelPackButtonContainer = new HPPVUIBox(10);
+		var wrapper = new HPPHUIBox(10);
+		wrapper.scrollFactor.set();
+
+		var levelPackButtonContainer:HPPVUIBox = new HPPVUIBox(10);
 		levelPackButtonContainer.scrollFactor.set();
 
 		levelPackButtonContainer.add(new WorldButton(0, function() {onWorldSelected(0);}, "world_0_selector_back"));
 		levelPackButtonContainer.add(new WorldButton(1, function() {onWorldSelected(1);}, "world_1_selector_back"));
 
-		levelPackButtonContainer.x = FlxG.stage.stageWidth / 2 - levelPackButtonContainer.width / 2;
-		levelPackButtonContainer.y = FlxG.stage.stageHeight / 2 - levelPackButtonContainer.height / 2 - 10;
+		wrapper.add(levelPackButtonContainer);
 
-		add(levelPackButtonContainer);
+		wrapper.add(new ChallengeWorldButton(2, function() {onWorldSelected(2); }, "world_2_selector_back"));
+
+		wrapper.x = FlxG.stage.stageWidth / 2 - wrapper.width / 2;
+		wrapper.y = FlxG.stage.stageHeight / 2 - wrapper.height / 2 - 10;
+
+		add(wrapper);
 	}
 }

@@ -12,7 +12,8 @@
 			"firstWheelXOffset": 36,
 			"firstWheelYOffset": 25,
 			"backWheelXOffset": -12,
-			"backWheelYOffset": 25
+			"backWheelYOffset": 25,
+			"flagGraphic": "flag_0"
 		},
 		{
 			"name": "Player car 2",
@@ -40,7 +41,8 @@
 			"firstWheelXOffset": 36,
 			"firstWheelYOffset": 25,
 			"backWheelXOffset": -12,
-			"backWheelYOffset": 25
+			"backWheelYOffset": 25,
+			"flagGraphic": "flag_1"
 		},
 		{
 			"name": "Enemy car 1",

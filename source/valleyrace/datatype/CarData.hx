@@ -16,6 +16,7 @@ typedef CarData =
 	var rotation(default, default):Array<Float>;
 	var elasticity(default, default):Array<Float>;
 
+	@:optional var flagGraphic(default, default):String;
 	@:optional var starRequired(default, default):UInt;
 	@:optional var firstWheelXOffset(default, default):UInt;
 	@:optional var firstWheelYOffset(default, default):UInt;

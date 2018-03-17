@@ -73,7 +73,18 @@ class SavedDataUtil
 					time: 0,
 					isEnabled: false,
 					isCompleted: false,
-					isLastPlayed: false
+					isLastPlayed: true
+				},
+				{
+					worldId: 2,
+					levelId: 0,
+					score: 0,
+					starCount: 0,
+					collectedCoins: 0,
+					time: 0,
+					isEnabled: true,
+					isCompleted: false,
+					isLastPlayed: true
 				}
 			];
 		}

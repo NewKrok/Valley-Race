@@ -8,8 +8,8 @@ import hpp.util.GeomUtil.SimplePoint;
  */
 class AppConfig
 {
-	public static inline var GAME_NAME:String = "Valley_Race";
-	public static inline var GAME_VERSION:String = "0.0.5";
+	public static inline var GAME_NAME:String = "FPP_Valley_Race";
+	public static inline var GAME_VERSION:String = "0.0.6";
 
 	public static var WORLD_PIECE_SIZE:SimplePoint = { x: 5000, y: 2000 };
 	public static var WORLD_BLOCK_SIZE:SimplePoint = { x: 500, y: 500 };
