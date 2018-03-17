@@ -26,6 +26,8 @@ class LevelUtil
 		{
 			level = Json.parse(jsonData);
 
+			level.starValues = level.starValues == null ? [0, 0, 0] : level.starValues;
+
 			level.startPoint = new FlxPoint(
 				level.startPoint.x * LEVEL_SCALE,
 				level.startPoint.y * LEVEL_SCALE

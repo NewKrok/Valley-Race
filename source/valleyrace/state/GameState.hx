@@ -167,7 +167,14 @@ class GameState extends FlxState
 
 		loadAssets();
 
-		levelData = LevelUtil.LevelDataFromJson(Assets.getText("assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json"));
+		if (Main.DEBUG_LEVEL != "")
+		{
+			levelData = LevelUtil.LevelDataFromJson(Main.DEBUG_LEVEL);
+		}
+		else
+		{
+			levelData = LevelUtil.LevelDataFromJson(Assets.getText("assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json"));
+		}
 
 		replayDatas = [];
 
@@ -213,7 +220,6 @@ class GameState extends FlxState
 				add(background = new Background(worldId));
 				add(container = new FlxSpriteGroup());
 
-				createCarFogs();
 				createCamera();
 				createPhysicsWorld();
 
@@ -231,6 +237,7 @@ class GameState extends FlxState
 			case 5:
 				createOpponentCars();
 				createStaticElements();
+				createCarFogs();
 				createCar();
 				createBridges();
 				createSmallRocks();
@@ -569,6 +576,8 @@ class GameState extends FlxState
 		var bridgeAngle:Float = Math.atan2(pointB.y - pointA.y, pointB.x - pointA.x);
 		var bridgeElementWidth:UInt = 60;
 		var bridgeElementHeight:UInt = 25;
+		var anchorA:Vec2 = new Vec2(bridgeElementWidth / 2, 0);
+		var anchorB:Vec2 = new Vec2(-bridgeElementWidth / 2, 0);
 		var bridgeDistance:Float = pointA.distanceTo(pointB);
 		var pieces:UInt = Math.round(bridgeDistance / bridgeElementWidth) + 1;
 
@@ -605,9 +614,6 @@ class GameState extends FlxState
 
 			if (i > 0)
 			{
-				var anchorA:Vec2 = new Vec2(bridgeElementWidth / 2, 0);
-				var anchorB:Vec2 = new Vec2(-bridgeElementWidth / 2, 0);
-
 				var pivotJointLeftLeftWheel:PivotJoint = new PivotJoint(bridgeBodies[bridgeBodies.length - 1][i - 1], bridgeBodies[bridgeBodies.length - 1][i], anchorA, anchorB);
 				pivotJointLeftLeftWheel.damping = 1;
 				pivotJointLeftLeftWheel.frequency = 20;

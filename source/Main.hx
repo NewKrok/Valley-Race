@@ -15,9 +15,15 @@ import valleyrace.util.SavedDataUtil;
 
 class Main extends Sprite
 {
+	// Only for fast level test
+	public static var DEBUG_LEVEL:String = "";
+
 	public function new()
 	{
 		super();
+
+		// Only for fast level test
+		untyped __js__("window.addEventListener('paste', (e)=>this.onPaste(e));");
 
 		SavedDataUtil.load( "ValleyRaceSavedData" );
 		var settingsInfo:SettingsInfo = SavedDataUtil.getSettingsInfo();
@@ -44,5 +50,20 @@ class Main extends Sprite
 				}
 			}, false);
 		");
+	}
+
+	// Only for fast level test
+	function onPaste(e:Dynamic)
+	{
+		try
+		{
+			DEBUG_LEVEL = e.clipboardData.getData('text/plain');
+			trace("Level loaded!");
+		}
+		catch (e:Dynamic)
+		{
+			DEBUG_LEVEL = "";
+			trace("Wrong data! Update your clipboard and try again.");
+		}
 	}
 }

@@ -28,8 +28,6 @@ class WorldButton extends ExtendedButtonWithTween
 		}
 		else
 		{
-			overScale = .98;
-
 			playEffect = HPPAssetManager.getSprite("world_selector_play");
 			playEffect.x = width / 2 - playEffect.width / 2;
 			playEffect.y = height / 2 - playEffect.height / 2;

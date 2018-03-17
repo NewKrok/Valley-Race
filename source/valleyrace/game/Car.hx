@@ -3,7 +3,10 @@ package valleyrace.game;
 import apostx.replaykit.IRecorderPerformer;
 import flixel.FlxSprite;
 import flixel.math.FlxAngle;
+import flixel.math.FlxPoint;
 import haxe.Serializer;
+import hpp.flixel.util.HPPAssetManager;
+import hpp.util.GeomUtil;
 import nape.callbacks.InteractionType;
 import nape.constraint.DistanceJoint;
 import nape.constraint.PivotJoint;
@@ -40,10 +43,40 @@ class Car extends AbstractCar implements IRecorderPerformer
 	var bodyHeight:Float = 45;
 	var hitAreaHeight:Float = 10;
 
+	var frontSpringHorizontalOffset:Float = 77;
+	var frontSpringVerticalOffset:Float = 1;
+	var backSpringHorizontalOffset:Float = 32;
+	var backSpringVerticalOffset:Float = 14;
+	var backTopHolderHorizontalOffset:Float = 8;
+	var backTopHolderVerticalOffset:Float = 45;
+	var backBottomHolderHorizontalOffset:Float = 6;
+	var backBottomHolderVerticalOffset:Float = 62;
+	var frontTopHolderHorizontalOffset:Float = 28;
+	var frontTopHolderVerticalOffset:Float = 35;
+	var frontBottomHolderHorizontalOffset:Float = 26;
+	var frontBottomHolderVerticalOffset:Float = 52;
+
+	var flagJoinDamping:Float = .15;
+	var flagJoinHertz:Float = 1.5;
+
+	var flagEndPointXOffet:Float = -115;
+	var flagEndPointYOffet:Float = -72;
+	var flagGraphicXOffset:Float = -55;
+	var flagGraphicYOffset:Float = -20;
+	var flagAngleOffset:Float = 145;
+
+	var carAngleCos:Float;
+	var carAngleSin:Float;
+	var carAngleRotatedCos:Float;
+	var carAngleRotatedSin:Float;
+
 	var hitArea:Body;
 	public var carBodyPhysics:Body;
 	public var wheelRightPhysics:Body;
 	public var wheelLeftPhysics:Body;
+	public var flagPhysics:Body;
+
+	public var flagGraphic:FlxSprite;
 
 	public var isOnWheelie:Bool;
 	public var onWheelieStartGameTime:Float;
@@ -58,25 +91,12 @@ class Car extends AbstractCar implements IRecorderPerformer
 	public var rightWheelOnAir(default, null):Bool;
 	public var isCarCrashed(default, null):Bool;
 
-	var frontSpringHorizontalOffset:Float = 77;
-	var frontSpringVerticalOffset:Float = 1;
-	var backSpringHorizontalOffset:Float = 32;
-	var backSpringVerticalOffset:Float = 14;
-	var backTopHolderHorizontalOffset:Float = 8;
-	var backTopHolderVerticalOffset:Float = 45;
-	var backBottomHolderHorizontalOffset:Float = 6;
-	var backBottomHolderVerticalOffset:Float = 62;
-	var frontTopHolderHorizontalOffset:Float = 28;
-	var frontTopHolderVerticalOffset:Float = 35;
-	var frontBottomHolderHorizontalOffset:Float = 26;
-	var frontBottomHolderVerticalOffset:Float = 52;
-
 	var direction:Int = 1;
 	var space:Space;
 
-	public function new(space:Space, x:Float, y:Float, carData:CarData, scale:Float = 1, filterCategory:UInt = 0, filterMask:UInt = 0)
+	public function new(space:Space, x:Float, y:Float, carData:CarData, carScale:Float = 1, filterCategory:UInt = 0, filterMask:UInt = 0)
 	{
-		super(carData, scale);
+		super(carData, carScale);
 		carLeveledData = CarDatas.getLeveledData(carData.id);
 
 		this.space = space;
@@ -86,37 +106,54 @@ class Car extends AbstractCar implements IRecorderPerformer
 		backWheelXOffset += Math.isNaN(carData.backWheelXOffset) ? 0 : carData.backWheelXOffset;
 		backWheelYOffset += Math.isNaN(carData.backWheelYOffset) ? 0 : carData.backWheelYOffset;
 
-		firstWheelXOffset *= scale;
-		firstWheelYOffset *= scale;
-		firstWheelRadius *= scale;
-		backWheelXOffset *= scale;
-		backWheelYOffset *= scale;
-		backWheelRadius *= scale;
-		bodyWidth *= scale;
-		bodyHeight *= scale;
-		hitAreaHeight *= scale;
+		firstWheelXOffset *= carScale;
+		firstWheelYOffset *= carScale;
+		firstWheelRadius *= carScale;
+		backWheelXOffset *= carScale;
+		backWheelYOffset *= carScale;
+		backWheelRadius *= carScale;
+		bodyWidth *= carScale;
+		bodyHeight *= carScale;
+		hitAreaHeight *= carScale;
 
-		frontSpringHorizontalOffset = 77 * carScale;
-		frontSpringVerticalOffset = 1 * carScale;
-		backSpringHorizontalOffset = 32 * carScale;
-		backSpringVerticalOffset = 14 * carScale;
-		backTopHolderHorizontalOffset = 8 * carScale;
-		backTopHolderVerticalOffset = 45 * carScale;
-		backBottomHolderHorizontalOffset = 6 * carScale;
-		backBottomHolderVerticalOffset = 62 * carScale;
-		frontTopHolderHorizontalOffset = 28 * carScale;
-		frontTopHolderVerticalOffset = 35 * carScale;
-		frontBottomHolderHorizontalOffset = 26 * carScale;
-		frontBottomHolderVerticalOffset = 52 * carScale;
+		frontSpringHorizontalOffset*= carScale;
+		frontSpringVerticalOffset *= carScale;
+		backSpringHorizontalOffset *= carScale;
+		backSpringVerticalOffset *= carScale;
+		backTopHolderHorizontalOffset *= carScale;
+		backTopHolderVerticalOffset *= carScale;
+		backBottomHolderHorizontalOffset *= carScale;
+		backBottomHolderVerticalOffset *= carScale;
+		frontTopHolderHorizontalOffset *= carScale;
+		frontTopHolderVerticalOffset *= carScale;
+		frontBottomHolderHorizontalOffset *= carScale;
+		frontBottomHolderVerticalOffset *= carScale;
+
+		flagEndPointXOffet *= carScale;
+		flagEndPointYOffet *= carScale;
 
 		buildPhysics(x, y, filterCategory, filterMask);
 	}
 
+	override function buildGraphics():Void
+	{
+		add(flagGraphic = HPPAssetManager.getSprite("flag_0"));
+		flagGraphic.antialiasing = true;
+		flagGraphic.scale = new FlxPoint(carScale, carScale);
+		flagGraphic.origin.set(flagGraphic.width, flagGraphic.height);
+
+		super.buildGraphics();
+	}
+
 	function buildPhysics(x:Float, y:Float, filterCategory:Int = 0, filterMask:Int = 0):Void
 	{
-		var filter:InteractionFilter = new InteractionFilter();
+		var filter = new InteractionFilter();
 		filter.collisionGroup = filterCategory;
 		filter.collisionMask = filterMask;
+
+		var noHitFilter = new InteractionFilter();
+		noHitFilter.collisionGroup = 0;
+		noHitFilter.collisionMask = 0;
 
 		wheelRightPhysics = new Body();
 		wheelRightPhysics.shapes.add(new Circle(firstWheelRadius));
@@ -133,6 +170,14 @@ class Car extends AbstractCar implements IRecorderPerformer
 		wheelLeftPhysics.position.y = y + backWheelYOffset;
 		wheelLeftPhysics.space = space;
 		wheelRightPhysics.mass = 1;
+
+		flagPhysics = new Body();
+		flagPhysics.shapes.add(new Circle(5));
+		flagPhysics.setShapeFilters(noHitFilter);
+		flagPhysics.position.x = x + flagEndPointXOffet;
+		flagPhysics.position.y = y + flagEndPointYOffet;
+		flagPhysics.space = space;
+		flagPhysics.mass = 0.001;
 
 		carBodyPhysics = new Body();
 		carBodyPhysics.shapes.add(new Polygon(Polygon.box(bodyWidth, bodyHeight)));
@@ -169,6 +214,20 @@ class Car extends AbstractCar implements IRecorderPerformer
 		var distance:Float = firstWheelXOffset + Math.abs(backWheelXOffset);
 		var wheelJoin:DistanceJoint = new DistanceJoint(wheelRightPhysics, wheelLeftPhysics, wheelRightPhysics.localCOM, wheelLeftPhysics.localCOM, distance, distance);
 		wheelJoin.space = space;
+
+		var flagWeldAnchorA:Vec2 = new Vec2( flagEndPointXOffet * carScale - 20 * carScale, flagEndPointYOffet * carScale );
+		var flagFrontJointWheel:PivotJoint = new PivotJoint(carBodyPhysics, flagPhysics, flagWeldAnchorA, flagPhysics.localCOM);
+		flagFrontJointWheel.stiff = false;
+		flagFrontJointWheel.damping = flagJoinDamping;
+		flagFrontJointWheel.frequency = flagJoinHertz;
+		flagFrontJointWheel.space = space;
+
+		var flagWeldAnchorB:Vec2 = new Vec2( flagEndPointXOffet * carScale, flagEndPointYOffet * carScale );
+		var flagFrontJointWheel:PivotJoint = new PivotJoint(carBodyPhysics, flagPhysics, flagWeldAnchorB, flagPhysics.localCOM);
+		flagFrontJointWheel.stiff = false;
+		flagFrontJointWheel.damping = flagJoinDamping;
+		flagFrontJointWheel.frequency = flagJoinHertz;
+		flagFrontJointWheel.space = space;
 	}
 
 	public function getMidXPosition():Float
@@ -192,6 +251,21 @@ class Car extends AbstractCar implements IRecorderPerformer
 			wheelRightPhysics.velocity.x = 0;
 		}
 
+		carAngleCos = Math.cos(carBodyPhysics.rotation);
+		carAngleSin = Math.sin(carBodyPhysics.rotation);
+		carAngleRotatedCos = Math.cos(carBodyPhysics.rotation + Math.PI / 2);
+		carAngleRotatedSin = Math.sin(carBodyPhysics.rotation + Math.PI / 2);
+
+		updateMainCarComponnentGrraphic();
+		updateSpringGraphic();
+		updateWheelHolderGraphic();
+		updateFlagGraphic();
+
+		calculateCollision();
+	}
+
+	function updateMainCarComponnentGrraphic()
+	{
 		carBodyGraphics.x = carBodyPhysics.position.x - carBodyGraphics.origin.x;
 		carBodyGraphics.y = carBodyPhysics.position.y - carBodyGraphics.origin.y;
 		carBodyGraphics.angle = carBodyPhysics.rotation * FlxAngle.TO_DEG;
@@ -203,45 +277,79 @@ class Car extends AbstractCar implements IRecorderPerformer
 		wheelLeftGraphics.x = wheelLeftPhysics.position.x - wheelLeftGraphics.origin.x;
 		wheelLeftGraphics.y = wheelLeftPhysics.position.y - wheelLeftGraphics.origin.y;
 		wheelLeftGraphics.angle = wheelLeftPhysics.rotation * FlxAngle.TO_DEG;
+	}
 
-		var carAngleCos:Float = Math.cos(carBodyGraphics.angle * (Math.PI / 180));
-		var carAngleSin:Float = Math.sin(carBodyGraphics.angle * (Math.PI / 180));
-		var carAngleRotatedCos:Float = Math.cos((carBodyGraphics.angle + 90) * (Math.PI / 180));
-		var carAngleRotatedSin:Float = Math.sin((carBodyGraphics.angle + 90) * (Math.PI / 180));
-
-		frontSpring.x = carBodyPhysics.position.x + frontSpring.origin.x + frontSpringHorizontalOffset * carAngleCos + frontSpringVerticalOffset * carAngleRotatedCos;
-		frontSpring.y = carBodyPhysics.position.y + frontSpring.origin.y + frontSpringHorizontalOffset * carAngleSin + frontSpringVerticalOffset * carAngleRotatedSin;
+	function updateSpringGraphic()
+	{
+		frontSpring.x = carBodyPhysics.position.x + frontSpringHorizontalOffset * carAngleCos + frontSpringVerticalOffset * carAngleRotatedCos;
+		frontSpring.y = carBodyPhysics.position.y + frontSpringHorizontalOffset * carAngleSin + frontSpringVerticalOffset * carAngleRotatedSin;
 		frontSpring.scale.x = Point.distance(
 			new Point(wheelRightGraphics.x + wheelRightGraphics.origin.x, wheelRightGraphics.y + wheelRightGraphics.origin.y),
 			new Point(frontSpring.x, frontSpring.y)
 		) / 59;
-		frontSpring.angle = Math.atan2(wheelRightGraphics.y + wheelRightGraphics.origin.y - frontSpring.y, wheelRightGraphics.x + wheelRightGraphics.origin.x - frontSpring.x) * (180 / Math.PI);
+		frontSpring.angle = FlxAngle.TO_DEG * Math.atan2(
+			wheelRightGraphics.y + wheelRightGraphics.origin.y - frontSpring.y,
+			wheelRightGraphics.x + wheelRightGraphics.origin.x - frontSpring.x
+		);
 
-		backSpring.x = carBodyPhysics.position.x + backSpring.origin.x - backSpringHorizontalOffset * carAngleCos + backSpringVerticalOffset * carAngleRotatedCos;
-		backSpring.y = carBodyPhysics.position.y + backSpring.origin.y - backSpringHorizontalOffset * carAngleSin + backSpringVerticalOffset * carAngleRotatedSin;
+		backSpring.x = carBodyPhysics.position.x - backSpringHorizontalOffset * carAngleCos + backSpringVerticalOffset * carAngleRotatedCos;
+		backSpring.y = carBodyPhysics.position.y - backSpringHorizontalOffset * carAngleSin + backSpringVerticalOffset * carAngleRotatedSin;
 		backSpring.scale.x = Point.distance(
 			new Point(wheelLeftGraphics.x + wheelLeftGraphics.origin.x, wheelLeftGraphics.y + wheelLeftGraphics.origin.y),
 			new Point(backSpring.x, backSpring.y)
 		) / 59;
-		backSpring.angle = Math.atan2(wheelLeftGraphics.y + wheelLeftGraphics.origin.y - backSpring.y, wheelLeftGraphics.x + wheelLeftGraphics.origin.x - backSpring.x) * (180 / Math.PI);
+		backSpring.angle = FlxAngle.TO_DEG * Math.atan2(
+			wheelLeftGraphics.y + wheelLeftGraphics.origin.y - backSpring.y,
+			wheelLeftGraphics.x + wheelLeftGraphics.origin.x - backSpring.x
+		);
+	}
 
-		wheelBackTopHolderGraphics.x = carBodyPhysics.position.x + wheelBackTopHolderGraphics.origin.x + backTopHolderHorizontalOffset * carAngleCos + backTopHolderVerticalOffset * carAngleRotatedCos;
-		wheelBackTopHolderGraphics.y = carBodyPhysics.position.y + wheelBackTopHolderGraphics.origin.y + backTopHolderHorizontalOffset * carAngleSin + backTopHolderVerticalOffset * carAngleRotatedSin;
-		wheelBackTopHolderGraphics.angle = Math.atan2(wheelLeftGraphics.y + wheelLeftGraphics.origin.y - wheelBackTopHolderGraphics.y, wheelLeftGraphics.x + wheelLeftGraphics.origin.x - wheelBackTopHolderGraphics.x) * (180 / Math.PI);
+	function updateWheelHolderGraphic()
+	{
+		wheelBackTopHolderGraphics.x = carBodyPhysics.position.x + backTopHolderHorizontalOffset * carAngleCos + backTopHolderVerticalOffset * carAngleRotatedCos;
+		wheelBackTopHolderGraphics.y = carBodyPhysics.position.y + backTopHolderHorizontalOffset * carAngleSin + backTopHolderVerticalOffset * carAngleRotatedSin;
+		wheelBackTopHolderGraphics.angle = FlxAngle.TO_DEG * Math.atan2(
+			wheelLeftGraphics.y + wheelLeftGraphics.origin.y - wheelBackTopHolderGraphics.y,
+			wheelLeftGraphics.x + wheelLeftGraphics.origin.x - wheelBackTopHolderGraphics.x
+		);
 
-		wheelBackBottomHolderGraphics.x = carBodyPhysics.position.x + wheelBackBottomHolderGraphics.origin.x + backBottomHolderHorizontalOffset * carAngleCos + backBottomHolderVerticalOffset * carAngleRotatedCos;
-		wheelBackBottomHolderGraphics.y = carBodyPhysics.position.y + wheelBackBottomHolderGraphics.origin.y + backBottomHolderHorizontalOffset * carAngleSin + backBottomHolderVerticalOffset * carAngleRotatedSin;
-		wheelBackBottomHolderGraphics.angle = Math.atan2(wheelLeftGraphics.y + wheelLeftGraphics.origin.y - wheelBackBottomHolderGraphics.y, wheelLeftGraphics.x + wheelLeftGraphics.origin.x - wheelBackBottomHolderGraphics.x) * (180 / Math.PI);
+		wheelBackBottomHolderGraphics.x = carBodyPhysics.position.x + backBottomHolderHorizontalOffset * carAngleCos + backBottomHolderVerticalOffset * carAngleRotatedCos;
+		wheelBackBottomHolderGraphics.y = carBodyPhysics.position.y + backBottomHolderHorizontalOffset * carAngleSin + backBottomHolderVerticalOffset * carAngleRotatedSin;
+		wheelBackBottomHolderGraphics.angle = FlxAngle.TO_DEG * Math.atan2(
+			wheelLeftGraphics.y + wheelLeftGraphics.origin.y - wheelBackBottomHolderGraphics.y,
+			wheelLeftGraphics.x + wheelLeftGraphics.origin.x - wheelBackBottomHolderGraphics.x
+		);
 
-		wheelFrontTopHolderGraphics.x = carBodyPhysics.position.x + wheelFrontTopHolderGraphics.origin.x + frontTopHolderHorizontalOffset * carAngleCos + frontTopHolderVerticalOffset * carAngleRotatedCos;
-		wheelFrontTopHolderGraphics.y = carBodyPhysics.position.y + wheelFrontTopHolderGraphics.origin.y + frontTopHolderHorizontalOffset * carAngleSin + frontTopHolderVerticalOffset * carAngleRotatedSin;
-		wheelFrontTopHolderGraphics.angle = Math.atan2(wheelRightGraphics.y + wheelRightGraphics.origin.y - wheelFrontTopHolderGraphics.y, wheelRightGraphics.x + wheelRightGraphics.origin.x - wheelFrontTopHolderGraphics.x) * (180 / Math.PI);
+		wheelFrontTopHolderGraphics.x = carBodyPhysics.position.x + frontTopHolderHorizontalOffset * carAngleCos + frontTopHolderVerticalOffset * carAngleRotatedCos;
+		wheelFrontTopHolderGraphics.y = carBodyPhysics.position.y + frontTopHolderHorizontalOffset * carAngleSin + frontTopHolderVerticalOffset * carAngleRotatedSin;
+		wheelFrontTopHolderGraphics.angle = FlxAngle.TO_DEG * Math.atan2(
+			wheelRightGraphics.y + wheelRightGraphics.origin.y - wheelFrontTopHolderGraphics.y,
+			wheelRightGraphics.x + wheelRightGraphics.origin.x - wheelFrontTopHolderGraphics.x
+		);
 
-		wheelFrontBottomHolderGraphics.x = carBodyPhysics.position.x + wheelFrontBottomHolderGraphics.origin.x + frontBottomHolderHorizontalOffset * carAngleCos + frontBottomHolderVerticalOffset * carAngleRotatedCos;
-		wheelFrontBottomHolderGraphics.y = carBodyPhysics.position.y + wheelFrontBottomHolderGraphics.origin.y + frontBottomHolderHorizontalOffset * carAngleSin + frontBottomHolderVerticalOffset * carAngleRotatedSin;
-		wheelFrontBottomHolderGraphics.angle = Math.atan2(wheelRightGraphics.y + wheelRightGraphics.origin.y - wheelFrontBottomHolderGraphics.y, wheelRightGraphics.x + wheelRightGraphics.origin.x - wheelFrontBottomHolderGraphics.x) * (180 / Math.PI);
+		wheelFrontBottomHolderGraphics.x = carBodyPhysics.position.x + frontBottomHolderHorizontalOffset * carAngleCos + frontBottomHolderVerticalOffset * carAngleRotatedCos;
+		wheelFrontBottomHolderGraphics.y = carBodyPhysics.position.y + frontBottomHolderHorizontalOffset * carAngleSin + frontBottomHolderVerticalOffset * carAngleRotatedSin;
+		wheelFrontBottomHolderGraphics.angle = FlxAngle.TO_DEG * Math.atan2(
+			wheelRightGraphics.y + wheelRightGraphics.origin.y - wheelFrontBottomHolderGraphics.y,
+			wheelRightGraphics.x + wheelRightGraphics.origin.x - wheelFrontBottomHolderGraphics.x
+		);
+	}
 
-		calculateCollision();
+	function updateFlagGraphic()
+	{
+		flagGraphic.x = carBodyPhysics.position.x - flagGraphic.origin.x + flagGraphicXOffset * carAngleCos + flagGraphicYOffset * carAngleRotatedCos;
+		flagGraphic.y = carBodyPhysics.position.y - flagGraphic.origin.y + flagGraphicXOffset * carAngleSin + flagGraphicYOffset * carAngleRotatedSin;
+
+		flagGraphic.angle = flagAngleOffset + FlxAngle.TO_DEG * (GeomUtil.getAngle(
+			{
+				x: flagGraphic.x + flagGraphic.origin.x,
+				y: flagGraphic.y + flagGraphic.origin.y
+			},
+			{
+				x: flagPhysics.position.x,
+				y: flagPhysics.position.y
+			}
+		));
 	}
 
 	function calculateCollision():Void
@@ -337,6 +445,10 @@ class Car extends AbstractCar implements IRecorderPerformer
 		hitArea.rotation = 0;
 		hitArea.velocity.setxy(0, 0);
 		hitArea.angularVel = 0;
+
+		flagPhysics.position.x = x + flagEndPointXOffet;
+		flagPhysics.position.y = y + flagEndPointYOffet;
+		flagPhysics.velocity.setxy(0, 0);
 
 		update(0);
 	}
