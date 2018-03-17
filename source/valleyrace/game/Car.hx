@@ -65,6 +65,9 @@ class Car extends AbstractCar implements IRecorderPerformer
 	var flagGraphicYOffset:Float = -20;
 	var flagAngleOffset:Float = 145;
 
+	var lightBreakGraphicXOffset:Float = -97;
+	var lightBreakGraphicYOffset:Float = -17;
+
 	var carAngleCos:Float;
 	var carAngleSin:Float;
 	var carAngleRotatedCos:Float;
@@ -77,6 +80,7 @@ class Car extends AbstractCar implements IRecorderPerformer
 	public var flagPhysics:Body;
 
 	public var flagGraphic:FlxSprite;
+	public var lightBreakeGraphic:FlxSprite;
 
 	public var isOnWheelie:Bool;
 	public var onWheelieStartGameTime:Float;
@@ -132,6 +136,9 @@ class Car extends AbstractCar implements IRecorderPerformer
 		flagEndPointXOffet *= carScale;
 		flagEndPointYOffet *= carScale;
 
+		lightBreakGraphicXOffset *= carScale;
+		lightBreakGraphicYOffset *= carScale;
+
 		buildPhysics(x, y, filterCategory, filterMask);
 	}
 
@@ -143,6 +150,10 @@ class Car extends AbstractCar implements IRecorderPerformer
 		flagGraphic.origin.set(flagGraphic.width, flagGraphic.height);
 
 		super.buildGraphics();
+
+		add(lightBreakeGraphic = HPPAssetManager.getSprite("break_light"));
+		lightBreakeGraphic.antialiasing = true;
+		lightBreakeGraphic.scale = new FlxPoint(carScale, carScale);
 	}
 
 	function buildPhysics(x:Float, y:Float, filterCategory:Int = 0, filterMask:Int = 0):Void
@@ -260,6 +271,7 @@ class Car extends AbstractCar implements IRecorderPerformer
 		updateSpringGraphic();
 		updateWheelHolderGraphic();
 		updateFlagGraphic();
+		updateBreakeLightGraphic();
 
 		calculateCollision();
 	}
@@ -352,6 +364,13 @@ class Car extends AbstractCar implements IRecorderPerformer
 		));
 	}
 
+	function updateBreakeLightGraphic()
+	{
+		lightBreakeGraphic.x = carBodyPhysics.position.x - lightBreakeGraphic.origin.x + lightBreakGraphicXOffset * carAngleCos + lightBreakGraphicYOffset * carAngleRotatedCos;
+		lightBreakeGraphic.y = carBodyPhysics.position.y - lightBreakeGraphic.origin.y + lightBreakGraphicXOffset * carAngleSin + lightBreakGraphicYOffset * carAngleRotatedSin;
+		lightBreakeGraphic.angle = carBodyGraphics.angle;
+	}
+
 	function calculateCollision():Void
 	{
 		var contactList:BodyList = wheelLeftPhysics.interactingBodies();
@@ -400,6 +419,8 @@ class Car extends AbstractCar implements IRecorderPerformer
 
 		wheelLeftPhysics.angularVel = -carLeveledData.speed / 2;
 		wheelRightPhysics.angularVel = -carLeveledData.speed / 2;
+
+		lightBreakeGraphic.visible = true;
 	}
 
 	public function accelerateToRight():Void
@@ -408,6 +429,13 @@ class Car extends AbstractCar implements IRecorderPerformer
 
 		wheelLeftPhysics.angularVel = carLeveledData.speed;
 		wheelRightPhysics.angularVel = carLeveledData.speed;
+
+		lightBreakeGraphic.visible = false;
+	}
+
+	public function idle():Void
+	{
+		lightBreakeGraphic.visible = false;
 	}
 
 	public function rotateLeft():Void

@@ -799,14 +799,9 @@ class GameState extends FlxState
 			up = down = right = left = false;
 		}
 
-		if (up)
-		{
-			car.accelerateToRight();
-		}
-		else if (down)
-		{
-			car.accelerateToLeft();
-		}
+		if (up) car.accelerateToRight();
+		else if (down) car.accelerateToLeft();
+		else car.idle();
 
 		if (right)
 		{
