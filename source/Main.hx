@@ -29,6 +29,8 @@ class Main extends Sprite
 		var settingsInfo:SettingsInfo = SavedDataUtil.getSettingsInfo();
 
 		AppConfig.IS_ALPHA_ANIMATION_ENABLED = settingsInfo.enableAlphaAnimation;
+		AppConfig.MUSIC_VOLUME = settingsInfo.musicVolume;
+		AppConfig.SOUND_VOLUME = settingsInfo.soundVolume;
 		AppConfig.IS_MOBILE_DEVICE = DeviceData.isMobile();
 
 		CarDatas.loadData(Assets.getText("assets/data/car_datas.json"));

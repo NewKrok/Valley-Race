@@ -1,5 +1,6 @@
 package valleyrace.menu.view;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
@@ -64,7 +65,10 @@ class CarPreview extends FlxSpriteGroup
 		SavedDataUtil.save();
 
 		if (!savedCarData.isUnlocked)
+		{
 			savedCarData.isUnlocked = true;
+			FlxG.sound.play("assets/sounds/car_unlocked.ogg", AppConfig.SOUND_VOLUME);
+		}
 
 		isUnlocked = savedCarData.isUnlocked;
 

@@ -47,15 +47,22 @@ class AboutUsPage extends FlxSubState
 		var container:HPPVUIBox = new HPPVUIBox( 20 );
 		container.scrollFactor.set();
 
-		var developerInfoText = new FlxText();
-		developerInfoText.color = FlxColor.WHITE;
-		developerInfoText.alignment = "center";
-		developerInfoText.size = 30;
-		developerInfoText.font = Fonts.HOLLYWOOD;
-		developerInfoText.borderStyle = FlxTextBorderStyle.SHADOW;
-		developerInfoText.fieldWidth = 800;
-		developerInfoText.text = "Valley Race game created by Krisztian Somoracz (NewKrok).";
-		container.add(developerInfoText);
+		var developerInfo = new HPPButton(
+			"Valley Race game created by Krisztian Somoracz (NewKrok).",
+			function (_) {
+				openfl.Lib.getURL(new URLRequest("https://www.linkedin.com/in/krisztian-somoracz-8924b949/"), "_blank");
+			}
+		);
+		developerInfo.label.fieldWidth = 700;
+		developerInfo.label.color = FlxColor.WHITE;
+		developerInfo.label.alignment = "center";
+		developerInfo.label.font = Fonts.HOLLYWOOD;
+		developerInfo.label.borderStyle = FlxTextBorderStyle.SHADOW;
+		developerInfo.up_style = new ButtonLabelStyle(null, null, FlxColor.WHITE);
+		developerInfo.over_style = new ButtonLabelStyle(null, null, FlxColor.YELLOW);
+		developerInfo.labelSize = 30;
+		developerInfo.loadGraphicFromSprite(new FlxSprite().makeGraphic(700, 30, FlxColor.TRANSPARENT));
+		container.add(developerInfo);
 
 		var graphicInfo = new HPPButton(
 			"Base graphics from GameDev Market by Nido",
@@ -73,6 +80,40 @@ class AboutUsPage extends FlxSubState
 		graphicInfo.labelSize = 30;
 		graphicInfo.loadGraphicFromSprite(new FlxSprite().makeGraphic(700, 30, FlxColor.TRANSPARENT));
 		container.add(graphicInfo);
+
+		var soundAInfo = new HPPButton(
+			"Music and sounds by Eric Matyas - http://soundimage.org/",
+			function (_) {
+				openfl.Lib.getURL(new URLRequest("http://soundimage.org/"), "_blank");
+			}
+		);
+		soundAInfo.label.fieldWidth = 700;
+		soundAInfo.label.color = FlxColor.WHITE;
+		soundAInfo.label.alignment = "center";
+		soundAInfo.label.font = Fonts.HOLLYWOOD;
+		soundAInfo.label.borderStyle = FlxTextBorderStyle.SHADOW;
+		soundAInfo.up_style = new ButtonLabelStyle(null, null, FlxColor.WHITE);
+		soundAInfo.over_style = new ButtonLabelStyle(null, null, FlxColor.YELLOW);
+		soundAInfo.labelSize = 30;
+		soundAInfo.loadGraphicFromSprite(new FlxSprite().makeGraphic(700, 30, FlxColor.TRANSPARENT));
+		container.add(soundAInfo);
+
+		var soundBInfo = new HPPButton(
+			"Engine noise by MarlonHJ - https://freesound.org/",
+			function (_) {
+				openfl.Lib.getURL(new URLRequest("https://freesound.org/people/MarlonHJ/"), "_blank");
+			}
+		);
+		soundBInfo.label.fieldWidth = 700;
+		soundBInfo.label.color = FlxColor.WHITE;
+		soundBInfo.label.alignment = "center";
+		soundBInfo.label.font = Fonts.HOLLYWOOD;
+		soundBInfo.label.borderStyle = FlxTextBorderStyle.SHADOW;
+		soundBInfo.up_style = new ButtonLabelStyle(null, null, FlxColor.WHITE);
+		soundBInfo.over_style = new ButtonLabelStyle(null, null, FlxColor.YELLOW);
+		soundBInfo.labelSize = 30;
+		soundBInfo.loadGraphicFromSprite(new FlxSprite().makeGraphic(700, 30, FlxColor.TRANSPARENT));
+		container.add(soundBInfo);
 
 		var poweredByContainer:HPPHUIBox = new HPPHUIBox(20);
 
@@ -105,7 +146,6 @@ class AboutUsPage extends FlxSubState
 
 		container.x = FlxG.width / 2 - container.width / 2;
 		container.y = FlxG.height / 2 - container.height / 2 - 100;
-		developerInfoText.fieldWidth = container.width;
 		add( container );
 
 		add( backButton = new SmallButton( "BACK", openWelcomePage ) );

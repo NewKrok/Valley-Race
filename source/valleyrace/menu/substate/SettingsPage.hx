@@ -29,12 +29,18 @@ class SettingsPage extends FlxSubState
 	var alphaAnimationCheckBox:HPPToggleButton;
 	var alphaAnimationsText:FlxText;
 
+	var musicCheckBox:HPPToggleButton;
+	var musicText:FlxText;
+
+	var soundCheckBox:HPPToggleButton;
+	var soundText:FlxText;
+
 	var fullScreenCheckBox:HPPToggleButton;
 	var fullScreenText:FlxText;
 
 	var backButton:HPPButton;
 
-	function new( openWelcomePage:HPPButton->Void ):Void
+	function new(openWelcomePage:HPPButton->Void):Void
 	{
 		super();
 
@@ -51,21 +57,23 @@ class SettingsPage extends FlxSubState
 	function build():Void
 	{
 		var baseBack:FlxSprite = new FlxSprite();
-		baseBack.makeGraphic( FlxG.width, FlxG.height, 0xAA000000 );
+		baseBack.makeGraphic(FlxG.width, FlxG.height, 0xAA000000);
 		baseBack.scrollFactor.set();
-		add( baseBack );
+		add(baseBack);
 
-		var container:HPPVUIBox = new HPPVUIBox( 20, HAlign.LEFT );
+		var container:HPPVUIBox = new HPPVUIBox(20, HAlign.LEFT);
 		container.scrollFactor.set();
 
+		container.add(createMusicVolumeSetting());
+		container.add(createSoundVolumeSetting());
 		if (AppConfig.IS_DESKTOP_DEVICE) container.add(createFullscreenSetting());
-		container.add( createAlphaAnimationSetting() );
+		container.add(createAlphaAnimationSetting());
 
 		container.x = FlxG.width / 2 - container.width / 2;
-		container.y = FlxG.height / 2 - container.height / 2 - 100;
-		add( container );
+		container.y = FlxG.height / 2 - container.height / 2 - 50;
+		add(container);
 
-		add( backButton = new SmallButton( "BACK", saveAndClose ) );
+		add(backButton = new SmallButton("BACK", saveAndClose));
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}
@@ -74,6 +82,8 @@ class SettingsPage extends FlxSubState
 	{
 		var settingsInfo:SettingsInfo = SavedDataUtil.getSettingsInfo();
 		settingsInfo.enableAlphaAnimation = AppConfig.IS_ALPHA_ANIMATION_ENABLED;
+		settingsInfo.musicVolume = AppConfig.MUSIC_VOLUME;
+		settingsInfo.soundVolume = AppConfig.SOUND_VOLUME;
 		SavedDataUtil.save();
 
 		openWelcomePage(target);
@@ -85,7 +95,7 @@ class SettingsPage extends FlxSubState
 
 		fullScreenCheckBox = new HPPToggleButton("", "", setFullscreen, "checkbox_off", "checkbox_on");
 		fullScreenCheckBox.isSelected = JsFullScreenUtil.isFullScreen();
-		settingContainer.add( fullScreenCheckBox );
+		settingContainer.add(fullScreenCheckBox);
 
 		var textWrapper:HPPVUIBox = new HPPVUIBox();
 		textWrapper.add(new PlaceHolder(1,15));
@@ -111,6 +121,8 @@ class SettingsPage extends FlxSubState
 
 	function setFullscreen(target:HPPToggleButton):Void
 	{
+		FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
+
 		updateFullScreenText();
 
 		if (JsFullScreenUtil.isFullScreen())
@@ -131,16 +143,16 @@ class SettingsPage extends FlxSubState
 
 	function updateFullScreenText():Void
 	{
-		fullScreenText.text = "Change to full screen mode (" + ( fullScreenCheckBox.isSelected ? "TURNED ON" : "TURNED OFF" ) + ") Note: On some site this feature is not available";
+		fullScreenText.text = "Change to full screen mode (" + (fullScreenCheckBox.isSelected ? "TURNED ON" : "TURNED OFF") + ") Note: On some site this feature is not available";
 	}
 
 	function createAlphaAnimationSetting():FlxSpriteGroup
 	{
-		var settingContainer:HPPHUIBox = new HPPHUIBox( 20 );
+		var settingContainer:HPPHUIBox = new HPPHUIBox(20);
 
-		alphaAnimationCheckBox = new HPPToggleButton( "", "", setAlphaAnimation, "checkbox_off", "checkbox_on" );
+		alphaAnimationCheckBox = new HPPToggleButton("", "", setAlphaAnimation, "checkbox_off", "checkbox_on");
 		alphaAnimationCheckBox.isSelected = AppConfig.IS_ALPHA_ANIMATION_ENABLED;
-		settingContainer.add( alphaAnimationCheckBox );
+		settingContainer.add(alphaAnimationCheckBox);
 
 		var textWrapper:HPPVUIBox = new HPPVUIBox();
 		textWrapper.add(new PlaceHolder(1, 15));
@@ -160,8 +172,10 @@ class SettingsPage extends FlxSubState
 		return cast settingContainer;
 	}
 
-	function setAlphaAnimation( target:HPPToggleButton ):Void
+	function setAlphaAnimation(target:HPPToggleButton):Void
 	{
+		FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
+
 		updateAlphaAnimationText();
 
 		AppConfig.IS_ALPHA_ANIMATION_ENABLED = alphaAnimationCheckBox.isSelected;
@@ -169,6 +183,88 @@ class SettingsPage extends FlxSubState
 
 	function updateAlphaAnimationText():Void
 	{
-		alphaAnimationsText.text = "Enable alpha animations - Not recommended in mobile or with slow PC (" + ( alphaAnimationCheckBox.isSelected ? "TURNED ON" : "TURNED OFF" ) + ")";
+		alphaAnimationsText.text = "Enable alpha animations - Not recommended in mobile or with slow PC (" + (alphaAnimationCheckBox.isSelected ? "TURNED ON" : "TURNED OFF") + ")";
+	}
+
+	function createMusicVolumeSetting():FlxSpriteGroup
+	{
+		var settingContainer:HPPHUIBox = new HPPHUIBox(20);
+
+		musicCheckBox = new HPPToggleButton("", "", setMusicVolume, "checkbox_off", "checkbox_on");
+		musicCheckBox.isSelected = AppConfig.MUSIC_VOLUME == 1;
+		settingContainer.add(musicCheckBox);
+
+		var textWrapper:HPPVUIBox = new HPPVUIBox();
+		textWrapper.add(new PlaceHolder(1, 15));
+
+		musicText = new FlxText();
+		musicText.color = FlxColor.WHITE;
+		musicText.alignment = "left";
+		musicText.size = 35;
+		musicText.font = Fonts.HOLLYWOOD;
+		musicText.borderStyle = FlxTextBorderStyle.SHADOW;
+		musicText.fieldWidth = 650;
+
+		updateMusicVolumeText();
+		textWrapper.add(musicText);
+		settingContainer.add(textWrapper);
+
+		return cast settingContainer;
+	}
+
+	function setMusicVolume(target:HPPToggleButton):Void
+	{
+		FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
+
+		updateMusicVolumeText();
+
+		AppConfig.MUSIC_VOLUME = musicCheckBox.isSelected ? 1 : 0;
+		FlxG.sound.music.volume = AppConfig.MUSIC_VOLUME == 1 ? .75 : 0;
+	}
+
+	function updateMusicVolumeText():Void
+	{
+		musicText.text = "Enable music (" + (musicCheckBox.isSelected ? "TURNED ON" : "TURNED OFF") + ")";
+	}
+
+	function createSoundVolumeSetting():FlxSpriteGroup
+	{
+		var settingContainer:HPPHUIBox = new HPPHUIBox(20);
+
+		soundCheckBox = new HPPToggleButton("", "", setSoundVolume, "checkbox_off", "checkbox_on");
+		soundCheckBox.isSelected = AppConfig.SOUND_VOLUME == 1;
+		settingContainer.add(soundCheckBox);
+
+		var textWrapper:HPPVUIBox = new HPPVUIBox();
+		textWrapper.add(new PlaceHolder(1, 15));
+
+		soundText = new FlxText();
+		soundText.color = FlxColor.WHITE;
+		soundText.alignment = "left";
+		soundText.size = 35;
+		soundText.font = Fonts.HOLLYWOOD;
+		soundText.borderStyle = FlxTextBorderStyle.SHADOW;
+		soundText.fieldWidth = 650;
+
+		updateSoundVolumeText();
+		textWrapper.add(soundText);
+		settingContainer.add(textWrapper);
+
+		return cast settingContainer;
+	}
+
+	function setSoundVolume(target:HPPToggleButton):Void
+	{
+		FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
+
+		updateSoundVolumeText();
+
+		AppConfig.SOUND_VOLUME = soundCheckBox.isSelected ? 1 : 0;
+		//FlxG.sound.music.volume = AppConfig.SOUND_VOLUME;
+	}
+
+	function updateSoundVolumeText():Void
+	{
+		soundText.text = "Enable sound effects (" + (soundCheckBox.isSelected ? "TURNED ON" : "TURNED OFF") + ")";
 	}
 }

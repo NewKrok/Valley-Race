@@ -10,6 +10,7 @@ import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
+import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -144,6 +145,7 @@ class GameState extends FlxState
 	var buildStep:UInt = 0;
 	var isBuilt:Bool = false;
 	var playerPosition:UInt = 0;
+	var engineSound:FlxSound;
 
 	public function new(worldId:UInt, levelId:UInt):Void
 	{
@@ -405,6 +407,8 @@ class GameState extends FlxState
 		isGameStarted = true;
 
 		now = gameStartTime = Date.now().getTime();
+		FlxG.sound.playMusic("assets/music/game_loop.ogg", AppConfig.MUSIC_VOLUME == 1 ? .75 : 0, true);
+		engineSound = FlxG.sound.play("assets/sounds/engine.ogg", AppConfig.SOUND_VOLUME, true);
 
 		resumeRequest();
 
@@ -430,6 +434,8 @@ class GameState extends FlxState
 
 	function pauseRequest(target:HPPButton = null):Void
 	{
+		FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
+
 		if (subState == null)
 		{
 			openSubState(pausePanel);
@@ -1018,10 +1024,14 @@ class GameState extends FlxState
 
 		if (!isLost && !isWon && (car.isCarCrashed || isTimeout || isFallDown))
 		{
+			FlxG.sound.play("assets/sounds/loopse.ogg", AppConfig.SOUND_VOLUME);
+
 			isLost = true;
 
 			if (car.isCarCrashed || isFallDown)
 			{
+				FlxG.sound.play("assets/sounds/crushed.ogg", AppConfig.SOUND_VOLUME);
+
 				camera.shake(.02, .2);
 				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - (isFallDown ? 100 : 20), GameEffect.TYPE_CRUSHED);
 			}
@@ -1034,6 +1044,9 @@ class GameState extends FlxState
 			camera.deadzone.x = (camera.width + w * 5) / 2;
 
 			Timer.delay(gameOverRutin, 1000);
+
+			FlxG.sound.music.stop();
+			engineSound.stop();
 		}
 	}
 
@@ -1042,12 +1055,16 @@ class GameState extends FlxState
 		if (!isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x)
 		//if (!isLost && !isWon && gameTime > 2000) // temporary for instant win
 		{
+			FlxG.sound.play("assets/sounds/won.ogg", AppConfig.SOUND_VOLUME);
+
 			isWon = true;
 			isLevelFinished = true;
 
 			addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_LEVEL_COMPLETED);
 
 			Timer.delay(gameOverRutin, 250);
+
+			FlxG.sound.music.stop();
 		}
 	}
 
@@ -1245,6 +1262,9 @@ class GameState extends FlxState
 	override public function destroy():Void
 	{
 		HPPAssetManager.clear();
+
+		FlxG.sound.music.stop();
+		engineSound.stop();
 
 		super.destroy();
 	}

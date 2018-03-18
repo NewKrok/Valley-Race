@@ -1,5 +1,6 @@
 package valleyrace.common.view;
 
+import flixel.FlxG;
 import flixel.addons.ui.ButtonLabelStyle;
 import flixel.math.FlxPoint;
 import hpp.flixel.ui.HPPButton;
@@ -14,7 +15,10 @@ class SmallButton extends ButtonWithTween
 {
 	public function new(title:String = "", callBack:HPPButton->Void = null)
 	{
-		super(title, callBack);
+		super(title, function(e) {
+			FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
+			callBack(e);
+		});
 
 		label.font = Fonts.HOLLYWOOD;
 		labelSize = 30;

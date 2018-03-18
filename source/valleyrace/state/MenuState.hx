@@ -90,6 +90,8 @@ class MenuState extends FlxState
 		{
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		}
+
+		FlxG.sound.playMusic("assets/music/menu_loop.ogg", AppConfig.MUSIC_VOLUME == 1 ? .75 : 0, true);
 	}
 
 	function loadAssets():Void
@@ -117,26 +119,31 @@ class MenuState extends FlxState
 		onMouseMove(null);
 
 		// To start immediately the game...
-		//FlxG.switchState(new GameState(1, 0));
+		//FlxG.switchState(new GameState(0, 0));
 	}
 
 	function openWelcomePage(target:HPPButton = null):Void
 	{
+		FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
 		openSubState(welcomePage);
 	}
 
 	function openSettingsPage(target:HPPButton = null):Void
 	{
+		FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
 		openSubState(settingsPage);
 	}
 
 	function openAboutUsPage(target:HPPButton = null):Void
 	{
+		FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
 		openSubState(aboutUsPage);
 	}
 
 	function openLevelSelector(worldId:UInt):Void
 	{
+		FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
+
 		var needCreateNewLevelSelector:Bool = true;
 
 		if (levelSelector != null)
@@ -165,6 +172,8 @@ class MenuState extends FlxState
 
 	function openWorldSelector(target:HPPButton = null):Void
 	{
+		FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
+
 		openSubState(worldSelector);
 	}
 
@@ -231,6 +240,8 @@ class MenuState extends FlxState
 		#end
 
 		stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+
+		FlxG.sound.music.stop();
 
 		super.destroy();
 	}

@@ -1,5 +1,6 @@
 package valleyrace.game;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.tweens.FlxTween;
@@ -44,6 +45,8 @@ class Coin extends FlxSpriteGroup
 	public function collect():Void
 	{
 		isCollected = true;
+
+		FlxG.sound.play("assets/sounds/coin_pick_up.ogg", AppConfig.SOUND_VOLUME == 1 ? .5 : 0);
 
 		mc.visible = false;
 		Timer.delay(disableCoin, 600);
@@ -91,6 +94,7 @@ class Coin extends FlxSpriteGroup
 		{
 			e.x = x + mc.width / 2;
 			e.y = y + mc.height / 2;
+			e.visible = false;
 		}
 	}
 }

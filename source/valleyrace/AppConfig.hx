@@ -16,6 +16,9 @@ class AppConfig
 
 	public static var IS_ALPHA_ANIMATION_ENABLED:Bool = false;
 
+	public static var MUSIC_VOLUME:Float = 1;
+	public static var SOUND_VOLUME:Float = 1;
+
 	public static var IS_MOBILE_DEVICE:Bool = false;
 	public static var IS_DESKTOP_DEVICE(get, null):Bool;
 

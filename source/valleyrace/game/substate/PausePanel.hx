@@ -81,6 +81,14 @@ class PausePanel extends FlxSubState
 		subContainer.y = FlxG.stage.stageHeight / 2 - subContainer.height / 2 - 100;
 
 		container.add(subContainer);
+
+		openCallback = function() {
+			FlxG.sound.music.volume = AppConfig.MUSIC_VOLUME == 1 ? .2 : 0;
+		}
+
+		closeCallback = function() {
+			FlxG.sound.music.volume = AppConfig.MUSIC_VOLUME == 1 ? 1 : 0;
+		}
 	}
 
 	override public function update(elapsed:Float):Void

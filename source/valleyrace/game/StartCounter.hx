@@ -78,8 +78,14 @@ class StartCounter extends FlxSpriteGroup
 		{
 			counterImages[ animationIndex - 1 ].visible = false;
 
+			FlxG.sound.play("assets/sounds/start_game.ogg", AppConfig.SOUND_VOLUME);
+
 			onCompleteCallback();
 			return;
+		}
+		else
+		{
+			FlxG.sound.play("assets/sounds/start_timer.ogg", AppConfig.SOUND_VOLUME);
 		}
 
 		if (animationIndex > 0)

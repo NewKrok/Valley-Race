@@ -41,7 +41,9 @@ class SavedDataUtil
 		{
 			gameSave.data.settings = {
 				showFPS: false,
-				enableAlphaAnimation: DeviceData.isMobile() ? false : true
+				enableAlphaAnimation: DeviceData.isMobile() ? false : true,
+				musicVolume: 1,
+				soundVolume: 1
 			};
 		}
 
@@ -197,6 +199,8 @@ typedef CarSavedData = {
 
 typedef SettingsInfo = {
 	var enableAlphaAnimation:Bool;
+	var musicVolume:Float;
+	var soundVolume:Float;
 }
 
 typedef LevelSavedData = {

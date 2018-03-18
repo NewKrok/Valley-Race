@@ -1,5 +1,6 @@
 package valleyrace.menu.view;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
@@ -82,6 +83,7 @@ class UpgradeButton extends ExtendedButtonWithTween
 	{
 		if (carData.price.length > level && SavedDataUtil.getPlayerInfo().coin >= carData.price[level + 1])
 		{
+			FlxG.sound.play("assets/sounds/button.ogg", AppConfig.SOUND_VOLUME);
 			onUpgrade();
 		}
 	}
