@@ -5,6 +5,8 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import hpp.flixel.display.HPPMovieClip;
 import hpp.flixel.util.HPPAssetManager;
+import valleyrace.config.BackgroundConfigs;
+import valleyrace.config.BackgroundConfigs.BackgroundConfig;
 import valleyrace.datatype.BackgroundData;
 
 /**
@@ -45,10 +47,9 @@ class Background extends FlxSpriteGroup
 		removeCurrent();
 
 		backgroundDatas = [];
-		addBackground('back_world_' + worldId + '_a00', 200, new FlxPoint(.1, .1), -.5);
-		addBackground('back_world_' + worldId + '_b00', 300, new FlxPoint(.25, .25), -.5);
-		addBackground('back_world_' + worldId + '_c00', 450, new FlxPoint(.35, .35), -.5);
-		addBackground('back_world_' + worldId + '_d00', 640, new FlxPoint(.45, .45), -.5);
+
+		var configList = BackgroundConfigs.getConfigConfigByWorld(worldId);
+		for (config in configList) addBackground(config);
 
 		update(1);
 	}
@@ -67,10 +68,10 @@ class Background extends FlxSpriteGroup
 		backgroundDatas = null;
 	}
 
-	function addBackground(assetId:String, baseYOffset:Float, easing:FlxPoint, xOverlap:Float):Void
+	function addBackground(config:BackgroundConfig):Void
 	{
 		var backgroundData:BackgroundData = {
-			easing: easing,
+			easing: config.easing,
 			container: new FlxSpriteGroup(),
 			elements: []
 		};
@@ -81,13 +82,13 @@ class Background extends FlxSpriteGroup
 
 		for (i in 0...5)
 		{
-			var backgroundPiece:HPPMovieClip = HPPAssetManager.getMovieClip(assetId, "00");
+			var backgroundPiece:HPPMovieClip = HPPAssetManager.getMovieClip(config.assetId, "00");
 			backgroundData.container.add(backgroundPiece);
 			backgroundData.elements.push(backgroundPiece);
 
 			backgroundPiece.gotoAndStop(i == 4 ? 0 : i);
-			backgroundPiece.x = i * (backgroundPiece.width + xOverlap);
-			backgroundPiece.y = baseYOffset;
+			backgroundPiece.x = i * (backgroundPiece.width + config.xOverlap);
+			backgroundPiece.y = config.baseYOffset;
 		}
 	}
 

@@ -21,12 +21,13 @@
 	<SubTexture name="wheel_7" x="1890" y="400" width="80" height="80"/>
 	<SubTexture name="wheel_8" x="1890" y="490" width="80" height="80"/>
 	<SubTexture name="car_fog" x="345" y="5" width="31" height="25"/>
-	<SubTexture name="small_rock_0_1" x="345" y="35" width="12" height="9"/>
-	<SubTexture name="small_rock_0_2" x="345" y="50" width="12" height="14"/>
+	<SubTexture name="small_rock_0_1" x="345" y="35" width="9" height="11"/>
+	<SubTexture name="small_rock_0_2" x="345" y="50" width="7" height="5"/>
 	<SubTexture name="coin0000" x="385" y="5" width="35" height="35"/>
 	<SubTexture name="coin0001" x="425" y="5" width="35" height="35"/>
 	<SubTexture name="coin0002" x="465" y="5" width="35" height="35"/>
 	<SubTexture name="coin0003" x="505" y="5" width="35" height="35"/>
+	<SubTexture name="coin_pick_up_effect" x="500" y="75" width="15" height="15"/>
 	<SubTexture name="bridge" x="345" y="70" width="71" height="23"/>
 	<SubTexture name="gui_coin_back" x="710" y="5" width="137" height="50"/>
 	<SubTexture name="gui_coin_back_max" x="345" y="165" width="161" height="74"/>
@@ -78,4 +79,16 @@
 	<SubTexture name="flag_0" x="420" y="50" width="28" height="45"/>
 	<SubTexture name="flag_1" x="455" y="50" width="28" height="45"/>
 	<SubTexture name="break_light" x="490" y="80" width="6" height="18"/>
+	<SubTexture name="back_world_2_b0000" x="5" y="630" width="284" height="550"/>
+	<SubTexture name="back_world_2_b0001" x="289" y="630" width="284" height="550"/>
+	<SubTexture name="back_world_2_b0002" x="573" y="630" width="284" height="550"/>
+	<SubTexture name="back_world_2_b0003" x="857" y="630" width="284" height="550"/>
+	<SubTexture name="back_world_2_c0000" x="5" y="1185" width="284" height="486"/>
+	<SubTexture name="back_world_2_c0001" x="289" y="1185" width="284" height="486"/>
+	<SubTexture name="back_world_2_c0002" x="573" y="1185" width="284" height="486"/>
+	<SubTexture name="back_world_2_c0003" x="857" y="1185" width="284" height="486"/>
+	<SubTexture name="back_world_2_d0000" x="5" y="1675" width="284" height="357"/>
+	<SubTexture name="back_world_2_d0001" x="289" y="1675" width="284" height="357"/>
+	<SubTexture name="back_world_2_d0002" x="573" y="1675" width="284" height="357"/>
+	<SubTexture name="back_world_2_d0003" x="857" y="1675" width="284" height="357"/>
 </TextureAtlas>

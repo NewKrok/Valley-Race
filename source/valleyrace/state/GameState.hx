@@ -10,7 +10,6 @@ import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
-import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -43,7 +42,6 @@ import valleyrace.game.SmallRock;
 import valleyrace.game.constant.CGameTimeValue;
 import valleyrace.game.constant.CLibraryElement;
 import valleyrace.game.constant.CPhysicsValue;
-import valleyrace.game.constant.CScore;
 import valleyrace.game.library.crate.AbstractCrate;
 import valleyrace.game.library.crate.Crate;
 import valleyrace.game.library.crate.LongCrate;
@@ -178,15 +176,18 @@ class GameState extends FlxState
 
 		replayDatas = [];
 
-		try {
-			var replayData:String = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_0.txt");
-			if (replayData != null) replayDatas.push(replayData);
-			replayData = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_1.txt");
-			if (replayData != null) replayDatas.push(replayData);
-			replayData = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_2.txt");
-			if (replayData != null) replayDatas.push(replayData);
+		if (worldId != 2)
+		{
+			try {
+				var replayData:String = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_0.txt");
+				if (replayData != null) replayDatas.push(replayData);
+				replayData = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_1.txt");
+				if (replayData != null) replayDatas.push(replayData);
+				replayData = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + "_2.txt");
+				if (replayData != null) replayDatas.push(replayData);
+			}
+			catch (e:Dynamic){ trace("Invalid or missing replay data."); }
 		}
-		catch (e:Dynamic){ trace("Invalid or missing replay data."); }
 
 		levelPreloader = new LevelPreloader();
 		openSubState(levelPreloader);
@@ -501,7 +502,7 @@ class GameState extends FlxState
 			{ x: AppConfig.WORLD_PIECE_SIZE.x, y: AppConfig.WORLD_PIECE_SIZE.y },
 			polygonBackgroundData,
 			64,
-			15
+			20
 		);
 		generatedTerrain.scrollFactor.set();
 		generatedTerrain.x = row * AppConfig.WORLD_PIECE_SIZE.x;
@@ -684,7 +685,7 @@ class GameState extends FlxState
 
 		for (i in 0...30)
 		{
-			var smallRock:SmallRock = new SmallRock("small_rock_" + (worldId == 0 || worldId == 1 ? 0 : worldId) + "_" + Math.floor(Math.random() * 2 + 1), releaseSmallRock);
+			var smallRock:SmallRock = new SmallRock("small_rock_0_" + Math.floor(Math.random() * 2 + 1), releaseSmallRock);
 			container.add(smallRock);
 			smallRocks.push(smallRock);
 		}

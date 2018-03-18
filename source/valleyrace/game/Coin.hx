@@ -1,9 +1,10 @@
 package valleyrace.game;
 
+import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
-import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.tweens.misc.VarTween;
+import haxe.Timer;
 import hpp.flixel.display.HPPMovieClip;
 import hpp.flixel.util.HPPAssetManager;
 import valleyrace.AppConfig;
@@ -16,8 +17,9 @@ class Coin extends FlxSpriteGroup
 {
 	public var isCollected(default, null):Bool;
 
-	var tween:VarTween;
 	var mc:HPPMovieClip;
+	var effects:Array<FlxSprite>;
+	var effectTweens:Array<VarTween>;
 
 	public function new(x:Float, y:Float)
 	{
@@ -26,42 +28,46 @@ class Coin extends FlxSpriteGroup
 		add(mc = HPPAssetManager.getMovieClip("coin00", "00"));
 		mc.frameRate = 8;
 		mc.play();
+
+		effectTweens = [];
+		effects = [];
+		for (i in 0...10)
+		{
+			var e = HPPAssetManager.getSprite("coin_pick_up_effect");
+			e.origin.set(e.width / 2, e.height / 2);
+			add(e);
+			e.visible = false;
+			effects.push(e);
+		}
 	}
 
 	public function collect():Void
 	{
 		isCollected = true;
 
-		disposeTween();
+		mc.visible = false;
+		Timer.delay(disableCoin, 600);
 
-		tween = FlxTween.tween(
-			this,
-			{ alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? .1 : 1 },
-			.4,
-			{ onComplete: tweenCompleted }
-		);
-
-		FlxTween.tween(
-			scale,
-			{ x: 1.5, y: 1.5 },
-			.2
-		);
-
-		FlxTween.tween(
-			scale,
-			{ x: .2, y: .2 },
-			.2,
-			{ startDelay: .3, ease: FlxEase.quadIn }
-		);
+		for (e in effects)
+		{
+			effectTweens.push(FlxTween.tween(
+				e,
+				{ x: x + Math.random() * 100 - 50, y: y + Math.random() * 100 - 50 },
+				Math.random() * .4,
+				{
+					onComplete: function(_) { e.visible = false; },
+					onStart: function(_) { e.visible = true; },
+					startDelay: Math.random() * .2
+				}
+			));
+		}
 	}
 
-	function tweenCompleted(tween:FlxTween):Void
+	function disableCoin():Void
 	{
 		visible = false;
 		alpha = 1;
 		mc.stop();
-
-		disposeTween();
 	}
 
 	override public function reset(x:Float, y:Float):Void
@@ -72,17 +78,19 @@ class Coin extends FlxSpriteGroup
 		scale.set(1, 1);
 		isCollected = false;
 		visible = true;
+		mc.visible = true;
 
-		disposeTween();
-	}
-
-	function disposeTween():Void
-	{
-		if (tween != null)
+		for (t in effectTweens)
 		{
-			tween.cancel();
-			tween.destroy();
-			tween = null;
+			t.cancel();
+			t.destroy();
+			t = null;
+		}
+
+		for (e in effects)
+		{
+			e.x = x + mc.width / 2;
+			e.y = y + mc.height / 2;
 		}
 	}
 }

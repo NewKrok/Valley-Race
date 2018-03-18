@@ -15,7 +15,8 @@ class LevelUtil
 
 	static var worldNames:Array<String> = [
 		"Pine Mountain",
-		"Rocky Hill"
+		"Rocky Hill",
+		"Challenges"
 	];
 
 	public static function LevelDataFromJson(jsonData:String):LevelData

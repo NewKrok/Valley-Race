@@ -29,24 +29,24 @@
 			"frame": {"x":5,"y":110,"w":127,"h":30},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":127,"h":30},
-			"sourceSize": {"w":127,"h":30}
+			"spriteSourceSize": {"x":0,"y":10,"w":127,"h":40},
+			"sourceSize": {"w":127,"h":40}
 		},
 		"terrain_ground_texture_10000":
 		{
 			"frame": {"x":135,"y":110,"w":127,"h":30},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":127,"h":30},
-			"sourceSize": {"w":127,"h":30}
+			"spriteSourceSize": {"x":0,"y":10,"w":127,"h":40},
+			"sourceSize": {"w":127,"h":40}
 		},
 		"terrain_ground_texture_20000":
 		{
 			"frame": {"x":265,"y":110,"w":127,"h":30},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":127,"h":30},
-			"sourceSize": {"w":127,"h":30}
+			"spriteSourceSize": {"x":0,"y":10,"w":127,"h":40},
+			"sourceSize": {"w":127,"h":40}
 		},
 		"terrain_fill_texture_dark_00000":
 		{
