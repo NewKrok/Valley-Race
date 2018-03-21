@@ -1024,8 +1024,6 @@ class GameState extends FlxState
 
 		if (!isLost && !isWon && (car.isCarCrashed || isTimeout || isFallDown))
 		{
-			FlxG.sound.play("assets/sounds/loopse.ogg", AppConfig.SOUND_VOLUME);
-
 			isLost = true;
 
 			if (car.isCarCrashed || isFallDown)
@@ -1065,6 +1063,7 @@ class GameState extends FlxState
 			Timer.delay(gameOverRutin, 250);
 
 			FlxG.sound.music.stop();
+			engineSound.stop();
 		}
 	}
 
