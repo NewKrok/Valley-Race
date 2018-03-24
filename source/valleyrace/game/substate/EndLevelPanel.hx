@@ -19,7 +19,7 @@ import valleyrace.datatype.LevelData;
 import valleyrace.game.LevelEndData;
 import valleyrace.game.view.endlevelpanel.EndLevelSummary;
 import valleyrace.menu.view.CoinView;
-import valleyrace.menu.view.RaceFinishPosition;
+import valleyrace.game.view.RaceFinishPosition;
 import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil;
 import valleyrace.util.SavedDataUtil.LevelSavedData;
@@ -111,7 +111,7 @@ class EndLevelPanel extends FlxSubState
 		playersCoin.y = 17;
 
 		var titleContainer:HPPVUIBox = new HPPVUIBox(-20, HAlign.RIGHT);
-		var levelText:FlxText = new FlxText(0, 0, 0, "RACE " + (levelInfo.levelId + 1), 45);
+		var levelText:FlxText = new FlxText(0, 0, 0, (levelData.worldId < 2 ? "RACE " : "LEVEL ") + (levelInfo.levelId + 1), 45);
 		levelText.autoSize = true;
 		levelText.color = 0xFFC9B501;
 		levelText.font = Fonts.HOLLYWOOD;
@@ -202,8 +202,8 @@ class EndLevelPanel extends FlxSubState
 		buttonContainer.y = (background.height - 50) / 2 - buttonContainer.height / 2;
 
 		var buttonContainerRight:HPPHUIBox = new HPPHUIBox(30);
-		if (canStartPrevLevel()) buttonContainerRight.add(prevButton = new SmallButton("PREV RACE", prevLevelRequest));
-		buttonContainerRight.add(nextButton = new SmallButton("NEXT RACE", nextLevelRequest));
+		if (canStartPrevLevel()) buttonContainerRight.add(prevButton = new SmallButton(levelData.worldId < 2 ? "PREV RACE" : "PREV LEVEL", prevLevelRequest));
+		buttonContainerRight.add(nextButton = new SmallButton(levelData.worldId < 2 ? "NEXT RACE" : "NEXT LEVEL", nextLevelRequest));
 		buttonContainerRight.x = FlxG.stage.stageWidth - buttonContainerRight.width - 30;
 		buttonContainerRight.y = (background.height - 50) / 2 - buttonContainer.height / 2;
 		if (!canStartNextLevel()) nextButton.visible = false;
@@ -240,12 +240,12 @@ class EndLevelPanel extends FlxSubState
 
 		if (levelEndData.isWon)
 		{
-			title.text = "RACE COMPLETED";
+			title.text = levelData.worldId < 2 ? "RACE COMPLETED" : "LEVEL COMPLETED";
 			title.color = FlxColor.YELLOW;
 		}
 		else
 		{
-			title.text = "RACE FAILED";
+			title.text = levelData.worldId < 2 ? "RACE FAILED" : "LEVEL FAILED";
 			title.color = 0xFFFF4D4D;
 		}
 
@@ -257,7 +257,7 @@ class EndLevelPanel extends FlxSubState
 		highscoreText.visible = levelEndData.isHighscore;
 
 		endLevelSummary.updateView(levelEndData);
-		raceFinishPosition.setFinishPosition(levelEndData.position, levelEndData.isUnlockedNextLevel);
+		raceFinishPosition.setFinishPosition(levelEndData.position, levelEndData.isUnlockedNextLevel, levelData.worldId, levelEndData.collectedCoin, levelData.collectableItems.length);
 		raceFinishPosition.visible = levelEndData.isLevelFinished;
 
 		nextLevelWarning.visible = levelEndData.isUnlockedNextLevel;

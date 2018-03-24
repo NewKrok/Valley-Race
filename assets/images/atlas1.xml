@@ -27,6 +27,7 @@
 	<SubTexture name="play_button" x="905" y="1460" width="150" height="150"/>
 	<SubTexture name="home_button" x="905" y="1620" width="100" height="100"/>
 	<SubTexture name="facebook_button" x="905" y="1725" width="100" height="100"/>
+	<SubTexture name="youtube_button" x="905" y="1935" width="100" height="100"/>
 	<SubTexture name="github_button" x="905" y="1830" width="100" height="100"/>
 	<SubTexture name="about_us_button" x="1010" y="1620" width="100" height="100"/>
 	<SubTexture name="options_button" x="1010" y="1725" width="100" height="100"/>

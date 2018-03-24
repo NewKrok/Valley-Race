@@ -117,7 +117,11 @@ class LevelSelector extends FlxSubState
 
 	function buildInfo()
 	{
-		var infoText = new FlxText(0, 0, 0, "Be the 1st to unlock the next level!", 30);
+		var infoText = new FlxText(0, 0, 0,
+			worldId < 2
+				? "Be the 1st to unlock the next level!"
+				: "Collect all coins to unlock next level!"
+		, 30);
 		infoText.color = FlxColor.WHITE;
 		infoText.alignment = "center";
 		infoText.font = Fonts.HOLLYWOOD;

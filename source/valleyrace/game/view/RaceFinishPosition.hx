@@ -1,4 +1,4 @@
-package valleyrace.menu.view;
+package valleyrace.game.view;
 
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -47,12 +47,24 @@ class RaceFinishPosition extends FlxSpriteGroup
 		add(positionText);
 	}
 
-	public function setFinishPosition(p:UInt, isUnlockedNewLevel:Bool):Void
+	public function setFinishPosition(p:UInt, isUnlockedNewLevel:Bool, worldId:UInt, collectedCoins:UInt, totalCoins:UInt):Void
 	{
-		positionText.color = p == 1 ? FlxColor.YELLOW : FlxColor.WHITE;
-		positionText.text = p + " " + (p == 1 ? "ST" : p == 2 ? "ND" : p == 3 ? "RD" : "TH");
+		if (worldId < 2)
+		{
+			positionText.color = p == 1 ? FlxColor.YELLOW : FlxColor.WHITE;
+			positionText.text = p + " " + (p == 1 ? "ST" : p == 2 ? "ND" : p == 3 ? "RD" : "TH");
+		}
+		else
+		{
+			positionText.color = collectedCoins == totalCoins ? FlxColor.YELLOW : FlxColor.WHITE;
+			positionText.text = collectedCoins + "/" + totalCoins;
+		}
 
 		positionInfo.color = positionText.color;
-		positionInfo.text = p == 1 ? isUnlockedNewLevel ? "NEXT LEVEL UNLOCKED!" : "" : "Be the 1st to unlock the next level!";
+
+		if (p == 1)
+			positionInfo.text = isUnlockedNewLevel ? (worldId < 2 ? "NEXT RACE UNLOCKED!" : "NEXT LEVEL UNLOCKED!") : "";
+		else
+			positionInfo.text = worldId < 2 ? "Be the 1st to unlock the next level!" : "Collect all coins to unlock next level!";
 	}
 }

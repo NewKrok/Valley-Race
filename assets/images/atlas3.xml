@@ -91,4 +91,6 @@
 	<SubTexture name="back_world_2_d0001" x="289" y="1675" width="284" height="357"/>
 	<SubTexture name="back_world_2_d0002" x="573" y="1675" width="284" height="357"/>
 	<SubTexture name="back_world_2_d0003" x="857" y="1675" width="284" height="357"/>
+	<SubTexture name="youtube_level_help_button" x="1150" y="630" width="190" height="55"/>
+	<SubTexture name="youtube_level_help_button_over" x="1150" y="690" width="190" height="55"/>
 </TextureAtlas>

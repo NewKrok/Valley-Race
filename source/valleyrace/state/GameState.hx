@@ -174,6 +174,8 @@ class GameState extends FlxState
 		else
 		{
 			levelData = LevelUtil.LevelDataFromJson(Assets.getText("assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json"));
+			levelData.levelId = levelId;
+			levelData.worldId = worldId;
 		}
 
 		replayDatas = [];
@@ -775,6 +777,8 @@ class GameState extends FlxState
 
 		super.update(elapsed);
 
+		if (carMarker != null && carMarker.visible) carMarker.y = car.carBodyPhysics.position.y - 55;
+
 		if (isPhysicsEnabled)
 		{
 			space.step(CPhysicsValue.STEP);
@@ -1038,8 +1042,7 @@ class GameState extends FlxState
 				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_TIME_OUT);
 			}
 
-			var w:Float = camera.width / 8;
-			camera.deadzone.x = (camera.width + w * 5) / 2;
+			rightFocusOnCar();
 
 			Timer.delay(gameOverRutin, 1000);
 
@@ -1050,7 +1053,7 @@ class GameState extends FlxState
 
 	function checkWin():Void
 	{
-		if (!isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x)
+		if (!isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x && car.carBodyGraphics.y > levelData.finishPoint.y - 300 && car.carBodyGraphics.y < levelData.finishPoint.y + 300)
 		//if (!isLost && !isWon && gameTime > 2000) // temporary for instant win
 		{
 			FlxG.sound.play("assets/sounds/won.ogg", AppConfig.SOUND_VOLUME);
@@ -1060,6 +1063,8 @@ class GameState extends FlxState
 
 			addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_LEVEL_COMPLETED);
 
+			rightFocusOnCar();
+
 			Timer.delay(gameOverRutin, 250);
 
 			FlxG.sound.music.stop();
@@ -1067,9 +1072,20 @@ class GameState extends FlxState
 		}
 	}
 
+	function rightFocusOnCar()
+	{
+		var w:Float = camera.width / 8;
+		camera.deadzone.x = (camera.width + w * 5) / 2;
+	}
+
 	function gameOverRutin():Void
 	{
 		recorder.takeSnapshot();
+
+		if (worldId == 2)
+		{
+			isWon = collectedCoin == levelData.collectableItems.length;
+		}
 
 		var nextLevelInfo:LevelSavedData;
 		var isNewLevelUnlocked:Bool = false;

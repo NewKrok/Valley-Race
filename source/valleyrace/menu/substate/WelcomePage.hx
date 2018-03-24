@@ -17,6 +17,7 @@ class WelcomePage extends FlxSubState
 	var startButton:HPPButton;
 	var homeButton:HPPButton;
 	var facebookButton:HPPButton;
+	var youtubeButton:HPPButton;
 	var settingsButton:HPPButton;
 	var aboutUsButton:HPPButton;
 	var gitHubButton:HPPButton;
@@ -69,6 +70,10 @@ class WelcomePage extends FlxSubState
 		facebookButton.overScale = .98;
 		leftContainer.add(facebookButton);
 
+		youtubeButton = new HPPButton("", goToYoutube, "youtube_button");
+		youtubeButton.overScale = .98;
+		leftContainer.add(youtubeButton);
+
 		gitHubButton = new HPPButton("", goToGithub, "github_button");
 		gitHubButton.overScale = .98;
 		leftContainer.add(gitHubButton);
@@ -107,6 +112,12 @@ class WelcomePage extends FlxSubState
 	{
 		var facebookURL:URLRequest = new URLRequest("https://www.facebook.com/flashplusplus");
 		openfl.Lib.getURL(facebookURL, "_blank");
+	}
+
+	function goToYoutube(target:HPPButton):Void
+	{
+		var youtubeURL:URLRequest = new URLRequest("https://www.youtube.com/watch?v=rXURdr8JVrg");
+		openfl.Lib.getURL(youtubeURL, "_blank");
 	}
 
 	function goToGithub(target:HPPButton):Void

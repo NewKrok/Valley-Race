@@ -14,6 +14,7 @@ import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.ui.PlaceHolder;
 import hpp.ui.HAlign;
 import hpp.util.NumberUtil;
+import openfl.net.URLRequest;
 import valleyrace.AppConfig;
 import valleyrace.assets.Fonts;
 import valleyrace.common.view.LongButton;
@@ -28,6 +29,14 @@ import valleyrace.util.SavedDataUtil.LevelSavedData;
  */
 class StartLevelPanel extends FlxSubState
 {
+	var youtubeHelps:Array<String> = [
+		"https://www.youtube.com/watch?v=rXURdr8JVrg",
+		"https://www.youtube.com/watch?v=rXURdr8JVrg",
+		"https://www.youtube.com/watch?v=rXURdr8JVrg",
+		"https://www.youtube.com/watch?v=rXURdr8JVrg",
+		"https://www.youtube.com/watch?v=rXURdr8JVrg"
+	];
+
 	var header:FlxSpriteGroup;
 	var footer:FlxSpriteGroup;
 	var reachedStarView:ReachedStarView;
@@ -36,6 +45,7 @@ class StartLevelPanel extends FlxSubState
 	var exitButton:HPPButton;
 	var nextButton:HPPButton;
 	var prevButton:HPPButton;
+	var youtubeButton:HPPButton;
 
 	var startRequest:HPPButton->Void;
 	var exitRequest:HPPButton->Void;
@@ -116,7 +126,7 @@ class StartLevelPanel extends FlxSubState
 		header.add(scoreWrapper);
 
 		var titleContainer:HPPVUIBox = new HPPVUIBox(-20, HAlign.RIGHT);
-		var levelText:FlxText = new FlxText(0, 0, 0, "RACE " + (levelInfo.levelId + 1), 45);
+		var levelText:FlxText = new FlxText(0, 0, 0, (levelInfo.worldId < 2 ? "RACE " : "LEVEL ") + (levelInfo.levelId + 1), 45);
 		levelText.autoSize = true;
 		levelText.color = 0xFFC9B501;
 		levelText.font = Fonts.HOLLYWOOD;
@@ -131,6 +141,13 @@ class StartLevelPanel extends FlxSubState
 		header.add(titleContainer);
 
 		add(header);
+
+		if (levelInfo.worldId == 2)
+		{
+			add(youtubeButton = new HPPButton("", youtubeHelpRequest, "youtube_level_help_button", "youtube_level_help_button_over"));
+			youtubeButton.x = FlxG.stage.stageWidth - youtubeButton.width - 30;
+			youtubeButton.y = 110;
+		}
 	}
 
 	function buildFooter():Void
@@ -163,6 +180,8 @@ class StartLevelPanel extends FlxSubState
 
 	function startPreRequest(e)
 	{
+		youtubeButton.visible = false;
+
 		FlxTween.tween(
 			header,
 			{ y: -header.height - 10, alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? 0 : 1 },
@@ -176,6 +195,12 @@ class StartLevelPanel extends FlxSubState
 			.5,
 			{ ease: FlxEase.backIn, onComplete: function(_) { startRequest(e); } }
 		);
+	}
+
+	function youtubeHelpRequest(_)
+	{
+		var youtubeURL:URLRequest = new URLRequest(youtubeHelps[levelInfo.levelId]);
+		openfl.Lib.getURL(youtubeURL, "_blank");
 	}
 
 	override public function update(elapsed:Float):Void
