@@ -24,6 +24,7 @@ class TimeCounter extends FlxSpriteGroup implements IValueContainer
 		add(background = HPPAssetManager.getSprite("gui_time_back"));
 
 		text = new FlxText(45, 0, cast width - 40, "00:00", 30);
+		text.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		text.autoSize = false;
 		text.color = 0xFF26FF92;
 		text.alignment = "center";

@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import hpp.flixel.system.HPPFlxMain;
+import hpp.util.BrowserData;
 import hpp.util.DeviceData;
 import hpp.util.JsFullScreenUtil;
 import openfl.Assets;
@@ -24,13 +25,14 @@ class Main extends Sprite
 		// Only for fast level test
 		//untyped __js__("window.addEventListener('paste', (e)=>this.onPaste(e));");
 
-		SavedDataUtil.load( "ValleyRaceSavedData" );
+		SavedDataUtil.load( "FPP_ValleyRaceSavedData" );
 		var settingsInfo:SettingsInfo = SavedDataUtil.getSettingsInfo();
 
 		AppConfig.IS_ALPHA_ANIMATION_ENABLED = settingsInfo.enableAlphaAnimation;
 		AppConfig.MUSIC_VOLUME = settingsInfo.musicVolume;
 		AppConfig.SOUND_VOLUME = settingsInfo.soundVolume;
 		AppConfig.IS_MOBILE_DEVICE = DeviceData.isMobile();
+		AppConfig.IS_SVG_FONT = BrowserData.get().type == BrowserType.Safari;
 
 		CarDatas.loadData(Assets.getText("assets/data/car_datas.json"));
 

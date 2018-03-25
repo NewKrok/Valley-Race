@@ -28,6 +28,7 @@ class EndLevelEntry extends FlxSpriteGroup
 		add(background);
 
 		valueText = new FlxText(0, 0, background.width - 154, "W ", 30);
+		valueText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		valueText.autoSize = true;
 		valueText.color = 0xFF26FF92;
 		valueText.alignment = "right";
@@ -36,6 +37,7 @@ class EndLevelEntry extends FlxSpriteGroup
 		add(valueText);
 
 		bonusText = new FlxText(0, 0, background.width - 154, "W ", 20);
+		bonusText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		bonusText.autoSize = true;
 		bonusText.color = FlxColor.WHITE;
 		bonusText.alignment = "right";

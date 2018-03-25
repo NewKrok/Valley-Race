@@ -1092,6 +1092,7 @@ class GameState extends FlxState
 		if (worldId == 2)
 		{
 			isWon = isWon && collectedCoin == levelData.collectableItems.length;
+			isLost = !isWon;
 		}
 
 		var nextLevelInfo:LevelSavedData;

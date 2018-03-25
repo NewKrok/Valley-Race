@@ -24,7 +24,7 @@ class SmallButton extends ButtonWithTween
 		labelSize = 30;
 		up_style = new ButtonLabelStyle(null, null, 0xFF3E3700);
 		over_style = new ButtonLabelStyle(null, null, 0xFFFFE302);
-		labelOffsets = [new FlxPoint(0, 7), new FlxPoint(0, 7), new FlxPoint(0, 7)];
+		if (!AppConfig.IS_SVG_FONT) labelOffsets = [new FlxPoint(0, 7), new FlxPoint(0, 7), new FlxPoint(0, 7)];
 		loadGraphic(HPPAssetManager.getGraphic("base_button"));
 		tweenOverScale = .95;
 	}

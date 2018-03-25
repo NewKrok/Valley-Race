@@ -24,6 +24,7 @@ class BonusCounter extends FlxSpriteGroup implements IValueContainer
 		add(background = HPPAssetManager.getSprite(backgroundUrl));
 
 		text = new FlxText(45, 0, cast width - 40, Std.string(0), 30);
+		text.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		text.autoSize = false;
 		text.color = FlxColor.WHITE;
 		text.alignment = "center";

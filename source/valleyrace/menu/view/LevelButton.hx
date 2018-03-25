@@ -40,12 +40,14 @@ class LevelButton extends ExtendedButtonWithTween
 			var container:HPPVUIBox = new HPPVUIBox(3);
 
 			title = new FlxText(0, 0, cast width, (worldId < 2 ? "RACE " : "LEVEL ") + (levelId + 1), 35);
+			title.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 			title.font = Fonts.HOLLYWOOD;
 			title.color = 0xFF3E3700;
 			title.alignment = "center";
 			container.add(title);
 
 			score = new FlxText(0, 0, title.width, levelInfo.score == 0 ? "PLAY" : NumberUtil.formatNumber(levelInfo.score), 35);
+			score.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 			score.font = Fonts.HOLLYWOOD;
 			score.color = FlxColor.WHITE;
 			score.alignment = "center";

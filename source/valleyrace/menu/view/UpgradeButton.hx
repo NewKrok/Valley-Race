@@ -41,6 +41,7 @@ class UpgradeButton extends ExtendedButtonWithTween
 		container = new HPPHUIBox(2);
 
 		title = new FlxText(0, 0, 0, "W", 20);
+		title.offset.set(0, AppConfig.IS_SVG_FONT ? 5 : 0);
 		title.autoSize = true;
 		title.font = Fonts.HOLLYWOOD;
 		title.color = 0xFF3E3700;
@@ -54,6 +55,7 @@ class UpgradeButton extends ExtendedButtonWithTween
 			priceContainer.add(coinView);
 
 			priceText = new FlxText(0, 0, 0, NumberUtil.formatNumber(carData.price[level + 1]), 20);
+			priceText.offset.set(0, AppConfig.IS_SVG_FONT ? 5 : 0);
 			priceText.autoSize = true;
 			priceText.color = FlxColor.YELLOW;
 			priceText.font = Fonts.HOLLYWOOD;

@@ -101,6 +101,7 @@ class SettingsPage extends FlxSubState
 		textWrapper.add(new PlaceHolder(1,15));
 
 		fullScreenText = new FlxText();
+		fullScreenText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		fullScreenText.color = FlxColor.WHITE;
 		fullScreenText.alignment = "left";
 		fullScreenText.size = 35;
@@ -158,6 +159,7 @@ class SettingsPage extends FlxSubState
 		textWrapper.add(new PlaceHolder(1, 15));
 
 		alphaAnimationsText = new FlxText();
+		alphaAnimationsText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		alphaAnimationsText.color = FlxColor.WHITE;
 		alphaAnimationsText.alignment = "left";
 		alphaAnimationsText.size = 35;
@@ -198,6 +200,7 @@ class SettingsPage extends FlxSubState
 		textWrapper.add(new PlaceHolder(1, 15));
 
 		musicText = new FlxText();
+		musicText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		musicText.color = FlxColor.WHITE;
 		musicText.alignment = "left";
 		musicText.size = 35;
@@ -239,6 +242,7 @@ class SettingsPage extends FlxSubState
 		textWrapper.add(new PlaceHolder(1, 15));
 
 		soundText = new FlxText();
+		soundText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		soundText.color = FlxColor.WHITE;
 		soundText.alignment = "left";
 		soundText.size = 35;
@@ -260,7 +264,6 @@ class SettingsPage extends FlxSubState
 		updateSoundVolumeText();
 
 		AppConfig.SOUND_VOLUME = soundCheckBox.isSelected ? 1 : 0;
-		//FlxG.sound.music.volume = AppConfig.SOUND_VOLUME;
 	}
 
 	function updateSoundVolumeText():Void

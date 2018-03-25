@@ -46,6 +46,7 @@ class LevelPreloader extends FlxSubState
 		label.color = 0xFFFFE300;
 		label.alignment = "center";
 		label.font = Fonts.HOLLYWOOD;
+		label.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		container.add(label);
 
 		progressBar = new FlxSpriteGroup();

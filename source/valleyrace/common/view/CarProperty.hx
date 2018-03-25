@@ -35,6 +35,7 @@ class CarProperty extends FlxSpriteGroup
 		this.invertedProperty = invertedProperty;
 
 		var label:FlxText = new FlxText(0, 0, 70, labelText, 20);
+		label.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		label.color = FlxColor.WHITE;
 		label.alignment = "right";
 		label.font = Fonts.HOLLYWOOD;

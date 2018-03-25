@@ -103,7 +103,7 @@ class EndLevelPanel extends FlxSubState
 				openfl.Lib.getURL(new URLRequest("http://flashplusplus.net/?utm_source=Valley-Race&utm_medium=end-level-panel&utm_campaign=HTML5-Games"), "_blank");
 			}
 		);
-
+		moreGamesButton.label.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		moreGamesButton.label.fieldWidth = 400;
 		moreGamesButton.label.color = FlxColor.WHITE;
 		moreGamesButton.label.alignment = "left";
@@ -137,11 +137,13 @@ class EndLevelPanel extends FlxSubState
 
 		var titleContainer:HPPVUIBox = new HPPVUIBox(-20, HAlign.RIGHT);
 		var levelText:FlxText = new FlxText(0, 0, 0, (levelData.worldId < 2 ? "RACE " : "LEVEL ") + (levelInfo.levelId + 1), 45);
+		levelText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		levelText.autoSize = true;
 		levelText.color = 0xFFC9B501;
 		levelText.font = Fonts.HOLLYWOOD;
 		titleContainer.add(levelText);
 		var worldText:FlxText = new FlxText(0, 0, 0, LevelUtil.getWorldNameByWorldId(levelInfo.worldId).toUpperCase(), 35);
+		worldText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		worldText.autoSize = true;
 		worldText.color = 0xFFFFFF00;
 		worldText.font = Fonts.HOLLYWOOD;
@@ -151,6 +153,7 @@ class EndLevelPanel extends FlxSubState
 		header.add(titleContainer);
 
 		title = new FlxText(0, 0, background.width, "RACE COMPLETED ", 45);
+		title.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		title.autoSize = true;
 		title.color = FlxColor.YELLOW;
 		title.font = Fonts.HOLLYWOOD;
@@ -168,6 +171,7 @@ class EndLevelPanel extends FlxSubState
 		scoreContainer.scrollFactor.set();
 
 		var bestScoreLabelText:FlxText = new FlxText(0, 0, 0, "Best score ", 25);
+		bestScoreLabelText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		bestScoreLabelText.autoSize = true;
 		bestScoreLabelText.color = FlxColor.WHITE;
 		bestScoreLabelText.alignment = "left";
@@ -177,6 +181,7 @@ class EndLevelPanel extends FlxSubState
 		bestScoreLabelText.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
 		scoreContainer.add(bestScoreLabelText);
 		bestScoreText = new FlxText(0, 0, 0, levelInfo.isCompleted ? NumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
+		bestScoreText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		bestScoreText.autoSize = true;
 		bestScoreText.color = FlxColor.YELLOW;
 		bestScoreText.alignment = "left";
@@ -191,6 +196,7 @@ class EndLevelPanel extends FlxSubState
 		add(scoreContainer);
 
 		highscoreText = new FlxText(0, 0, 0, "NEW HIGHSCORE! ", 25);
+		highscoreText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		highscoreText.scrollFactor.set();
 		highscoreText.autoSize = true;
 		highscoreText.color = FlxColor.YELLOW;

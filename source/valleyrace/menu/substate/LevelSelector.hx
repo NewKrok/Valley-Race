@@ -73,6 +73,7 @@ class LevelSelector extends FlxSubState
 		playersCoin.y = 15;
 
 		var worldText:FlxText = new FlxText(0, 0, 0, LevelUtil.getWorldNameByWorldId(worldId).toUpperCase(), 35);
+		worldText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		worldText.autoSize = true;
 		worldText.color = 0xFFFFFF00;
 		worldText.font = Fonts.HOLLYWOOD;
@@ -121,6 +122,7 @@ class LevelSelector extends FlxSubState
 				? "Be the 1st to unlock the next level!"
 				: "Collect all coins to unlock next level!"
 		, 30);
+		infoText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		infoText.color = FlxColor.WHITE;
 		infoText.alignment = "center";
 		infoText.font = Fonts.HOLLYWOOD;

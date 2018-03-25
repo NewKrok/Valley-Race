@@ -22,6 +22,7 @@ class CarMarker extends FlxSpriteGroup
 		add(background);
 
 		var info = new FlxText(0, 0, background.width, "YOUR CAR", 26);
+		info.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		info.autoSize = true;
 		info.alignment = "center";
 		info.color = FlxColor.WHITE;

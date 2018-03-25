@@ -36,6 +36,7 @@ class RaceFinishPosition extends FlxSpriteGroup
 		background.x = 420;
 
 		positionText = new FlxText(0, 0, background.width, "W", 40);
+		positionText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		positionText.autoSize = true;
 		positionText.alignment = "center";
 		positionText.font = Fonts.HOLLYWOOD;

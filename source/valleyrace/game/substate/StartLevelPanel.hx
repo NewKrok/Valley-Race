@@ -104,12 +104,14 @@ class StartLevelPanel extends FlxSubState
 		var scoreContainer = new HPPHUIBox(15);
 
 		var bestScoreLabelText:FlxText = new FlxText(0, 0, 0, "Best score ", 25);
+		bestScoreLabelText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		bestScoreLabelText.autoSize = true;
 		bestScoreLabelText.color = FlxColor.WHITE;
 		bestScoreLabelText.alignment = "left";
 		bestScoreLabelText.font = Fonts.HOLLYWOOD;
 		scoreContainer.add(bestScoreLabelText);
 		var bestScoreText:FlxText = new FlxText(0, 0, 0, levelInfo.isCompleted ? NumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
+		bestScoreText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		bestScoreText.autoSize = true;
 		bestScoreText.color = FlxColor.YELLOW;
 		bestScoreText.alignment = "left";
@@ -127,11 +129,13 @@ class StartLevelPanel extends FlxSubState
 
 		var titleContainer:HPPVUIBox = new HPPVUIBox(-20, HAlign.RIGHT);
 		var levelText:FlxText = new FlxText(0, 0, 0, (levelInfo.worldId < 2 ? "RACE " : "LEVEL ") + (levelInfo.levelId + 1), 45);
+		levelText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		levelText.autoSize = true;
 		levelText.color = 0xFFC9B501;
 		levelText.font = Fonts.HOLLYWOOD;
 		titleContainer.add(levelText);
 		var worldText:FlxText = new FlxText(0, 0, 0, LevelUtil.getWorldNameByWorldId(levelInfo.worldId).toUpperCase(), 35);
+		worldText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		worldText.autoSize = true;
 		worldText.color = 0xFFFFFF00;
 		worldText.font = Fonts.HOLLYWOOD;

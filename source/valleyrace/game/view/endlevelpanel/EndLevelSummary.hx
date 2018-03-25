@@ -81,12 +81,14 @@ class EndLevelSummary extends FlxSpriteGroup
 		var totalScoreContainer = new HPPHUIBox();
 
 		var totalScoreTitle = new FlxText(0, 0, "TOTAL SCORE ", 30);
+		totalScoreTitle.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		totalScoreTitle.autoSize = true;
 		totalScoreTitle.color = 0xFF26FF92;
 		totalScoreTitle.font = Fonts.HOLLYWOOD;
 		totalScoreContainer.add(totalScoreTitle);
 
 		totalScore = new FlxText(0, 0, 160, NumberUtil.formatNumber(levelInfo.score), 45);
+		totalScore.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		totalScore.autoSize = true;
 		totalScore.color = FlxColor.YELLOW;
 		totalScore.font = Fonts.HOLLYWOOD;

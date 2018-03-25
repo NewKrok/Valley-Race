@@ -53,6 +53,7 @@ class AboutUsPage extends FlxSubState
 				openfl.Lib.getURL(new URLRequest("https://www.linkedin.com/in/krisztian-somoracz-8924b949/"), "_blank");
 			}
 		);
+		developerInfo.label.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		developerInfo.label.fieldWidth = 700;
 		developerInfo.label.color = FlxColor.WHITE;
 		developerInfo.label.alignment = "center";
@@ -70,6 +71,7 @@ class AboutUsPage extends FlxSubState
 				openfl.Lib.getURL(new URLRequest("https://www.gamedevmarket.net/asset/monster-truck-game-assets/"), "_blank");
 			}
 		);
+		graphicInfo.label.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		graphicInfo.label.fieldWidth = 700;
 		graphicInfo.label.color = FlxColor.WHITE;
 		graphicInfo.label.alignment = "center";
@@ -87,6 +89,7 @@ class AboutUsPage extends FlxSubState
 				openfl.Lib.getURL(new URLRequest("http://soundimage.org/"), "_blank");
 			}
 		);
+		soundAInfo.label.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		soundAInfo.label.fieldWidth = 700;
 		soundAInfo.label.color = FlxColor.WHITE;
 		soundAInfo.label.alignment = "center";
@@ -104,6 +107,7 @@ class AboutUsPage extends FlxSubState
 				openfl.Lib.getURL(new URLRequest("https://freesound.org/people/MarlonHJ/"), "_blank");
 			}
 		);
+		soundBInfo.label.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		soundBInfo.label.fieldWidth = 700;
 		soundBInfo.label.color = FlxColor.WHITE;
 		soundBInfo.label.alignment = "center";
@@ -118,6 +122,7 @@ class AboutUsPage extends FlxSubState
 		var poweredByContainer:HPPHUIBox = new HPPHUIBox(20);
 
 		var poweredByInfoText = new FlxText();
+		poweredByInfoText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		poweredByInfoText.color = FlxColor.WHITE;
 		poweredByInfoText.alignment = "center";
 		poweredByInfoText.size = 25;

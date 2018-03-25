@@ -60,6 +60,7 @@ class WorldSelector extends FlxSubState
 		playersCoin.y = 15;
 
 		var infoText:FlxText = new FlxText(0, 0, 0, "SELECT AREA", 35);
+		infoText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		infoText.autoSize = true;
 		infoText.color = 0xFFFFFF00;
 		infoText.font = Fonts.HOLLYWOOD;

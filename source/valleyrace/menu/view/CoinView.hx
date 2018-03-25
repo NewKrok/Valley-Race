@@ -29,6 +29,7 @@ class CoinView extends FlxSpriteGroup
 		add(coinView);
 
 		levelText = new FlxText(0, 0, 0, NumberUtil.formatNumber(defaultValue), 35);
+		levelText.offset.set(0, AppConfig.IS_SVG_FONT ? 7 : 0);
 		levelText.autoSize = true;
 		levelText.color = FlxColor.YELLOW;
 		levelText.font = Fonts.HOLLYWOOD;
