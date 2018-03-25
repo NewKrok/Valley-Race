@@ -87,7 +87,7 @@ class PausePanel extends FlxSubState
 		}
 
 		closeCallback = function() {
-			FlxG.sound.music.volume = AppConfig.MUSIC_VOLUME == 1 ? 1 : 0;
+			FlxG.sound.music.volume = AppConfig.MUSIC_VOLUME == 1 ? .75 : 0;
 		}
 	}
 

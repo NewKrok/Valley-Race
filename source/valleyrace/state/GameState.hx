@@ -29,7 +29,6 @@ import openfl.Assets;
 import openfl.geom.Point;
 import valleyrace.AppConfig;
 import valleyrace.assets.CarDatas;
-import valleyrace.common.PlayerInfo;
 import valleyrace.datatype.LevelData;
 import valleyrace.game.Background;
 import valleyrace.game.Car;
@@ -438,12 +437,15 @@ class GameState extends FlxState
 		if (subState == null)
 		{
 			openSubState(pausePanel);
+			engineSound.volume = AppConfig.SOUND_VOLUME == 1 ? .5 : 0;
 			pause();
 		}
 	}
 
 	function resume():Void
 	{
+		engineSound.volume = AppConfig.SOUND_VOLUME == 1 ? 1 : 0;
+
 		isRaceStarted = true;
 		isGamePaused = false;
 		isPhysicsEnabled = true;
@@ -646,7 +648,7 @@ class GameState extends FlxState
 
 	function createCar():Void
 	{
-		car = new Car(space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData(PlayerInfo.selectedCarId), CAR_SCALE, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK);
+		car = new Car(space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData(SavedDataUtil.getPlayerInfo().selectedCar), CAR_SCALE, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK);
 		container.add(car);
 	}
 
@@ -1077,11 +1079,12 @@ class GameState extends FlxState
 
 	function gameOverRutin():Void
 	{
+		engineSound.stop();
 		recorder.takeSnapshot();
 
 		if (worldId == 2)
 		{
-			isWon = collectedCoin == levelData.collectableItems.length;
+			isWon = isWon && collectedCoin == levelData.collectableItems.length;
 		}
 
 		var nextLevelInfo:LevelSavedData;

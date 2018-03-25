@@ -10,11 +10,10 @@ import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import valleyrace.assets.Fonts;
-import valleyrace.common.PlayerInfo;
 import valleyrace.common.view.SmallButton;
 import valleyrace.menu.view.CarPreview;
-import valleyrace.menu.view.LevelSelectorPage;
 import valleyrace.menu.view.CoinView;
+import valleyrace.menu.view.LevelSelectorPage;
 import valleyrace.util.LevelUtil;
 import valleyrace.util.SavedDataUtil;
 
@@ -90,7 +89,7 @@ class LevelSelector extends FlxSubState
 
 		for (i in 0...3)
 		{
-			var preview = new CarPreview(onCarSelect, onCarUpgrade, i, PlayerInfo.selectedCarId == i);
+			var preview = new CarPreview(onCarSelect, onCarUpgrade, i, SavedDataUtil.getPlayerInfo().selectedCar == i);
 			carSelectorContainer.add(preview);
 			carPreviews.push(preview);
 		}
@@ -105,7 +104,7 @@ class LevelSelector extends FlxSubState
 		for (preview in carPreviews)
 			preview.isSelected = p == preview;
 
-		PlayerInfo.selectedCarId = p.id;
+		SavedDataUtil.getPlayerInfo().selectedCar = p.id;
 	}
 
 	function onCarUpgrade()
