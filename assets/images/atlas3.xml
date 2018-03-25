@@ -73,6 +73,10 @@
 	<SubTexture name="table_warning" x="1500" y="160" width="51" height="80"/>
 	<SubTexture name="table_direction" x="1585" y="160" width="51" height="80"/>
 	<SubTexture name="table_danger" x="1670" y="160" width="51" height="80"/>
+	<SubTexture name="table_help_a" x="1345" y="570" width="100" height="100"/>
+	<SubTexture name="table_help_b" x="1455" y="570" width="100" height="100"/>
+	<SubTexture name="table_help_c" x="1565" y="570" width="100" height="100"/>
+	<SubTexture name="table_help_d" x="1675" y="570" width="100" height="100"/>
 	<SubTexture name="finish_table" x="620" y="5" width="51" height="80"/>
 	<SubTexture name="race_position_back" x="1875" y="250" width="125" height="47"/>
 	<SubTexture name="warning_icon" x="875" y="65" width="42" height="42"/>
