@@ -22,7 +22,7 @@ class Main extends Sprite
 		super();
 
 		// Only for fast level test
-		untyped __js__("window.addEventListener('paste', (e)=>this.onPaste(e));");
+		//untyped __js__("window.addEventListener('paste', (e)=>this.onPaste(e));");
 
 		SavedDataUtil.load( "ValleyRaceSavedData" );
 		var settingsInfo:SettingsInfo = SavedDataUtil.getSettingsInfo();
@@ -52,7 +52,7 @@ class Main extends Sprite
 	}
 
 	// Only for fast level test
-	function onPaste(e:Dynamic)
+	/*function onPaste(e:Dynamic)
 	{
 		try
 		{
@@ -64,5 +64,5 @@ class Main extends Sprite
 			DEBUG_LEVEL = "";
 			trace("Wrong data! Update your clipboard and try again.");
 		}
-	}
+	}*/
 }

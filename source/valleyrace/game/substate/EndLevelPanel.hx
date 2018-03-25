@@ -2,6 +2,8 @@ package valleyrace.game.substate;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
+import flixel.addons.ui.BorderDef;
+import flixel.addons.ui.ButtonLabelStyle;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -10,6 +12,7 @@ import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.ui.HAlign;
 import hpp.util.NumberUtil;
+import openfl.net.URLRequest;
 import valleyrace.AppConfig;
 import valleyrace.assets.Fonts;
 import valleyrace.common.view.ReachedStarView;
@@ -93,6 +96,28 @@ class EndLevelPanel extends FlxSubState
 		buildFooter();
 		add(endLevelSummary = new EndLevelSummary(levelInfo, levelData));
 		endLevelSummary.y = 100;
+
+		var moreGamesButton = new HPPButton(
+			"More games from Flash++",
+			function (_) {
+				openfl.Lib.getURL(new URLRequest("http://flashplusplus.net/?utm_source=Valley-Race&utm_medium=end-level-panel&utm_campaign=HTML5-Games"), "_blank");
+			}
+		);
+
+		moreGamesButton.label.fieldWidth = 400;
+		moreGamesButton.label.color = FlxColor.WHITE;
+		moreGamesButton.label.alignment = "left";
+		moreGamesButton.label.font = Fonts.HOLLYWOOD;
+		moreGamesButton.label.borderSize = 2;
+		moreGamesButton.label.borderColor = FlxColor.BLACK;
+		moreGamesButton.label.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
+		moreGamesButton.up_style = new ButtonLabelStyle(null, null, FlxColor.WHITE);
+		moreGamesButton.over_style = new ButtonLabelStyle(null, null, FlxColor.YELLOW);
+		moreGamesButton.labelSize = 25;
+		moreGamesButton.loadGraphicFromSprite(new FlxSprite().makeGraphic(400, 30, FlxColor.TRANSPARENT));
+		add(moreGamesButton);
+		moreGamesButton.x = 500;
+		moreGamesButton.y = bestScoreText.y;
 
 	}
 

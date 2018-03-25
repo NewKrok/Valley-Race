@@ -1,7 +1,7 @@
 package valleyrace.state;
 
 import apostx.replaykit.Playback;
-import apostx.replaykit.Recorder;
+//import apostx.replaykit.Recorder;
 import flixel.FlxCamera;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
@@ -97,7 +97,7 @@ class GameState extends FlxState
 
 	var staticElements:Array<FlxSprite>;
 
-	var recorder:Recorder;
+	//var recorder:Recorder;
 
 	var car:Car;
 	var snow:Snow;
@@ -321,6 +321,7 @@ class GameState extends FlxState
 		countOfNiceWheelie = 0;
 		gameTime = 0;
 		totalPausedTime = 0;
+		pauseStartTime = 0;
 		playerPosition = 0;
 
 		car.isOnWheelie = false;
@@ -367,9 +368,9 @@ class GameState extends FlxState
 
 	function resetReplayKit():Void
 	{
-		if (recorder != null) recorder.dispose();
+		/*if (recorder != null) recorder.dispose();
 		recorder = new Recorder(car);
-		recorder.enableAutoRecording(250);
+		recorder.enableAutoRecording(250);*/
 
 		if (playbacks != null)
 		{
@@ -452,11 +453,12 @@ class GameState extends FlxState
 		carMarker.visible = false;
 
 		totalPausedTime += now - pauseStartTime;
+		pauseStartTime = 0;
 
-		if (recorder != null)
+		/*if (recorder != null)
 		{
 			recorder.resume();
-		}
+		}*/
 	}
 
 	function pause():Void
@@ -465,12 +467,15 @@ class GameState extends FlxState
 		isPhysicsEnabled = false;
 
 		gameGui.pause();
+
+		if (pauseStartTime != 0) totalPausedTime += now - pauseStartTime;
+
 		pauseStartTime = now;
 
-		if (recorder != null)
+		/*if (recorder != null)
 		{
 			recorder.pause();
-		}
+		}*/
 	}
 
 	function createCamera():Void
@@ -839,10 +844,7 @@ class GameState extends FlxState
 		}
 
 		if (playbacks != null)
-		{
-			for (playback in playbacks)
-				playback.showSnapshot(recorder.getElapsedTime());
-		}
+			for (playback in playbacks) playback.showSnapshot(gameTime);
 	}
 
 	function calculateGameTime():Void
@@ -1080,7 +1082,7 @@ class GameState extends FlxState
 	function gameOverRutin():Void
 	{
 		engineSound.stop();
-		recorder.takeSnapshot();
+		//recorder.takeSnapshot();
 
 		if (worldId == 2)
 		{
@@ -1122,7 +1124,7 @@ class GameState extends FlxState
 		levelEndData.isWon = isWon;
 
 		// Temporary for save base replays
-		trace(recorder.toString());
+		//trace(recorder.toString());
 
 		levelInfo.time = (isWon && (levelInfo.time > gameTime || levelInfo.time == 0)) ? gameTime : levelInfo.time;
 		levelInfo.score = (isWon && (levelInfo.score < levelEndData.totalScore)) ? levelEndData.totalScore : levelInfo.score;

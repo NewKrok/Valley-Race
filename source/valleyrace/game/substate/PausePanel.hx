@@ -3,12 +3,14 @@ package valleyrace.game.substate;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
+import flixel.addons.ui.ButtonLabelStyle;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
+import openfl.net.URLRequest;
 import valleyrace.AppConfig;
 import valleyrace.assets.Fonts;
 
@@ -81,6 +83,26 @@ class PausePanel extends FlxSubState
 		subContainer.y = FlxG.stage.stageHeight / 2 - subContainer.height / 2 - 100;
 
 		container.add(subContainer);
+
+
+		var moreGamesButton = new HPPButton(
+			"More games from Flash++",
+			function (_) {
+				openfl.Lib.getURL(new URLRequest("http://flashplusplus.net/?utm_source=Valley-Race&utm_medium=pause-panel&utm_campaign=HTML5-Games"), "_blank");
+			}
+		);
+		moreGamesButton.label.fieldWidth = 700;
+		moreGamesButton.label.color = FlxColor.WHITE;
+		moreGamesButton.label.alignment = "center";
+		moreGamesButton.label.font = Fonts.HOLLYWOOD;
+		moreGamesButton.label.borderStyle = FlxTextBorderStyle.SHADOW;
+		moreGamesButton.up_style = new ButtonLabelStyle(null, null, FlxColor.WHITE);
+		moreGamesButton.over_style = new ButtonLabelStyle(null, null, FlxColor.YELLOW);
+		moreGamesButton.labelSize = 30;
+		moreGamesButton.loadGraphicFromSprite(new FlxSprite().makeGraphic(700, 30, FlxColor.TRANSPARENT));
+		add(moreGamesButton);
+		moreGamesButton.x = FlxG.stage.stageWidth / 2 - moreGamesButton.width / 2;
+		moreGamesButton.y = FlxG.stage.stageHeight - moreGamesButton.height - 20;
 
 		openCallback = function() {
 			FlxG.sound.music.volume = AppConfig.MUSIC_VOLUME == 1 ? .2 : 0;
