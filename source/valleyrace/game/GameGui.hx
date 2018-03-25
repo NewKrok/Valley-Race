@@ -83,6 +83,8 @@ class GameGui extends FlxSpriteGroup
 	public function pause():Void
 	{
 		startCounter.stop();
+
+		FlxTween.tween(topContainer, { y: -topContainer.height }, .5, { ease: FlxEase.backOut });
 	}
 
 	public function resumeGameRequest():Void

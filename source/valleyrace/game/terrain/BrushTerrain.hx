@@ -20,6 +20,7 @@ class BrushTerrain extends FlxSpriteGroup
 {
 	var linePointsInput:Array<BrushArea> = [];
 	var linePoints:Array<BrushArea>;
+	var elements:Array<FlxSprite> = [];
 
 	var vertices:Array<Float>;
 	var indices:Array<Int>;
@@ -140,6 +141,7 @@ class BrushTerrain extends FlxSpriteGroup
 					container.x = i * maxBlockSize;
 					container.y = j * maxBlockSize;
 					add(container);
+					elements.push(container);
 				}
 			}
 		}
@@ -231,5 +233,10 @@ class BrushTerrain extends FlxSpriteGroup
 		graphicContainer.graphics.beginBitmapFill(brushTexture, null, true, true);
 		graphicContainer.graphics.drawTriangles(vertices, indices, uvtData);
 		graphicContainer.graphics.endFill();
+	}
+
+	public function updateView(camPosition:SimplePoint):Void
+	{
+		for (element in elements) element.visible = Math.abs(camPosition.x - (element.x + element.width / 2)) < 1500;
 	}
 }

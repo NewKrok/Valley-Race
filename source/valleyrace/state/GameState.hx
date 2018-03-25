@@ -68,6 +68,8 @@ class GameState extends FlxState
 
 	var space:Space;
 
+	var polygonBackgrounds:Array<BrushTerrain> = [];
+
 	var levelPreloader:LevelPreloader;
 	var startLevelPanel:StartLevelPanel;
 	var endLevelPanel:EndLevelPanel;
@@ -520,6 +522,7 @@ class GameState extends FlxState
 		generatedTerrain.x = row * AppConfig.WORLD_PIECE_SIZE.x;
 		generatedTerrain.y = col * AppConfig.WORLD_PIECE_SIZE.y;
 
+		polygonBackgrounds.push(generatedTerrain);
 		terrainContainer.add(generatedTerrain);
 	}
 
@@ -780,6 +783,8 @@ class GameState extends FlxState
 		now = Date.now().getTime();
 
 		super.update(elapsed);
+
+		for (polygon in polygonBackgrounds) polygon.updateView({ x: Std.int(camera.target.x), y: Std.int(camera.target.y) });
 
 		if (carMarker != null && carMarker.visible) carMarker.y = car.carBodyPhysics.position.y - 55;
 
