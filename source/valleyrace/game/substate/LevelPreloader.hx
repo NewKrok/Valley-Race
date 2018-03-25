@@ -36,8 +36,10 @@ class LevelPreloader extends FlxSubState
 	{
 		add(baseBack = new FlxSprite());
 		baseBack.makeGraphic(FlxG.stage.stageWidth, FlxG.stage.stageHeight, FlxColor.BLACK);
+		baseBack.scrollFactor.set();
 
-		container = new HPPVUIBox(-20);
+		container = new HPPVUIBox( -20);
+		container.scrollFactor.set();
 
 		var label:FlxText = new FlxText(0, 0, 0, "LOADING...", 45);
 		label.autoSize = true;

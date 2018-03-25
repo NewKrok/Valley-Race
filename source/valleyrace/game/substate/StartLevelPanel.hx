@@ -180,7 +180,7 @@ class StartLevelPanel extends FlxSubState
 
 	function startPreRequest(e)
 	{
-		youtubeButton.visible = false;
+		if (levelInfo.worldId == 2) youtubeButton.visible = false;
 
 		FlxTween.tween(
 			header,

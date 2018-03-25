@@ -337,12 +337,9 @@ class GameState extends FlxState
 			coins[ i ].reset(levelData.collectableItems[ i ].x, levelData.collectableItems[ i ].y);
 		}
 
-		for (i in 0...smallRocks.length)
-		{
-			smallRocks[ i ].reset(0, 0);
-		}
+		for (i in 0...smallRocks.length) smallRocks[ i ].reset(0, 0);
 
-		//car.teleportTo(levelData.startPoint.x - 180, levelData.startPoint.y); // -180 / -360 / -540 for ghosts
+		//car.teleportTo(levelData.startPoint.x - 540, levelData.startPoint.y); // -180 / -360 / -540 for ghosts
 		car.teleportTo(levelData.startPoint.x, levelData.startPoint.y);
 
 		carMarker.visible = true;
