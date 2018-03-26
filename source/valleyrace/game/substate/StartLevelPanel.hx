@@ -30,11 +30,11 @@ import valleyrace.util.SavedDataUtil.LevelSavedData;
 class StartLevelPanel extends FlxSubState
 {
 	var youtubeHelps:Array<String> = [
-		"https://www.youtube.com/watch?v=rXURdr8JVrg",
-		"https://www.youtube.com/watch?v=rXURdr8JVrg",
-		"https://www.youtube.com/watch?v=rXURdr8JVrg",
-		"https://www.youtube.com/watch?v=rXURdr8JVrg",
-		"https://www.youtube.com/watch?v=rXURdr8JVrg"
+		"https://www.youtube.com/watch?v=WSVMh8Ivqb8",
+		"https://www.youtube.com/watch?v=kuA5VwsPhJs",
+		"https://www.youtube.com/watch?v=lCeuKF9ni3Y",
+		"https://www.youtube.com/watch?v=k8nDp-Qczyg",
+		"https://www.youtube.com/watch?v=6mVm_jZ3Mg0"
 	];
 
 	var header:FlxSpriteGroup;

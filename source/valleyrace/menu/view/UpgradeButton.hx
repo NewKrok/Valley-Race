@@ -107,6 +107,7 @@ class UpgradeButton extends ExtendedButtonWithTween
 			if (level < carData.price.length - 1)
 			{
 				priceText.text = NumberUtil.formatNumber(carData.price[level + (isUnlocked ? 1 : 0)]);
+				title.text = isUnlocked ? "UPGRADE" : "UNLOCK";
 			}
 			else
 			{

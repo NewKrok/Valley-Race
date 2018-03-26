@@ -243,10 +243,10 @@ class GameState extends FlxState
 			case 5:
 				createOpponentCars();
 				createStaticElements();
-				createCarFogs();
+				if (AppConfig.IS_DESKTOP_DEVICE) createCarFogs();
 				createCar();
 				createBridges();
-				createSmallRocks();
+				if (AppConfig.IS_DESKTOP_DEVICE) createSmallRocks();
 
 			case 6:
 				for (i in 0...levelData.polygonGroundData.length)
@@ -339,7 +339,7 @@ class GameState extends FlxState
 			coins[ i ].reset(levelData.collectableItems[ i ].x, levelData.collectableItems[ i ].y);
 		}
 
-		for (i in 0...smallRocks.length) smallRocks[ i ].reset(0, 0);
+		if (AppConfig.IS_DESKTOP_DEVICE) for (rock in smallRocks) rock.reset(0, 0);
 
 		//car.teleportTo(levelData.startPoint.x - 540, levelData.startPoint.y); // -180 / -360 / -540 for ghosts
 		car.teleportTo(levelData.startPoint.x, levelData.startPoint.y);
@@ -833,8 +833,12 @@ class GameState extends FlxState
 		}
 
 		updateBridges();
-		updateSmallRocks();
-		updateCarFogs();
+
+		if (AppConfig.IS_DESKTOP_DEVICE)
+		{
+			updateSmallRocks();
+			updateCarFogs();
+		}
 
 		if (!isLost)
 		{
