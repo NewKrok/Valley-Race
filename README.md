@@ -7,7 +7,7 @@ This is a Haxe + Haxeflixel based 2d car game. It's based on my previous car gam
 ## Dependencies
 - **HaxeFlixel 4.3.0** Cross Platform Game Engine. http://haxeflixel.com/
 - **HaxeFlixel-Ui 2.2.0** UI addons for HaxeFlixel. https://github.com/HaxeFlixel/flixel-ui
-- **Nape 2.0.20** 2D Physics Engine. https://code.google.com/p/tweener/
+- **Nape 2.0.20** 2D Physics Engine. https://lib.haxe.org/p/nape/
 - **HPP Package** Some useful classes for haxe projects https://github.com/NewKrok/HPP-Package
 - **ReplayKit** Library for recording and replaying gameplays https://github.com/apostx/haxe_replaykit
 
